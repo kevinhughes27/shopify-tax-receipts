@@ -1,0 +1,33 @@
+<%= erb :"_top_bar", :layout => false, :locals => locals %>
+
+<h3>Tax Receipts</h3>
+
+<div class="well">
+
+  <p>Please Enter your Charity details to complete the installation</p>
+
+  <form method="POST" action="/charity" role="form">
+
+    <div class="form-group">
+      <div class="col-sm-4">
+
+        <div class="control-group">
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-info-sign"></i></span>
+              <input type="text" name="charity_code" placeholder="charity">
+            </div>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            <input type="submit" class="btn btn-default" value="save">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+
+</div>
