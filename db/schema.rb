@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140414042317) do
+ActiveRecord::Schema.define(version: 20140605195850) do
+
+  create_table "charities", force: true do |t|
+    t.integer "shop_id"
+    t.string  "name"
+  end
+
+  create_table "products", force: true do |t|
+    t.integer "shop_id"
+    t.integer "product_id"
+  end
 
   create_table "shops", force: true do |t|
     t.string "name"

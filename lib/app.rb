@@ -1,5 +1,15 @@
 require './lib/base'
 
+class Charity < ActiveRecord::Base
+  belongs_to :shop
+  attr_accessor :name
+end
+
+class Product < ActiveRecord::Base
+  belongs_to :shop
+  attr_accessor :product_id
+end
+
 class SinatraApp < ShopifyApp
 
   # Home page
@@ -21,6 +31,10 @@ class SinatraApp < ShopifyApp
     flash[:notice] = "Saved"
     #flash[:error] = "Error"
     redirect '/'
+  end
+
+  post '/products' do
+    byebug
   end
 
   private
