@@ -1,4 +1,6 @@
 require './lib/base'
+require './lib/pdf_generator'
+require 'pony'
 
 class Charity < ActiveRecord::Base
   belongs_to :shop
@@ -24,7 +26,34 @@ class SinatraApp < ShopifyApp
   end
 
   post '/order.json' do
-    binding.pry
+    webhook_session do |shop, order|
+      donation_product_ids = Product.where(shop: shop).pluck(:product_id)
+      donations = []
+      order["line_items"].each do |item|
+        if donation_product_ids.include? item["product_id"]
+          donations << item["price"].to_f * item["quantity"].to_i
+        end
+      end
+
+      unless donations.empty?
+        charity = Charity.find_by(shop: shop)
+        shopify_shop = ShopifyAPI::Shop.current
+
+        donation_amount = donations.sum
+
+        pdf_generator = PdfGenerator.new(shop: shopify_shop,
+                                         order: order,
+                                         donation_amount: donation_amount,
+                                         charity_id: charity.charity_id)
+        receipt_pdf = pdf_generator.generate
+
+        Pony.mail to: order["customer"]["email"],
+                  from: "no-reply@#{shopify_shop.domain}",
+                  subject: "Donation receipt for #{shopify_shop.name}",
+                  attachments: {"tax_receipt.pdf" => receipt_pdf},
+                  body: erb(:receipt_email, layout: false, locals: {order: order, shop: shop})
+      end
+    end
   end
 
   post '/charity' do

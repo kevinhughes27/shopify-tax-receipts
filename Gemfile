@@ -12,6 +12,8 @@ gem 'resque', '~> 1.22.0'
 gem 'json'
 gem 'foreman'
 gem 'rake'
+gem 'prawn'
+gem 'pony'
 
 gem 'omniauth-shopify-oauth2'
 gem 'shopify_api'

@@ -42,6 +42,7 @@
 <h3>Products</h3>
 
 <% if @products.present? %>
+  <p>Make sure you aren't charging taxes or shipping for any of these products!</p>
   <table class="table table-striped table-hover">
     <tbody>
       <% @products.each do |product| %>
@@ -54,6 +55,6 @@
     </tbody>
   </table>
 <% else %>
-  <p> No products are currently setup for tax receipts. To select which products should recieve tax receipts on purchase go to your <a href=<%="https://#{@shop.name}/admin/products"%>>products</a> page and use the bulk dropdown</p>
+  <p> No products are currently setup for tax receipts. To select which products should recieve tax receipts on purchase go to your <a href=<%="https://#{@shop.name}/admin/products"%> target="_blank">products</a> page and use the bulk dropdown</p>
   <img src="https://taxreceipts.herokuapp.com/add_products.gif" alt="Instructions">
 <% end %>
