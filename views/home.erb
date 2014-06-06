@@ -5,7 +5,7 @@
 <div class="well">
   <p>Please Enter your Charity details to complete the installation</p>
 
-  <form method="POST" action="/charity" role="form">
+  <form method=<%= @charity.present? ? "PUT" : "POST"%> action="/charity" role="form">
 
     <div class="form-group">
       <div class="col-sm-4">
