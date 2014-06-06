@@ -79,7 +79,7 @@ class SinatraApp < ShopifyApp
       shop = Shop.find_by(name: shop_name)
       charity = Charity.find_by(shop: shop)
 
-      if charity.update_attributes(params)
+      if charity.update_attributes(charity_params(params))
         flash[:notice] = "Charity Information Saved"
       else
         flash[:error] = "Error Saving Charity Information"
@@ -87,6 +87,10 @@ class SinatraApp < ShopifyApp
 
       redirect '/'
     end
+  end
+
+  def charity_params(params)
+    params.slice("name", "charity_id")
   end
 
   get '/products' do
