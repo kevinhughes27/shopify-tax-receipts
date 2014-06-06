@@ -2,12 +2,13 @@ require './lib/base'
 
 class Charity < ActiveRecord::Base
   belongs_to :shop
-  attr_accessor :name
+  validates_presence_of :name, :charity_id
 end
 
 class Product < ActiveRecord::Base
   belongs_to :shop
-  attr_accessor :product_id
+  validates_presence_of :product_id
+  validates_uniqueness_of :product_id, scope: :shop
 end
 
 class SinatraApp < ShopifyApp
@@ -15,26 +16,45 @@ class SinatraApp < ShopifyApp
   # Home page
   get '/' do
     shopify_session do |shop_name|
-      @shop = Shop.find_by(:name => shop_name)
+      @shop = Shop.find_by(name: shop_name)
+      @charity = Charity.find_by(shop: @shop)
+      @products = Product.where(shop: @shop)
       erb :home
     end
   end
 
-  get '/order' do
-    # new order from shopify
-    # webhook_session do |shop, params|
-    # end
+  post '/order.json' do
+    binding.pry
   end
 
   post '/charity' do
-    # save charity details
-    flash[:notice] = "Saved"
-    #flash[:error] = "Error"
-    redirect '/'
+    shopify_session do |shop_name|
+      shop = Shop.find_by(name: shop_name)
+      params.merge!(shop: shop)
+
+      charity = Charity.new(params)
+
+      if charity.save
+        flash[:notice] = "Charity Information Saved"
+      else
+        flash[:error] = "Error Saving Charity Information"
+      end
+
+      redirect '/'
+    end
   end
 
-  post '/products' do
-    byebug
+  get '/products' do
+    shopify_session do |shop_name|
+      shop = Shop.find_by(name: shop_name)
+
+      params["ids"].each do |id|
+        product = Product.new(shop: shop, product_id: id)
+        product.save
+      end
+
+      redirect '/'
+    end
   end
 
   private

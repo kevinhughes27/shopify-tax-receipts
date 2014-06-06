@@ -3,7 +3,6 @@
 <h3>Tax Receipts</h3>
 
 <div class="well">
-
   <p>Please Enter your Charity details to complete the installation</p>
 
   <form method="POST" action="/charity" role="form">
@@ -15,7 +14,16 @@
           <div class="controls">
             <div class="input-prepend">
               <span class="add-on"><i class="icon-info-sign"></i></span>
-              <input type="text" name="charity_code" placeholder="charity">
+              <input type="text" name="name" placeholder="eg. Amnesty International" <%= "value='#{@charity.name}'" if @charity.present? %>>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-info-sign"></i></span>
+              <input type="text" name="charity_id" placeholder="eg. 804" <%= "value='#{@charity.id}'" if @charity.present? %>>
             </div>
           </div>
         </div>
@@ -29,5 +37,23 @@
       </div>
     </div>
   </form>
-
 </div>
+
+<h3>Products</h3>
+
+<% if @products.present? %>
+  <table class="table table-striped table-hover">
+    <tbody>
+      <% @products.each do |product| %>
+        <tr>
+          <td>
+            <a href=<%="https://#{@shop.name}/admin/products/#{product.product_id}"%> target="_blank"> <%= product.product_id %> </a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p> No products are currently setup for tax receipts. To select which products should recieve tax receipts on purchase go to your <a href=<%="https://#{@shop.name}/admin/products"%>>products</a> page and use the bulk dropdown</p>
+  <img src="https://taxreceipts.herokuapp.com/add_products.gif" alt="Instructions">
+<% end %>
