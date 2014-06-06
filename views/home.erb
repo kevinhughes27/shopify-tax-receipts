@@ -6,6 +6,9 @@
   <p>Please Enter your Charity details to complete the installation</p>
 
   <form method=<%= @charity.present? ? "PUT" : "POST"%> action="/charity" role="form">
+    <% if @charity.present? %>
+      <input type="hidden" name="_method" value="put" />
+    <% end %>
 
     <div class="form-group">
       <div class="col-sm-4">
