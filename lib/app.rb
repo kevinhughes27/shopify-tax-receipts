@@ -73,6 +73,21 @@ class SinatraApp < ShopifyApp
     end
   end
 
+  put '/charity' do
+    shopify_session do |shop_name|
+      shop = Shop.find_by(name: shop_name)
+      charity = Charity.find_by(shop: shop)
+
+      if charity.update_attributes(params)
+        flash[:notice] = "Charity Information Saved"
+      else
+        flash[:error] = "Error Saving Charity Information"
+      end
+
+      redirect '/'
+    end
+  end
+
   get '/products' do
     shopify_session do |shop_name|
       shop = Shop.find_by(name: shop_name)
