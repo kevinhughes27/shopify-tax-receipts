@@ -18,6 +18,12 @@ task :deploy do
   end
 end
 
+task :clear do
+  Rake::Task["clear_products"].invoke
+  Rake::Task["clear_charities"].invoke
+  Rake::Task["clear_shops"].invoke
+end
+
 task :clear_shops do
   Shop.delete_all
 end
