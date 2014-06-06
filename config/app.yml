@@ -2,12 +2,12 @@ scope: 'read_products, read_orders'
 
 order_webhook:
   topic: "orders/create"
-  #address: "http://taxreceipts.herokuapp.com/order.json"
-  address:  "https://5e9cd318.ngrok.com/order.json"
+  address: "http://taxreceipts.herokuapp.com/order.json"
+  #address:  "https://5e9cd318.ngrok.com/order.json"
   format: "json"
 
 uninstall_webhook:
   topic: "app/uninstalled"
-  #address: "http://taxreceipts.herokuapp.com/uninstall.json"
-  address:  "https://5e9cd318.ngrok.com/uninstall.json"
+  address: "http://taxreceipts.herokuapp.com/uninstall.json"
+  #address:  "https://5e9cd318.ngrok.com/uninstall.json"
   format: "json"

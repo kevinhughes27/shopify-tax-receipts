@@ -109,11 +109,11 @@ class SinatraApp < ShopifyApp
   end
 
   def uninstall
-    # webhook_session do |shop, params|
-    #   # remove any dependent models
-    #   # remove shop model
-    #   shop.destroy
-    # end
+    webhook_session do |shop, params|
+      Charity.where(shop: shop).destroy_all
+      Product.where(shop: shop).destroy_all
+      shop.destroy
+    end
   end
 
 end
