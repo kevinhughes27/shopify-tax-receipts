@@ -106,6 +106,12 @@ class SinatraApp < ShopifyApp
     end
   end
 
+  delete '/products' do
+    Product.find_by(id: params["id"]).destroy
+    flash[:notice] = "Product Removed"
+    redirect '/'
+  end
+
   private
 
   def install
