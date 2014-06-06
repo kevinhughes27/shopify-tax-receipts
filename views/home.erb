@@ -5,7 +5,7 @@
 <div class="well">
   <p>Please Enter your Charity details to complete the installation</p>
 
-  <form method=<%= @charity.present? ? "PUT" : "POST"%> action="/charity" role="form">
+  <form method="POST" action="/charity" role="form">
     <% if @charity.present? %>
       <input type="hidden" name="_method" value="put" />
     <% end %>
