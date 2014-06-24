@@ -51,7 +51,7 @@
       <% @products.each do |product| %>
         <tr>
           <td>
-            <a href=<%="https://#{@shop.name}/admin/products/#{product.product_id}"%> target="_blank"> <%= product.product_id %> </a>
+            <a href=<%="https://#{current_shop}/admin/products/#{product.product_id}"%> target="_blank"> <%= product.product_id %> </a>
           </td>
           <td>
             <form method="POST" action="/products">
@@ -65,6 +65,6 @@
     </tbody>
   </table>
 <% else %>
-  <p> No products are currently setup for tax receipts. To select which products should recieve tax receipts on purchase go to your <a href=<%="https://#{@shop.name}/admin/products"%> target="_blank">products</a> page and use the bulk dropdown</p>
-  <img src="https://taxreceipts.herokuapp.com/add_products.gif" alt="Instructions">
+  <p> No products are currently setup for tax receipts. To select which products should recieve tax receipts on purchase go to your <a href=<%="https://#{current_shop}/admin/products"%> target="_blank">products</a> page and use the bulk dropdown</p>
+  <img src='<%="#{base_url}/add_products.gif"%>' alt="Instructions">
 <% end %>
