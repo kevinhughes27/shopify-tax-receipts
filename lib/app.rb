@@ -142,9 +142,9 @@ class SinatraApp < Sinatra::Base
 
   def uninstall
     webhook_session do |params|
-      Charity.where(shop: shop).destroy_all
-      Product.where(shop: shop).destroy_all
-      # need helper from frame work to clear shop data for this
+      Charity.where(shop: current_shop_name).destroy_all
+      Product.where(shop: current_shop_name).destroy_all
+      current_shop.destroy
     end
   end
 
