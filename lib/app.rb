@@ -32,15 +32,15 @@ class SinatraApp < Sinatra::Base
   # Home page
   get '/' do
     shopify_session do
-      @charity = Charity.find_by(shop: current_shop)
-      @products = Product.where(shop: current_shop)
+      @charity = Charity.find_by(shop: current_shop_name)
+      @products = Product.where(shop: current_shop_name)
       erb :home
     end
   end
 
   post '/order.json' do
     webhook_session do |order|
-      donation_product_ids = Product.where(shop: current_shop).pluck(:product_id)
+      donation_product_ids = Product.where(shop: current_shop_name).pluck(:product_id)
       donations = []
       order["line_items"].each do |item|
         if donation_product_ids.include? item["product_id"]
@@ -49,7 +49,7 @@ class SinatraApp < Sinatra::Base
       end
 
       unless donations.empty?
-        charity = Charity.find_by(shop: current_shop)
+        charity = Charity.find_by(shop: current_shop_name)
         shopify_shop = ShopifyAPI::Shop.current
 
         donation_amount = donations.sum
@@ -71,7 +71,7 @@ class SinatraApp < Sinatra::Base
 
   post '/charity' do
     shopify_session do
-      params.merge!(shop: current_shop)
+      params.merge!(shop: current_shop_name)
 
       charity = Charity.new(params)
 
@@ -87,7 +87,7 @@ class SinatraApp < Sinatra::Base
 
   put '/charity' do
     shopify_session do
-      charity = Charity.find_by(shop: current_shop)
+      charity = Charity.find_by(shop: current_shop_name)
 
       if charity.update_attributes(charity_params(params))
         flash[:notice] = "Charity Information Saved"
@@ -106,7 +106,7 @@ class SinatraApp < Sinatra::Base
   get '/products' do
     shopify_session do
       params["ids"].each do |id|
-        product = Product.new(shop: current_shop, product_id: id)
+        product = Product.new(shop: current_shop_name, product_id: id)
         product.save
       end
       redirect '/'
