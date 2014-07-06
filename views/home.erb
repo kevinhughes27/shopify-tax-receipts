@@ -3,7 +3,9 @@
 <h3>Tax Receipts</h3>
 
 <div class="well">
-  <p>Please Enter your Charity details to complete the installation</p>
+  <% unless @charity.present? %>
+    <p>Please Enter your Charity details to complete the installation</p>
+  <% end %>
 
   <form method="POST" action="/charity" role="form">
     <% if @charity.present? %>
