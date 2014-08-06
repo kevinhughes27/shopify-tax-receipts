@@ -47,3 +47,19 @@ task :creds2heroku do
     `heroku config:set #{secret}`
   }
 end
+
+namespace :test do
+  task :prepare do
+    `RACK_ENV=test rake db:create`
+    `RACK_ENV=test rake db:migrate`
+    `RACK_ENV=test SECRET=secret rake db:seed`
+  end
+end
+
+task :test do
+  Rake::TestTask.new do |t|
+    t.pattern = 'test/*_test.rb'
+    t.libs << 'test'
+    t.verbose = true
+  end
+end
