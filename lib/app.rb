@@ -38,6 +38,7 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # Help page
   get '/help' do
     erb :help
   end
