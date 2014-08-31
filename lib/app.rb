@@ -36,6 +36,7 @@ class SinatraApp < Sinatra::Base
     erb :help
   end
 
+  # order/create webhook receiver
   post '/order.json' do
     webhook_session do |order|
       donation_product_ids = Product.where(shop: current_shop_name).pluck(:product_id)
@@ -67,6 +68,7 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # product index app link receiver
   get '/products' do
     shopify_session do
       product_ids = Array.wrap(params["ids"])
