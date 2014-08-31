@@ -63,7 +63,7 @@ class SinatraApp < Sinatra::Base
                   from: "no-reply@#{shopify_shop.domain}",
                   subject: "Donation receipt for #{charity.name}",
                   attachments: {"tax_receipt.pdf" => receipt_pdf},
-                  body: erb(:receipt_email, layout: false, locals: {order: order, shop: current_shop_name})
+                  body: erb(:receipt_email, layout: false, locals: {order: order, charity: charity})
       end
     end
   end
