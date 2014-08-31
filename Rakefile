@@ -3,14 +3,6 @@ require 'resque/tasks'
 require 'rake/testtask'
 require './lib/app'
 
-task :server do
-  #SinatraApp.run!
-  pipe = IO.popen("bundle exec rackup config.ru -p 4567")
-  while (line = pipe.gets)
-    print line
-  end
-end
-
 task :deploy do
   pipe = IO.popen("git push heroku master --force")
   while (line = pipe.gets)
