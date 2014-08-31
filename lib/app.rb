@@ -56,6 +56,7 @@ class SinatraApp < Sinatra::Base
         pdf_generator = PdfGenerator.new(shop: shopify_shop,
                                          order: order,
                                          donation_amount: donation_amount,
+                                         charity: charity.name,
                                          charity_id: charity.charity_id)
         receipt_pdf = pdf_generator.generate
 
