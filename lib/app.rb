@@ -1,16 +1,9 @@
 require 'sinatra/shopify-sinatra-app'
+require './lib/charity_routes'
 require './lib/pdf_generator'
+require './lib/models/charity'
+require './lib/models/product'
 require 'pony'
-
-class Charity < ActiveRecord::Base
-  validates :shop, uniqueness: true
-  validates_presence_of :name, :charity_id
-end
-
-class Product < ActiveRecord::Base
-  validates_presence_of :product_id
-  validates_uniqueness_of :product_id, scope: :shop
-end
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
@@ -74,46 +67,14 @@ class SinatraApp < Sinatra::Base
     end
   end
 
-  post '/charity' do
-    shopify_session do
-      params.merge!(shop: current_shop_name)
-
-      charity = Charity.new(params)
-
-      if charity.save
-        flash[:notice] = "Charity Information Saved"
-      else
-        flash[:error] = "Error Saving Charity Information"
-      end
-
-      redirect '/'
-    end
-  end
-
-  put '/charity' do
-    shopify_session do
-      charity = Charity.find_by(shop: current_shop_name)
-
-      if charity.update_attributes(charity_params(params))
-        flash[:notice] = "Charity Information Saved"
-      else
-        flash[:error] = "Error Saving Charity Information"
-      end
-
-      redirect '/'
-    end
-  end
-
-  def charity_params(params)
-    params.slice("name", "charity_id")
-  end
-
   get '/products' do
     shopify_session do
-      params["ids"].each do |id|
+      product_ids = Array.wrap(params["ids"])
+      product_ids.each do |id|
         product = Product.new(shop: current_shop_name, product_id: id)
         product.save
       end
+      flash[:notice] = "#{product_ids.count} Product(s) added!"
       redirect '/'
     end
   end
