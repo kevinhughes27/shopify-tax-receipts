@@ -71,12 +71,17 @@ class SinatraApp < Sinatra::Base
   # product index app link receiver
   get '/products' do
     shopify_session do
-      product_ids = Array.wrap(params["ids"])
-      product_ids.each do |id|
-        product = Product.new(shop: current_shop_name, product_id: id)
-        product.save
-      end
-      flash[:notice] = "#{product_ids.count} Product(s) added!"
+      add_products(Array.wrap(params["ids"]))
+      flash[:notice] = "Product(s) added!"
+      redirect '/'
+    end
+  end
+
+  # product index app link receiver
+  get '/product' do
+    shopify_session do
+      add_products(Array.wrap(params["id"]))
+      flash[:notice] = "Product added!"
       redirect '/'
     end
   end
@@ -106,6 +111,13 @@ class SinatraApp < Sinatra::Base
       uninstall_webhook.save
     end
     redirect '/'
+  end
+
+  def add_products(product_ids)
+    product_ids.each do |id|
+      product = Product.new(shop: current_shop_name, product_id: id)
+      product.save
+    end
   end
 
   def uninstall
