@@ -38,6 +38,10 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  get '/help' do
+    erb :help
+  end
+
   post '/order.json' do
     webhook_session do |order|
       donation_product_ids = Product.where(shop: current_shop_name).pluck(:product_id)

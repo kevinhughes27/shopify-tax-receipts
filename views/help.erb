@@ -1,0 +1,13 @@
+<%= erb :"_top_bar", :layout => false, :locals => locals %>
+
+<script>
+ShopifyApp.ready(function(){
+  ShopifyApp.Bar.setTitle('Help')
+});
+</script>
+
+<div class="container">
+  <h3>Adding Donations to Products</h3>
+  <p>To select which products should recieve tax receipts on purchase go to your <a href=<%="#{current_shop_url}/admin/products"%> target="_blank">products</a> page and use the bulk dropdown</p>
+  <img src='<%="#{base_url}/add_products.gif"%>' alt="Instructions">
+</div>
