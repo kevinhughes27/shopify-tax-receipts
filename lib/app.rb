@@ -54,15 +54,14 @@ class SinatraApp < Sinatra::Base
         donation_amount = donations.sum
 
         pdf_generator = PdfGenerator.new(shop: shopify_shop,
+                                         charity: charity,
                                          order: order,
-                                         donation_amount: donation_amount,
-                                         charity: charity.name,
-                                         charity_id: charity.charity_id)
+                                         donation_amount: donation_amount)
         receipt_pdf = pdf_generator.generate
 
         Pony.mail to: order["customer"]["email"],
                   from: "no-reply@#{shopify_shop.domain}",
-                  subject: "Donation receipt for #{shopify_shop.name}",
+                  subject: "Donation receipt for #{charity.name}",
                   attachments: {"tax_receipt.pdf" => receipt_pdf},
                   body: erb(:receipt_email, layout: false, locals: {order: order, shop: current_shop_name})
       end

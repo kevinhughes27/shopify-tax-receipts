@@ -1,12 +1,10 @@
 require 'prawn'
 
 class PdfGenerator
-  attr_reader :shop, :order, :pdf, :charity, :charity_id, :donation_amount
+  attr_reader :shop, :order, :charity, :donation_amount, :pdf
 
-  def initialize(shop: nil, order: nil, charity: nil, charity_id: nil, donation_amount: nil)
-    @shop, @order = shop, order
-    @charity, @charity_id = charity, charity_id
-    @donation_amount = donation_amount
+  def initialize(shop: nil, order: nil, charity: nil, donation_amount: nil)
+    @shop, @charity, @order, @donation_amount = shop, charity, order, donation_amount
     @pdf = Prawn::Document.new
   end
 
@@ -22,7 +20,7 @@ class PdfGenerator
     pdf.font "Helvetica"
 
     pdf.font_size font_size * 2
-    pdf.text_box charity,
+    pdf.text_box charity.name,
       :at => [0,  pdf.cursor], :style => :bold
 
     pdf.move_down line_size / 2
@@ -107,8 +105,8 @@ class PdfGenerator
 
   def shop_details
     [
-      charity,
-      "Charity BN/Registration # #{charity_id}",
+      charity.name,
+      "Charity BN/Registration # #{charity.charity_id}",
       shop.address1,
       "#{shop.city}, #{shop.province} #{shop.zip}",
     ]
