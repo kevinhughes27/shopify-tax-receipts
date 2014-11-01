@@ -52,22 +52,9 @@ class SinatraApp < Sinatra::Base
       unless donations.empty?
         charity = Charity.find_by(shop: current_shop_name)
         shopify_shop = ShopifyAPI::Shop.current
-
         donation_amount = donations.sum
-
-        pdf_generator = PdfGenerator.new(shop: shopify_shop,
-                                         charity: charity,
-                                         order: order,
-                                         donation_amount: donation_amount)
-        receipt_pdf = pdf_generator.generate
-
-        email_body = liquid(:receipt_email, layout: false, locals: {order: order, charity: charity})
-
-        Pony.mail to: order["customer"]["email"],
-                  from: "no-reply@#{shopify_shop.domain}",
-                  subject: "Donation receipt for #{charity.name}",
-                  attachments: {"tax_receipt.pdf" => receipt_pdf},
-                  body: email_body
+        receipt_pdf = generate_pdf(shopify_shop, order, charity, donation_amount)
+        deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
       end
     end
   end
@@ -122,6 +109,23 @@ class SinatraApp < Sinatra::Base
       product = Product.new(shop: current_shop_name, product_id: id)
       product.save
     end
+  end
+
+  def generate_pdf(shop, order, charity, donation_amount)
+    pdf_generator = PdfGenerator.new(shop: shop,
+                                         charity: charity,
+                                         order: order,
+                                         donation_amount: donation_amount)
+    pdf_generator.generate
+  end
+
+  def deliver_donation_receipt(shop, order, charity, pdf)
+    email_body = liquid(:receipt_email, layout: false, locals: {order: order, charity: charity})
+    Pony.mail to: order["customer"]["email"],
+              from: "no-reply@#{shop.domain}",
+              subject: "Donation receipt for #{charity.name}",
+              attachments: {"tax_receipt.pdf" => pdf},
+              body: email_body
   end
 
   def uninstall
