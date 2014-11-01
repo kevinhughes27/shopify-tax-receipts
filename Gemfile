@@ -6,6 +6,7 @@ gem 'foreman'
 gem 'shopify-sinatra-app', '~> 0.1.2'
 gem 'prawn'
 gem 'pony'
+gem 'liquid'
 
 group :production do
   gem 'pg'

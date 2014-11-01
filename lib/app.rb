@@ -4,6 +4,8 @@ require './lib/pdf_generator'
 require './lib/models/charity'
 require './lib/models/product'
 require 'pony'
+require 'liquid'
+require 'byebug'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
@@ -59,11 +61,13 @@ class SinatraApp < Sinatra::Base
                                          donation_amount: donation_amount)
         receipt_pdf = pdf_generator.generate
 
+        email_body = liquid(:receipt_email, layout: false, locals: {order: order, charity: charity})
+
         Pony.mail to: order["customer"]["email"],
                   from: "no-reply@#{shopify_shop.domain}",
                   subject: "Donation receipt for #{charity.name}",
                   attachments: {"tax_receipt.pdf" => receipt_pdf},
-                  body: erb(:receipt_email, layout: false, locals: {order: order, charity: charity})
+                  body: email_body
       end
     end
   end
