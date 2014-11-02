@@ -10,6 +10,13 @@ task :deploy do
   end
 end
 
+task :clear_my_shop do
+  shop_name = "kevins-sweet-test-shop.myshopify.com"
+  Charity.where(shop: shop_name).destroy_all
+  Product.where(shop: shop_name).destroy_all
+  Shop.where(name: shop_name).destroy_all
+end
+
 task :clear do
   Rake::Task["clear_products"].invoke
   Rake::Task["clear_charities"].invoke
