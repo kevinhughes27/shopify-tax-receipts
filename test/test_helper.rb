@@ -2,6 +2,7 @@ ENV['RACK_ENV'] = 'test'
 ENV['SECRET'] = 'secret'
 
 require 'minitest/autorun'
+require 'active_support/test_case'
 require 'rack/test'
 require 'mocha/setup'
 require 'fakeweb'
