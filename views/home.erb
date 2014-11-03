@@ -36,6 +36,35 @@
   }
 </style>
 
+<script>
+window.editEmailModal = function(){
+  ShopifyApp.Modal.open({
+    src: '/charity/email_template',
+    title: 'Edit "Donation Receipt" Email Template',
+    height: 400,
+    width: 'medium',
+    buttons: {
+      primary: {
+        label: "Save",
+        callback: function(){
+          ShopifyApp.Modal.window().$("form").submit();
+          ShopifyApp.Modal.close("ok");
+        }
+      },
+      secondary: [
+        {
+          label: "Cancel",
+          callback: function(){ ShopifyApp.Modal.close(); }
+        },
+      ]
+    },
+  }, function(result){
+    if (result)
+      ShopifyApp.flashNotice("Email Template Saved")
+  });
+}
+</script>
+
 <div id="wrap">
   <div class="container">
     <h3>Tax Receipts</h3>
@@ -81,6 +110,10 @@
         </div>
       </form>
     </div>
+
+    <% if @charity.present? %>
+      <a href="#" onclick="editEmailModal()">Edit receipt email template</a>
+    <% end %>
 
     <h3>Products</h3>
 

@@ -1,0 +1,14 @@
+&nbsp;
+<div class="container">
+  <form method="POST" data-shopify-app-submit="/charity/email_template" role="form">
+    <input type="hidden" name="_method" value="put" />
+
+    <div class="form-group">
+        <label for="subject">Email subject</label>
+        <input type="text" name="subject" id="subject" value="<%= charity.email_subject %>" class="input-xxlarge form-control" disabled="true"/>
+        <hr>
+        <textarea name="email_template" id="template" class="input-xxlarge form-control" rows="12"><%= charity.email_template %></textarea>
+    </div>
+  </form>
+</div>
+
