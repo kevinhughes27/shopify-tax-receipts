@@ -83,7 +83,7 @@
     </div>
 
     <% if @charity.present? %>
-      <%= erb :edit_email_modal, locals: {charity: @charity} %>
+      <%= erb :email_modals, locals: {charity: @charity} %>
       <a href="#" onclick="$('#editEmailModal').modal('toggle')">Edit receipt email template</a>
     <% end %>
 

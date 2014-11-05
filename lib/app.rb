@@ -58,6 +58,16 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  get '/preview_email' do
+    shopify_session do
+      charity = Charity.find_by(shop: current_shop_name)
+      template = params['template']
+      email_body = liquid(template, layout: false, locals: {order: mock_order, charity: charity})
+
+      {email_body: email_body, email_template: template}.to_json
+    end
+  end
+
   get '/test_email' do
     shopify_session do
       charity = Charity.find_by(shop: current_shop_name)
@@ -70,24 +80,16 @@ class SinatraApp < Sinatra::Base
         liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
       end
 
-      #receipt_pdf = generate_pdf(shopify_shop, order, charity, 20)
+      receipt_pdf = generate_pdf(shopify_shop, order, charity, 20)
 
       Pony.mail to: shopify_shop.email,
           from: "no-reply@#{shopify_shop.domain}",
           subject: charity.email_subject,
-          #attachments: {"tax_receipt.pdf" => receipt_pdf},
+          attachments: {"tax_receipt.pdf" => receipt_pdf},
           body: email_body
 
       status 200
     end
-  end
-
-  get '/first_modal' do
-    erb "<div> <p>first modal</p> </div>", :layout => false
-  end
-
-  get '/second_modal' do
-    erb "<div> <p>second modal</p> </div>", :layout => false
   end
 
   # product index app link receiver
@@ -160,7 +162,7 @@ class SinatraApp < Sinatra::Base
   end
 
   def mock_order
-    File.read(File.join('test', 'fixtures/order_webhook.json'))
+    JSON.parse( File.read(File.join('test', 'fixtures/order_webhook.json')) )
   end
 
   def uninstall

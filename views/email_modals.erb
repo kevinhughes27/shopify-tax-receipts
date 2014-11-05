@@ -1,0 +1,84 @@
+<script>
+window.sendTestEmail = function(){
+  var template = $('#template').val();
+  $.ajax({
+    url: '/test_email?template=' + encodeURIComponent(template)
+  })
+}
+
+window.previewEmail = function() {
+  var template = $('#template').val();
+  $.ajax({
+    url: '/preview_email?template=' + encodeURIComponent(template),
+    dataType: 'json'
+  }).done(function(response){
+    $('#previewEmailModal #email_template')[0].value = response.email_template;
+    $('#previewEmailModal #email_body')[0].innerHTML = response.email_body;
+    $('#editEmailModal').modal('hide')
+    $('#previewEmailModal').modal('show')
+  });
+}
+</script>
+
+<div class="modal fade" id="editEmailModal">
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <h4 class="modal-title">Edit "Donation Receipt" Email Template</h4>
+    </div>
+
+    <form method="POST" action="/charity" role="form">
+      <input type="hidden" name="_method" value="put" />
+      <div class="modal-body">
+        <label for="subject">Email subject</label>
+        <input type="text" name="email_subject" value="<%= charity.email_subject %>" disabled="true" style="width: 97%"/>
+        <hr>
+        <textarea name="email_template" id="template" rows="12" style="width: 97%"><%= charity.email_template %></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <div class="pull-left">
+           <button type="button" class="btn btn-default" onclick="previewEmail()">Preview</button>
+           <button type="button" class="btn btn-default" onclick="sendTestEmail()">Send test email</button>
+        </div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<div class="modal fade" id="previewEmailModal">
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <h4 class="modal-title">Email Template Preview</h4>
+    </div>
+
+    <form method="POST" action="/charity" role="form">
+      <input type="hidden" name="_method" value="put" />
+      <input type="hidden" name="email_template" id="email_template"/>
+
+      <div class="modal-body">
+        <label for="subject">Email subject</label>
+        <input type="text" value="<%= charity.email_subject %>" disabled="true" style="width: 97%"/>
+        <hr>
+        <textarea id="email_body" rows="12" disabled="true" style="width: 97%"><%= charity.email_template %></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <div class="pull-left">
+           <button type="button" class="btn btn-default" onclick="$('#previewEmailModal').modal('hide'); $('#editEmailModal').modal('show')">Back to edit</button>
+           <button type="button" class="btn btn-default" onclick="sendTestEmail()">Send test email</button>
+        </div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
