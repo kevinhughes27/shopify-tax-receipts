@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141101224125) do
+ActiveRecord::Schema.define(version: 20141105035009) do
 
   create_table "charities", force: true do |t|
     t.string  "name"
     t.integer "charity_id"
     t.string  "shop"
-    t.string  "email_template"
+    t.text    "email_template", limit: 255
+    t.string  "email_subject"
   end
 
   add_index "charities", ["shop"], name: "index_charities_on_shop"
