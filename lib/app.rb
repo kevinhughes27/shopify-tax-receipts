@@ -58,6 +58,38 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  get '/test_email' do
+    shopify_session do
+      charity = Charity.find_by(shop: current_shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+      order = mock_order
+
+      email_body = if params["template"]
+        liquid(params["template"], layout: false, locals: {order: mock_order, charity: charity})
+      else
+        liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
+      end
+
+      #receipt_pdf = generate_pdf(shopify_shop, order, charity, 20)
+
+      Pony.mail to: shopify_shop.email,
+          from: "no-reply@#{shopify_shop.domain}",
+          subject: charity.email_subject,
+          #attachments: {"tax_receipt.pdf" => receipt_pdf},
+          body: email_body
+
+      status 200
+    end
+  end
+
+  get '/first_modal' do
+    erb "<div> <p>first modal</p> </div>", :layout => false
+  end
+
+  get '/second_modal' do
+    erb "<div> <p>second modal</p> </div>", :layout => false
+  end
+
   # product index app link receiver
   get '/products' do
     shopify_session do
@@ -125,6 +157,10 @@ class SinatraApp < Sinatra::Base
               subject: charity.email_subject,
               attachments: {"tax_receipt.pdf" => pdf},
               body: email_body
+  end
+
+  def mock_order
+    File.read(File.join('test', 'fixtures/order_webhook.json'))
   end
 
   def uninstall
