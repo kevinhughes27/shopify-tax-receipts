@@ -106,7 +106,7 @@ class PdfGenerator
   def shop_details
     [
       charity.name,
-      "Charity BN/Registration # #{charity.charity_id}",
+      "Charity Tax ID # #{charity.charity_id}",
       shop.address1,
       "#{shop.city}, #{shop.province} #{shop.zip}",
     ]
