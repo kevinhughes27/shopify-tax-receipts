@@ -17,4 +17,9 @@ ShopifyApp.ready(function(){
   <img src='<%="#{base_url}/add_products.gif"%>' alt="Add Products using the bulk app link">
   <p>A product can also be added from the product edit page by using the app link in the top right corner</p>
   <img src='<%="#{base_url}/add_product.png"%>' alt="Add Product using the app link">
+
+  <hr>
+
+  <h3>Editing the Email Template</h3>
+  <p>You can edit the template for the email that gets sent out with the donation receipt. The email template is written in liquid just like your Shopify theme and other shop emails. However the data passed into the liquid template is a little bit different - you have access to all the order fields but you have to access them via a hash e.g. order['billing_address']['first_name']. Have a look at the fields <a href="http://docs.shopify.com/api/order">here</a>. You also have access to charity['name'] and charity['charity_id']. </p>
 </div>
