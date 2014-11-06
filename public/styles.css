@@ -31,3 +31,7 @@ body {
     padding-right: 20px;
   }
 }
+
+.modal-backdrop, .modal-backdrop.fade.in {
+  background-color: rgba(0,0,0,0);
+}
