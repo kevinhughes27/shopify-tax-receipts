@@ -61,10 +61,11 @@ class SinatraApp < Sinatra::Base
   get '/preview_email' do
     shopify_session do
       charity = Charity.find_by(shop: current_shop_name)
+      subject = params['subject']
       template = params['template']
       email_body = liquid(template, layout: false, locals: {order: mock_order, charity: charity})
 
-      {email_body: email_body, email_template: template}.to_json
+      {email_subject: subject, email_body: email_body, email_template: template}.to_json
     end
   end
 
@@ -74,6 +75,7 @@ class SinatraApp < Sinatra::Base
       shopify_shop = ShopifyAPI::Shop.current
       order = mock_order
 
+      email_subject = params["subject"] || charity.email_subject
       email_body = if params["template"]
         liquid(params["template"], layout: false, locals: {order: mock_order, charity: charity})
       else
@@ -84,7 +86,7 @@ class SinatraApp < Sinatra::Base
 
       Pony.mail to: shopify_shop.email,
           from: "no-reply@#{shopify_shop.domain}",
-          subject: charity.email_subject,
+          subject: email_subject,
           attachments: {"tax_receipt.pdf" => receipt_pdf},
           body: email_body
 

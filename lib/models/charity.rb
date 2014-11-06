@@ -3,7 +3,7 @@ class Charity < ActiveRecord::Base
   validates_presence_of :name, :charity_id
 
   def email_subject
-    "Donation receipt for #{name}"
+    read_attribute(:email_subject) || "Donation receipt for #{name}"
   end
 
   def email_template
