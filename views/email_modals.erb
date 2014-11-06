@@ -3,7 +3,9 @@ window.sendTestEmail = function(){
   var template = $('#template').val();
   $.ajax({
     url: '/test_email?template=' + encodeURIComponent(template)
-  })
+  }).done(function(){
+    ShopifyApp.flashNotice("Test email sent");
+  });
 }
 
 window.previewEmail = function() {
