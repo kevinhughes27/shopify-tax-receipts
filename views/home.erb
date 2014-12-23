@@ -48,7 +48,25 @@
 
     <% if @charity.present? %>
       <%= erb :email_modals, locals: {charity: @charity} %>
-      <a href="#" onclick="$('#editEmailModal').modal('toggle')">Edit receipt email template</a>
+      <p>
+        <a href="#" onclick="$('#editEmailModal').modal('toggle')">Edit receipt email template</a>
+      </p>
+    <% end %>
+
+    <% if @charity.present? %>
+      <script>
+        window.productPicker = function(){
+          ShopifyApp.Modal.productPicker({message: "Choose a product"}, function(success, result){
+            if(!success){ return; }
+            product = result.products[0]
+            ShopifyApp.Bar.loadingOn()
+            window.location = "/product?id=" + product.id
+          });
+        }
+      </script>
+      <p>
+        <a href="#" onclick="productPicker()">Add a product</a>
+      </p>
     <% end %>
 
     <h3>Products</h3>
