@@ -35,13 +35,15 @@ class PdfGenerator
 
     box_margin = 65
 
-    pdf.text_box "#{address['first_name']} #{address['last_name']}",
-      :at => [box_margin,  pdf.cursor], :style => :bold
+    if customer_name.present?
+      pdf.text_box customer_name,
+        :at => [box_margin,  pdf.cursor], :style => :bold
 
-    pdf.font_size font_size
-    order_address_lines.each do |line|
-      pdf.move_down line_size
-      pdf.text_box line, :at => [box_margin,  pdf.cursor]
+      pdf.font_size font_size
+      order_address_lines.each do |line|
+        pdf.move_down line_size
+        pdf.text_box line, :at => [box_margin,  pdf.cursor]
+      end
     end
 
     pdf.move_down line_size * 10
@@ -87,6 +89,10 @@ class PdfGenerator
 
   def address
     order["billing_address"]
+  end
+
+  def customer_name
+    "#{address['first_name']} #{address['last_name']}" if address.present?
   end
 
   def order_address_lines
