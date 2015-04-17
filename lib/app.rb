@@ -159,7 +159,7 @@ class SinatraApp < Sinatra::Base
   def deliver_donation_receipt(shop, order, charity, pdf)
     email_body = liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
     Pony.mail to: order["customer"]["email"],
-              from: shopify_shop.email,
+              from: shop.email,
               subject: charity.email_subject,
               attachments: {"tax_receipt.pdf" => pdf},
               body: email_body
