@@ -26,6 +26,7 @@ class SinatraApp < Sinatra::Base
   # Home page
   get '/' do
     shopify_session do
+      @shop = ShopifyAPI::Shop.current
       @charity = Charity.find_by(shop: current_shop_name)
       @products = Product.where(shop: current_shop_name)
       erb :home
@@ -75,6 +76,7 @@ class SinatraApp < Sinatra::Base
       shopify_shop = ShopifyAPI::Shop.current
       order = mock_order
 
+      email_to = params["to"] || shopify_shop.email
       email_subject = params["subject"] || charity.email_subject
       email_body = if params["template"]
         liquid(params["template"], layout: false, locals: {order: mock_order, charity: charity})
@@ -84,11 +86,11 @@ class SinatraApp < Sinatra::Base
 
       receipt_pdf = generate_pdf(shopify_shop, order, charity, 20)
 
-      Pony.mail to: shopify_shop.email,
-          from: "no-reply@#{shopify_shop.domain}",
-          subject: email_subject,
-          attachments: {"tax_receipt.pdf" => receipt_pdf},
-          body: email_body
+      Pony.mail to: email_to,
+                from: "no-reply@#{shopify_shop.domain}",
+                subject: email_subject,
+                attachments: {"tax_receipt.pdf" => receipt_pdf},
+                body: email_body
 
       status 200
     end

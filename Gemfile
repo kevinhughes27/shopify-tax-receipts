@@ -3,7 +3,7 @@ ruby "2.1.5"
 
 gem 'rake'
 gem 'foreman'
-gem 'shopify-sinatra-app', '~> 0.1.2'
+gem 'shopify-sinatra-app'
 gem 'prawn'
 gem 'pony'
 gem 'liquid'
