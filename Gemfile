@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'foreman'
-gem 'shopify-sinatra-app'
+gem 'shopify-sinatra-app', '~> 0.1.4'
 gem 'prawn'
 gem 'pony'
 gem 'liquid'
