@@ -6,6 +6,7 @@ gem 'shopify-sinatra-app', '~> 0.1.4'
 gem 'prawn'
 gem 'pony'
 gem 'liquid'
+gem 'raygun4ruby'
 
 group :production do
   gem 'pg'

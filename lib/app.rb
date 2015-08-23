@@ -5,6 +5,7 @@ require './lib/models/charity'
 require './lib/models/product'
 require 'pony'
 require 'liquid'
+require 'raygun4ruby'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
@@ -22,6 +23,12 @@ class SinatraApp < Sinatra::Base
       :enable_starttls_auto => true
     }
   }
+
+  Raygun.setup do |config|
+    config.api_key = ENV['RAYGUN_KEY']
+  end
+
+  use Raygun::Middleware::RackExceptionInterceptor
 
   # Home page
   get '/' do
