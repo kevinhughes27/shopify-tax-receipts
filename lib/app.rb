@@ -5,11 +5,13 @@ require 'sinatra/partial'
 require './lib/charity_controller'
 require './lib/models/charity'
 require './lib/models/product'
+require './lib/jobs/send_receipt_job'
 require './lib/pdf_generator'
 
+require 'pony'
+require 'liquid'
 require 'tilt/liquid'
 require 'raygun4ruby'
-require 'pony'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
@@ -85,23 +87,7 @@ class SinatraApp < Sinatra::Base
 
   # order/create webhook receiver
   post '/order.json' do
-    webhook_session do |order|
-      donation_product_ids = Product.where(shop: current_shop_name).pluck(:product_id)
-      donations = []
-      order["line_items"].each do |item|
-        if donation_product_ids.include? item["product_id"]
-          donations << item["price"].to_f * item["quantity"].to_i
-        end
-      end
-
-      unless donations.empty?
-        charity = Charity.find_by(shop: current_shop_name)
-        shopify_shop = ShopifyAPI::Shop.current
-        donation_amount = donations.sum
-        receipt_pdf = generate_pdf(shopify_shop, order, charity, donation_amount)
-        deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
-      end
-    end
+    webhook_job(SendReceiptJob)
   end
 
   # render a preview of user edited email template
