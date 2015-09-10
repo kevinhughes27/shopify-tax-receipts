@@ -25,7 +25,7 @@ class SinatraApp < Sinatra::Base
   }
 
   Raygun.setup do |config|
-    config.api_key = ENV['RAYGUN_KEY']
+    config.api_key = ENV['RAYGUN_APIKEY']
   end
 
   use Raygun::Middleware::RackExceptionInterceptor
