@@ -1,3 +1,7 @@
+production:
+  adapter: postgresql
+  url: <%= ENV['DATABASE_URL'] %>
+
 development:
   adapter: sqlite3
   database: db/shopify_app.sqlite3
