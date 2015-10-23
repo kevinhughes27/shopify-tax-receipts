@@ -12,6 +12,8 @@ require "./lib/app"
 
 FakeWeb.allow_net_connect = false
 
+ActiveSupport::TestCase.test_order = :random
+
 module Helpers
   include Rack::Test::Methods
 

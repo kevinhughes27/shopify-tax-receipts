@@ -4,7 +4,7 @@ require './lib/pdf_generator'
 require './lib/models/charity'
 require './lib/models/product'
 require 'pony'
-require 'liquid'
+require 'tilt/liquid'
 require 'raygun4ruby'
 
 class SinatraApp < Sinatra::Base
