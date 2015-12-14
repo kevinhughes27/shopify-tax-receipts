@@ -1,28 +1,23 @@
-<%= erb :"_top_bar", :layout => false, :locals => locals %>
-
 <script>
 ShopifyApp.ready(function(){
   ShopifyApp.Bar.setTitle('Help')
 });
 </script>
 
-<div class="container">
-  <h3>How it Works</h3>
-  <p>We listen for new orders on your shop and if one of the orders contains a product which you've setup to receive a tax receipt then we take care of it. Your customers will receive a second email (in addition to their order receipt from Shopify) containing a PDF tax receipt for their donation.</p>
+<h3>How it Works</h3>
+<p>We listen for new orders on your shop and if one of the orders contains a product which you've setup to receive a tax receipt then we take care of it. Your customers will receive a second email (in addition to their order receipt from Shopify) containing a PDF tax receipt for their donation.</p>
 
-  <hr>
+<hr>
 
-  <h3>Adding Donations to Products</h3>
-  <p>To select which products should recieve tax receipts on purchase add products using the 'Add a product' button on the home page or go to your <a href=<%="#{current_shop_url}/admin/products"%> target="_blank">products</a> page and use the bulk dropdown</p>
-  <img src='<%="#{base_url}/add_products.gif"%>' alt="Add Products using the bulk app link">
-  <p>A product can also be added from the product edit page by using the app link in the top right corner</p>
-  <img src='<%="#{base_url}/add_product.png"%>' alt="Add Product using the app link">
+<h3>Adding Donations to Products</h3>
+<p>To select which products should recieve tax receipts on purchase add products using the 'Add a product' button on the home page or go to your <a href=<%="#{current_shop_url}/admin/products"%> target="_blank">products</a> page and use the bulk dropdown</p>
+<img src='<%="#{base_url}/add_products.gif"%>' alt="Add Products using the bulk app link">
+<p>A product can also be added from the product edit page by using the app link in the top right corner</p>
+<img src='<%="#{base_url}/add_product.png"%>' alt="Add Product using the app link">
 
-  <hr>
+<hr>
 
-  <h3>Editing the Email Template</h3>
-  <p>You can edit the template for the email that gets sent out with the donation receipt. The email template is written in liquid just like your Shopify theme and other shop emails. However the data passed into the liquid template is a little bit different - you have access to all the order fields but you have to access them via a hash e.g. order['billing_address']['first_name']. Have a look at the fields <a href="http://docs.shopify.com/api/order">here</a>. You also have access to charity['name'] and charity['charity_id']. </p>
+<h3>Editing the Email Template</h3>
+<p>You can edit the template for the email that gets sent out with the donation receipt. The email template is written in liquid just like your Shopify theme and other shop emails. However the data passed into the liquid template is a little bit different - you have access to all the order fields but you have to access them via a hash e.g. order['billing_address']['first_name']. Have a look at the fields <a href="http://docs.shopify.com/api/order">here</a>. You also have access to charity['name'] and charity['charity_id']. </p>
 
-  <hr>
-
-</div>
+<hr>

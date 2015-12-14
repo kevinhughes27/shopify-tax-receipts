@@ -127,25 +127,44 @@ class SinatraApp < Sinatra::Base
     redirect '/'
   end
 
+  # receive uninstall webhook
+  post '/uninstall' do
+    webhook_session do |params|
+      Charity.where(shop: current_shop_name).destroy_all
+      Product.where(shop: current_shop_name).destroy_all
+      current_shop.destroy
+    end
+  end
+
   private
 
-  def install
+  def after_shopify_auth
     shopify_session do
-      order_webhook = ShopifyAPI::Webhook.new({
-        topic: "orders/create",
-        address: "#{base_url}/order.json",
-        format: "json"
-      })
-      order_webhook.save
-
-      uninstall_webhook = ShopifyAPI::Webhook.new({
-        topic: "app/uninstalled",
-        address: "#{base_url}/uninstall",
-        format: "json"
-      })
-      uninstall_webhook.save
+      create_order_webhook
+      create_uninstall_webhook
     end
-    redirect '/'
+  end
+
+  def create_order_webhook
+    order_webhook = ShopifyAPI::Webhook.new({
+      topic: "orders/create",
+      address: "#{base_url}/order.json",
+      format: "json"
+    })
+    order_webhook.save!
+  rescue => e
+    raise unless order_webhook.persisted?
+  end
+
+  def create_uninstall_webhook
+    uninstall_webhook = ShopifyAPI::Webhook.new({
+      topic: "app/uninstalled",
+      address: "#{base_url}/uninstall",
+      format: "json"
+    })
+    uninstall_webhook.save!
+  rescue => e
+    raise unless uninstall_webhook.persisted?
   end
 
   def add_products(product_ids)
@@ -178,13 +197,4 @@ class SinatraApp < Sinatra::Base
   def mock_order
     JSON.parse( File.read(File.join('test', 'fixtures/order_webhook.json')) )
   end
-
-  def uninstall
-    webhook_session do |params|
-      Charity.where(shop: current_shop_name).destroy_all
-      Product.where(shop: current_shop_name).destroy_all
-      current_shop.destroy
-    end
-  end
-
 end

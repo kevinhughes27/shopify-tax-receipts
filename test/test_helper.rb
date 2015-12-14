@@ -1,4 +1,5 @@
 ENV['RACK_ENV'] = 'test'
+ENV['SHOPIFY_REDIRECT_URI'] = 'http://localhost:4567'
 ENV['SECRET'] = 'secret'
 
 require 'minitest/autorun'
@@ -11,8 +12,6 @@ require 'byebug'
 require "./lib/app"
 
 FakeWeb.allow_net_connect = false
-
-ActiveSupport::TestCase.test_order = :random
 
 module Helpers
   include Rack::Test::Methods

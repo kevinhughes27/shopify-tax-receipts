@@ -1,105 +1,13 @@
-<%= erb :"_top_bar", :layout => false, :locals => locals %>
+<h3>Tax Receipts</h3>
 
-<div id="wrap">
-  <div class="container">
-    <h3>Tax Receipts</h3>
+<%= erb :"_charity", layout: false, locals: {charity: @charity} %>
 
-    <div class="well">
-      <% unless @charity.present? %>
-        <p>Please Enter your Charity details to complete the installation</p>
-      <% end %>
+<% if @charity.present? %>
+  <%= erb :_email_modals, locals: {shop: @shop, charity: @charity} %>
+<% end %>
 
-      <form method="POST" action="/charity" role="form">
-        <% if @charity.present? %>
-          <input type="hidden" name="_method" value="put" />
-        <% end %>
+<% if @charity.present? %>
+  <%= erb :_product_picker %>
+<% end %>
 
-        <div class="form-group">
-          <div class="col-sm-4">
-
-            <div class="control-group">
-              <div class="controls">
-                <div class="input-prepend">
-                  <span class="add-on"><i class="icon-info-sign"></i></span>
-                  <input type="text" name="name" placeholder="eg. Amnesty International" <%= "value=\"#{@charity.name}\"".html_safe if @charity.present? %>>
-                </div>
-              </div>
-            </div>
-
-            <div class="control-group">
-              <div class="controls">
-                <div class="input-prepend">
-                  <span class="add-on"><i class="icon-info-sign"></i></span>
-                  <input type="text" name="charity_id" placeholder="Tax ID # eg. 804" <%= "value='#{@charity.charity_id}'" if @charity.present? %>>
-                </div>
-              </div>
-            </div>
-
-            <div class="control-group">
-              <div class="controls">
-                <input type="submit" class="btn btn-default" value="save">
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <% if @charity.present? %>
-      <%= erb :email_modals, locals: {shop: @shop, charity: @charity} %>
-      <p>
-        <a href="#" onclick="$('#editEmailModal').modal('toggle')">Edit receipt email template</a>
-      </p>
-    <% end %>
-
-    <% if @charity.present? %>
-      <script>
-        window.productPicker = function(){
-          ShopifyApp.Modal.productPicker({message: "Choose a product"}, function(success, result){
-            if(!success){ return; }
-            product = result.products[0]
-            ShopifyApp.Bar.loadingOn()
-            window.location = "/product?id=" + product.id
-          });
-        }
-      </script>
-      <p>
-        <a href="#" onclick="productPicker()">Add a product</a>
-      </p>
-    <% end %>
-
-    <h3>Products</h3>
-
-    <% if @products.present? %>
-      <p>Make sure you aren't charging taxes or shipping for any of these products!</p>
-      <table class="table table-striped table-hover">
-        <tbody>
-          <% @products.each do |product| %>
-            <tr>
-              <td>
-                <a href=<%="#{current_shop_url}/admin/products/#{product.product_id}"%> target="_blank"> <%= product.product_id %> </a>
-              </td>
-              <td>
-                <form method="POST" action="/products">
-                  <input type="hidden" name="_method" value="delete" />
-                  <input type="hidden" name="id" value="<%= product.id %>" />
-                  <input type="submit" class="btn btn-default align-right" value="delete">
-                </form>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <p> No products are currently setup for tax receipts. Visit the <a href="/help">help page</a> to see how to get started!</p>
-    <% end %>
-  </div>
-  <div id="push"></div>
-</div>
-
-<div id="footer">
-  <div class="container">
-    <p class="muted credit" style="margin-top: 20px;">Need Help? Visit the <a href="/help">help page</a></p>
-  </div>
-</div>
+<%= erb :"_products", layout: false, locals: {products: @products} %>

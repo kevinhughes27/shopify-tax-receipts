@@ -1,24 +1,40 @@
+GIT
+  remote: git://github.com/kevinhughes27/shopify-sinatra-app.git
+  revision: 8f9cd206962f1567c7942b38d8f7f495d8f96c03
+  specs:
+    shopify-sinatra-app (0.1.5)
+      activesupport (~> 4.1.1)
+      attr_encrypted (~> 1.3.2)
+      omniauth-shopify-oauth2 (~> 1.1.11)
+      rack-flash3 (~> 1.0.5)
+      resque (~> 1.25.2)
+      shopify_api (~> 4.0.2)
+      sinatra (~> 1.4.6)
+      sinatra-activerecord (~> 2.0.9)
+      sinatra-redis (~> 0.3.0)
+      sinatra-twitter-bootstrap (~> 2.3.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (4.2.4)
-      activesupport (= 4.2.4)
+    activemodel (4.1.14)
+      activesupport (= 4.1.14)
       builder (~> 3.1)
-    activerecord (4.2.4)
-      activemodel (= 4.2.4)
-      activesupport (= 4.2.4)
-      arel (~> 6.0)
+    activerecord (4.1.14)
+      activemodel (= 4.1.14)
+      activesupport (= 4.1.14)
+      arel (~> 5.0.0)
     activeresource (4.0.0)
       activemodel (~> 4.0)
       activesupport (~> 4.0)
       rails-observers (~> 0.1.1)
-    activesupport (4.2.4)
-      i18n (~> 0.7)
+    activesupport (4.1.14)
+      i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
+      thread_safe (~> 0.1)
       tzinfo (~> 1.1)
-    arel (6.0.3)
+    arel (5.0.1.20140414130214)
     attr_encrypted (1.3.4)
       encryptor (>= 1.3.0)
     builder (3.2.2)
@@ -30,22 +46,23 @@ GEM
       multipart-post (>= 1.2, < 3)
     foreman (0.78.0)
       thor (~> 0.19.1)
-    hashie (3.4.2)
+    hashie (3.4.3)
     httparty (0.13.7)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
     json (1.8.3)
-    jwt (1.5.1)
+    jwt (1.5.2)
     liquid (3.0.6)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (2.6.2)
-    minitest (5.8.1)
+    minitest (5.8.3)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
+    mono_logger (1.1.0)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -61,7 +78,7 @@ GEM
     omniauth-oauth2 (1.4.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
-    omniauth-shopify-oauth2 (1.1.10)
+    omniauth-shopify-oauth2 (1.1.11)
       omniauth-oauth2 (~> 1.2)
     pdf-core (0.6.0)
     pg (0.18.3)
@@ -88,26 +105,16 @@ GEM
       httparty (~> 0.11)
       json
       rack
-    redis (3.2.1)
+    redis (3.2.2)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
-    resque (1.22.0)
+    resque (1.25.2)
+      mono_logger (~> 1.0)
       multi_json (~> 1.0)
-      redis-namespace (~> 1.0)
+      redis-namespace (~> 1.3)
       sinatra (>= 0.9.2)
       vegas (~> 0.1.2)
-    shopify-sinatra-app (0.1.5)
-      activesupport
-      attr_encrypted
-      omniauth-shopify-oauth2
-      rack-flash3
-      resque (~> 1.22.0)
-      shopify_api
-      sinatra
-      sinatra-activerecord
-      sinatra-redis
-      sinatra-twitter-bootstrap
-    shopify_api (4.0.6)
+    shopify_api (4.0.7)
       activeresource
       rack
     sinatra (1.4.6)
@@ -148,7 +155,7 @@ DEPENDENCIES
   rack-test
   rake
   raygun4ruby
-  shopify-sinatra-app (~> 0.1.5)
+  shopify-sinatra-app!
   sqlite3
 
 BUNDLED WITH

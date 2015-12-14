@@ -15,6 +15,19 @@
 </head>
 
 <body>
-  <%= yield %>
+  <%= erb :"_top_bar", layout: false %>
+
+  <div id="wrap">
+    <div class="container">
+      <%= yield %>
+      <div id="push"></div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="container">
+      <p class="muted credit" style="margin-top: 20px;">Need Help? Visit the <a href="/help">help page</a></p>
+    </div>
+  </div>
 </body>
 </html>
