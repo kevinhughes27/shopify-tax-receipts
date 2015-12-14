@@ -1,15 +1,20 @@
 require 'sinatra/shopify-sinatra-app'
+require 'sinatra/content_for'
+
 require './lib/charity_routes'
 require './lib/pdf_generator'
 require './lib/models/charity'
 require './lib/models/product'
-require 'pony'
+
 require 'tilt/liquid'
 require 'raygun4ruby'
+require 'pony'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
   set :scope, 'read_products, read_orders'
+
+  helpers Sinatra::ContentFor
 
   Pony.options = {
     :via => :smtp,
@@ -146,6 +151,8 @@ class SinatraApp < Sinatra::Base
   end
 
   def create_order_webhook
+    return if ENV['DEVELOPMENT']
+
     order_webhook = ShopifyAPI::Webhook.new({
       topic: "orders/create",
       address: "#{base_url}/order.json",
@@ -157,6 +164,8 @@ class SinatraApp < Sinatra::Base
   end
 
   def create_uninstall_webhook
+    return if ENV['DEVELOPMENT']
+
     uninstall_webhook = ShopifyAPI::Webhook.new({
       topic: "app/uninstalled",
       address: "#{base_url}/uninstall",

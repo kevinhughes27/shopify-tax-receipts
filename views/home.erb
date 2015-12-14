@@ -3,11 +3,12 @@
 <%= erb :"_charity", layout: false, locals: {charity: @charity} %>
 
 <% if @charity.present? %>
-  <%= erb :_email_modals, locals: {shop: @shop, charity: @charity} %>
-<% end %>
-
-<% if @charity.present? %>
-  <%= erb :_product_picker %>
+  <%= erb :_email_modals, layout: false, locals: {shop: @shop, charity: @charity} %>
+  <%= erb :_product_picker, layout: false %>
 <% end %>
 
 <%= erb :"_products", layout: false, locals: {products: @products} %>
+
+<% content_for :footer do %>
+  <p class="muted credit" style="margin-top: 20px;">Need Help? Visit the <a href="/help">help page</a></p>
+<% end %>

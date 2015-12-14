@@ -1,0 +1,14 @@
+<script>
+  window.productPicker = function(){
+    ShopifyApp.Modal.productPicker({message: "Choose a product"}, function(success, result){
+      if(!success){ return; }
+      product = result.products[0]
+      ShopifyApp.Bar.loadingOn()
+      window.location = "/product?id=" + product.id
+    });
+  }
+</script>
+
+<p>
+  <a href="#" onclick="productPicker()">Add a product</a>
+</p>
