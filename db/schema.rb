@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141105035009) do
+ActiveRecord::Schema.define(version: 20151216025413) do
 
   create_table "charities", force: true do |t|
     t.string  "name"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20141105035009) do
   add_index "charities", ["shop"], name: "index_charities_on_shop"
 
   create_table "products", force: true do |t|
-    t.integer "product_id"
+    t.integer "product_id", limit: 8
     t.string  "shop"
   end
 
