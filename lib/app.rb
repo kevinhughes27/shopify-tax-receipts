@@ -176,7 +176,11 @@ class SinatraApp < Sinatra::Base
   def add_products(product_ids)
     product_ids.each do |id|
       product = Product.new(shop: current_shop_name, product_id: id)
-      product.save
+      begin
+        product.save!
+      rescue ActiveRecord::RecordNotUnique
+        # this exception is OK
+      end
     end
   end
 
