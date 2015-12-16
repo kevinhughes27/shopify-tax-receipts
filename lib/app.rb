@@ -1,10 +1,10 @@
 require 'sinatra/shopify-sinatra-app'
 require 'sinatra/content_for'
 
-require './lib/charity_routes'
-require './lib/pdf_generator'
+require './lib/charity_controller'
 require './lib/models/charity'
 require './lib/models/product'
+require './lib/pdf_generator'
 
 require 'tilt/liquid'
 require 'raygun4ruby'
