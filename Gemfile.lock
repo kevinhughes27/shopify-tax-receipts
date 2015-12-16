@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/kevinhughes27/shopify-sinatra-app.git
   revision: 8f9cd206962f1567c7942b38d8f7f495d8f96c03
+  branch: master
   specs:
     shopify-sinatra-app (0.1.5)
       activesupport (~> 4.1.1)
