@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rake'
 gem 'foreman'
 
-gem 'shopify-sinatra-app', github: 'kevinhughes27/shopify-sinatra-app', branch: 'master'
+gem 'shopify-sinatra-app', '~> 0.2.0'
 gem 'sinatra-contrib'
 gem 'sinatra-partial'
 
