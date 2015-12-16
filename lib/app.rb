@@ -123,7 +123,7 @@ class SinatraApp < Sinatra::Base
       order = mock_order
 
       receipt_pdf = generate_pdf(shopify_shop, order, charity, 20)
-      deliver_test_receipt(shopify_shop, order, charity, pdf, params)
+      deliver_test_receipt(shopify_shop, order, charity, receipt_pdf, params)
 
       status 200
     end
@@ -202,14 +202,14 @@ class SinatraApp < Sinatra::Base
   end
 
   def deliver_test_receipt(shop, order, charity, pdf, params = {})
-    email_to = params["to"] || shopify.email
+    email_to = params["to"] || shop.email
     email_subject = params["subject"] || charity.email_subject
-    email_body = liquid(params["template"] || charity.email_template, layout: false, locals: {order: mock, charity: charity})
+    email_body = liquid(params["template"] || charity.email_template, layout: false, locals: {order: order, charity: charity})
 
     Pony.mail to: email_to,
               from: shop.email,
               subject: email_subject,
-              attachments: {"tax_receipt.pdf" => receipt_pdf},
+              attachments: {"tax_receipt.pdf" => pdf},
               body: email_body
   end
 

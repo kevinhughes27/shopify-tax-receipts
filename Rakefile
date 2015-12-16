@@ -3,20 +3,6 @@ require 'resque/tasks'
 require 'rake/testtask'
 require './lib/app'
 
-task :deploy do
-  pipe = IO.popen("git push heroku master --force")
-  while (line = pipe.gets)
-    print line
-  end
-end
-
-task :deploy_staging do
-  pipe = IO.popen("git push staging master --force")
-  while (line = pipe.gets)
-    print line
-  end
-end
-
 task :clear do
   Rake::Task["clear_products"].invoke
   Rake::Task["clear_charities"].invoke

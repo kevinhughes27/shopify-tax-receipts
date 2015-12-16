@@ -1,6 +1,7 @@
 ENV['RACK_ENV'] = 'test'
 ENV['SHOPIFY_REDIRECT_URI'] = 'http://localhost:4567'
 ENV['SECRET'] = 'secret'
+ENV['DEVELOPMENT'] = '1'
 
 require 'minitest/autorun'
 require 'active_support/test_case'
