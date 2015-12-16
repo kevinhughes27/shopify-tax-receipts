@@ -1,30 +1,30 @@
 <script>
-window.sendTestEmail = function(){
-  var to = $('#to').val();
-  var subject = $('#subject').val();
-  var template = $('#template').val();
-  $.ajax({
-    url: '/test_email?to=' + to + '&subject=' + encodeURIComponent(subject) + '&template=' + encodeURIComponent(template)
-  }).done(function(){
-    ShopifyApp.flashNotice("Test email sent");
-  });
-}
+  window.sendTestEmail = function(){
+    var to = $('#to').val();
+    var subject = $('#subject').val();
+    var template = $('#template').val();
+    $.ajax({
+      url: '/test_email?to=' + to + '&subject=' + encodeURIComponent(subject) + '&template=' + encodeURIComponent(template)
+    }).done(function(){
+      ShopifyApp.flashNotice("Test email sent");
+    });
+  }
 
-window.previewEmail = function() {
-  var subject = $('#subject').val();
-  var template = $('#template').val();
-  $.ajax({
-    url: '/preview_email?subject=' + encodeURIComponent(subject) + '&template=' + encodeURIComponent(template),
-    dataType: 'json'
-  }).done(function(response){;
-    $('#previewEmailModal #email_subject')[0].value = response.email_subject;
-    $('#previewEmailModal #email_subject')[1].value = response.email_subject;
-    $('#previewEmailModal #email_template')[0].value = response.email_template;
-    $('#previewEmailModal #email_body')[0].innerHTML = response.email_body;
-    $('#editEmailModal').modal('hide')
-    $('#previewEmailModal').modal('show')
-  });
-}
+  window.previewEmail = function() {
+    var subject = $('#subject').val();
+    var template = $('#template').val();
+    $.ajax({
+      url: '/preview_email?subject=' + encodeURIComponent(subject) + '&template=' + encodeURIComponent(template),
+      dataType: 'json'
+    }).done(function(response){;
+      $('#previewEmailModal #email_subject')[0].value = response.email_subject;
+      $('#previewEmailModal #email_subject')[1].value = response.email_subject;
+      $('#previewEmailModal #email_template')[0].value = response.email_template;
+      $('#previewEmailModal #email_body')[0].innerHTML = response.email_body;
+      $('#editEmailModal').modal('hide')
+      $('#previewEmailModal').modal('show')
+    });
+  }
 </script>
 
 <div class="modal hide" id="previewEmailModal">
