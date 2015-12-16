@@ -1,8 +1,4 @@
 <div class="well">
-  <% if charity.blank? %>
-    <p>Please Enter your Charity details to complete the installation</p>
-  <% end %>
-
   <form method="POST" action="/charity" role="form">
     <% if charity.present? %>
       <input type="hidden" name="_method" value="put" />

@@ -2,8 +2,11 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'foreman'
+
 gem 'shopify-sinatra-app', github: 'kevinhughes27/shopify-sinatra-app'
 gem 'sinatra-contrib'
+gem 'sinatra-partial'
+
 gem 'prawn'
 gem 'pony'
 gem 'liquid'

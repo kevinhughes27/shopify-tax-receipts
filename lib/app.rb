@@ -1,5 +1,6 @@
 require 'sinatra/shopify-sinatra-app'
 require 'sinatra/content_for'
+require 'sinatra/partial'
 
 require './lib/charity_controller'
 require './lib/models/charity'
@@ -13,6 +14,10 @@ require 'pony'
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
   set :scope, 'read_products, read_orders'
+
+  register Sinatra::Partial
+  set :partial_template_engine, :erb
+  enable :partial_underscores
 
   helpers Sinatra::ContentFor
 
@@ -29,11 +34,13 @@ class SinatraApp < Sinatra::Base
     }
   }
 
-  Raygun.setup do |config|
-    config.api_key = ENV['RAYGUN_APIKEY']
-  end
+  unless ENV['DEVELOPMENT']
+    Raygun.setup do |config|
+      config.api_key = ENV['RAYGUN_APIKEY']
+    end
 
-  use Raygun::Middleware::RackExceptionInterceptor
+    use Raygun::Middleware::RackExceptionInterceptor
+  end
 
   # Home page
   get '/' do

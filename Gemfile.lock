@@ -132,6 +132,8 @@ GEM
       rack-test
       sinatra (~> 1.4.0)
       tilt (>= 1.3, < 3)
+    sinatra-partial (0.4.0)
+      sinatra
     sinatra-redis (0.3.0)
       redis
       sinatra (>= 0.9.4)
@@ -165,6 +167,7 @@ DEPENDENCIES
   raygun4ruby
   shopify-sinatra-app!
   sinatra-contrib
+  sinatra-partial
   sqlite3
 
 BUNDLED WITH
