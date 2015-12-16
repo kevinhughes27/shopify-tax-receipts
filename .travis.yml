@@ -6,4 +6,4 @@ rvm:
 gemfile:
   - Gemfile
 
-script: "bundle exec rake test:prepare && bundle exec rake test"
+script: "bundle exec rake test:prepare && ./script/test"
