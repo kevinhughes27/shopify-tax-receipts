@@ -21,30 +21,6 @@ task :clear_products do
   Product.delete_all
 end
 
-task :creds2heroku do
-  Bundler.with_clean_env {
-    api_key = `sed -n '1p' .env`
-    shared_secret = `sed -n '2p' .env`
-    secret = `sed -n '3p' .env`
-
-    `heroku config:set #{api_key}`
-    `heroku config:set #{shared_secret}`
-    `heroku config:set #{secret}`
-  }
-end
-
-task :creds2staging do
-  Bundler.with_clean_env {
-    api_key = `sed -n '1p' .env`
-    shared_secret = `sed -n '2p' .env`
-    secret = `sed -n '3p' .env`
-
-    `heroku config:set #{api_key.strip} --remote staging`
-    `heroku config:set #{shared_secret.strip} --remote staging`
-    `heroku config:set #{secret.strip} --remote staging`
-  }
-end
-
 namespace :test do
   task :prepare do
     `RACK_ENV=test rake db:create`
