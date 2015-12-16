@@ -45,6 +45,31 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # product index app link receiver
+  get '/products' do
+    shopify_session do
+      add_products(Array.wrap(params["ids"]))
+      flash[:notice] = "Product(s) added!"
+      redirect '/'
+    end
+  end
+
+  # product index app link receiver
+  get '/product' do
+    shopify_session do
+      add_products(Array.wrap(params["id"]))
+      flash[:notice] = "Product added!"
+      redirect '/'
+    end
+  end
+
+  # delete product (stops getting a donation receipt)
+  delete '/products' do
+    Product.find_by(id: params["id"]).destroy
+    flash[:notice] = "Product Removed"
+    redirect '/'
+  end
+
   # Help page
   get '/help' do
     erb :help
@@ -71,6 +96,7 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # render a preview of user edited email template
   get '/preview_email' do
     shopify_session do
       charity = Charity.find_by(shop: current_shop_name)
@@ -82,6 +108,7 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # send a test email to the user
   get '/test_email' do
     shopify_session do
       charity = Charity.find_by(shop: current_shop_name)
@@ -93,30 +120,6 @@ class SinatraApp < Sinatra::Base
 
       status 200
     end
-  end
-
-  # product index app link receiver
-  get '/products' do
-    shopify_session do
-      add_products(Array.wrap(params["ids"]))
-      flash[:notice] = "Product(s) added!"
-      redirect '/'
-    end
-  end
-
-  # product index app link receiver
-  get '/product' do
-    shopify_session do
-      add_products(Array.wrap(params["id"]))
-      flash[:notice] = "Product added!"
-      redirect '/'
-    end
-  end
-
-  delete '/products' do
-    Product.find_by(id: params["id"]).destroy
-    flash[:notice] = "Product Removed"
-    redirect '/'
   end
 
   # receive uninstall webhook
@@ -183,6 +186,7 @@ class SinatraApp < Sinatra::Base
     return unless mail_to = order["customer"]["email"]
     return unless order["billing_address"]
     email_body = liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
+
     Pony.mail to: mail_to,
               from: shop.email,
               subject: charity.email_subject,
@@ -193,15 +197,10 @@ class SinatraApp < Sinatra::Base
   def deliver_test_receipt(shop, order, charity, pdf, params = {})
     email_to = params["to"] || shopify.email
     email_subject = params["subject"] || charity.email_subject
-
-    email_body = if params["template"]
-      liquid(params["template"], layout: false, locals: {order: mock, charity: charity})
-    else
-      liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
-    end
+    email_body = liquid(params["template"] || charity.email_template, layout: false, locals: {order: mock, charity: charity})
 
     Pony.mail to: email_to,
-              from: shopify_shop.email,
+              from: shop.email,
               subject: email_subject,
               attachments: {"tax_receipt.pdf" => receipt_pdf},
               body: email_body
