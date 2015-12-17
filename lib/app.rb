@@ -39,6 +39,7 @@ class SinatraApp < Sinatra::Base
       config.api_key = ENV['RAYGUN_APIKEY']
     end
 
+    set :raise_errors, true
     use Raygun::Middleware::RackExceptionInterceptor
   end
 
@@ -152,12 +153,13 @@ class SinatraApp < Sinatra::Base
 
     order_webhook = ShopifyAPI::Webhook.new({
       topic: "orders/create",
-      address: "#{base_url}/order.json",
+      address: "https://kevinhughes.ca/order.json",
       format: "json"
     })
+
     order_webhook.save!
   rescue => e
-    raise unless order_webhook.persisted?
+    raise unless webhook_already_created?(order_webhook)
   end
 
   def create_uninstall_webhook
@@ -168,9 +170,14 @@ class SinatraApp < Sinatra::Base
       address: "#{base_url}/uninstall",
       format: "json"
     })
+
     uninstall_webhook.save!
   rescue => e
-    raise unless uninstall_webhook.persisted?
+    raise unless webhook_already_created?(uninstall_webhook)
+  end
+
+  def webhook_already_created?(webhook)
+    webhook.errors.messages[:address].include? "for this topic has already been taken"
   end
 
   def add_products(product_ids)
