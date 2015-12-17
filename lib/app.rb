@@ -175,11 +175,10 @@ class SinatraApp < Sinatra::Base
 
   def add_products(product_ids)
     product_ids.each do |id|
-      product = Product.new(shop: current_shop_name, product_id: id)
       begin
-        product.save!
-      rescue ActiveRecord::RecordNotUnique
-        # this exception is OK
+        Product.create!(shop: current_shop_name, product_id: id)
+      rescue ActiveRecord::RecordInvalid => e
+        raise unless e.message.include? "Product has already been taken"
       end
     end
   end
