@@ -155,7 +155,7 @@ DEPENDENCIES
   mocha
   pg
   pony
-  prawn
+  prawn (~> 2.0.2)
   pry
   rack-test
   rake

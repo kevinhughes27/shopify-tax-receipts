@@ -7,7 +7,7 @@ gem 'shopify-sinatra-app', '~> 0.2.0'
 gem 'sinatra-contrib'
 gem 'sinatra-partial'
 
-gem 'prawn'
+gem 'prawn', '~> 2.0.2'
 gem 'pony'
 gem 'liquid'
 gem 'raygun4ruby'
