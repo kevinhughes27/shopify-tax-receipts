@@ -36,3 +36,48 @@ task :test do
     t.verbose = true
   end
 end
+
+namespace :resque do
+  task :info do
+    puts Resque.info
+  end
+
+  task :queues do
+    puts Resque.queues
+  end
+
+  task :redis do
+    puts Resque.redis
+  end
+
+  task :size do
+    puts Resque.size(:default)
+  end
+
+  task :peek do
+    puts Resque.peek(:default)
+  end
+
+  task :working do
+    puts Resque.working
+  end
+
+  task :failed do
+    puts Resque::Failure.count
+  end
+
+  task :failed_backtrace do
+    Resque::Failure.all(0,5).reverse.each { |job|
+       backtrace = job["backtrace"].join("\n")
+       puts "#{job["exception"]} \n #{backtrace} \n\n"
+    }
+  end
+
+  task :retry_failed do
+    (Resque::Failure.count-1).downto(0).each { |i| Resque::Failure.requeue(i) }
+  end
+
+  task :clear_failures do
+    Resque::Failure.clear
+  end
+end
