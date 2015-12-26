@@ -1,0 +1,19 @@
+<script>
+ShopifyApp.ready(function(){
+  ShopifyApp.Bar.setTitle('Webhooks')
+});
+</script>
+
+<h3>Webhooks</h3>
+
+<table class="table table-striped table-hover">
+  <tbody>
+    <% @webhooks.each do |webhook| %>
+      <tr>
+        <td><%= webhook.id %></td>
+        <td><%= webhook.topic %></td>
+        <td><%= webhook.address %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

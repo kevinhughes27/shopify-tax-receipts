@@ -1,7 +1,6 @@
 require 'sinatra/shopify-sinatra-app'
 require 'sinatra/content_for'
 require 'sinatra/partial'
-require 'sinatra/json'
 
 require './lib/charity_controller'
 require './lib/models/charity'
@@ -84,10 +83,10 @@ class SinatraApp < Sinatra::Base
     erb :help
   end
 
-  get '/webhooks.json' do
+  get '/webhooks' do
     shopify_session do
-      webhooks = ShopifyAPI::Webhook.find(:all)
-      json webhooks
+      @webhooks = ShopifyAPI::Webhook.all
+      erb :webhooks
     end
   end
 
