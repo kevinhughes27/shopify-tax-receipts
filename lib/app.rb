@@ -90,13 +90,13 @@ class SinatraApp < Sinatra::Base
     end
   end
 
-  delete '/webhooks' do
-    shopify_session do
-      ShopifyAPI::Webhook.find(params["id"]).destroy
-      flash[:notice] = "Webhook Removed"
-      redirect '/webhooks'
-    end
-  end
+  # delete '/webhooks' do
+  #   shopify_session do
+  #     ShopifyAPI::Webhook.find(params["id"]).destroy
+  #     flash[:notice] = "Webhook Removed"
+  #     redirect '/webhooks'
+  #   end
+  # end
 
   # order/create webhook receiver
   post '/order.json' do
