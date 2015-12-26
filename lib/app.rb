@@ -160,7 +160,7 @@ class SinatraApp < Sinatra::Base
 
     order_webhook = ShopifyAPI::Webhook.new({
       topic: "orders/create",
-      address: "https://kevinhughes.ca/order.json",
+      address: "#{base_url}/order.json",
       format: "json"
     })
 
