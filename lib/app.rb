@@ -83,6 +83,15 @@ class SinatraApp < Sinatra::Base
     erb :help
   end
 
+  get '/webhooks.json' do
+    shopify_session do
+      webhooks = ShopifyAPI::Webhook.find(:all)
+
+      content_type :json
+      webhooks.to_json
+    end
+  end
+
   # order/create webhook receiver
   post '/order.json' do
     webhook_session do |order|
