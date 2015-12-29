@@ -96,7 +96,7 @@ class PdfGenerator
   end
 
   def order_address_lines
-    [ address['address1'], address['city'], address['country'], address['zip'] ]
+    [ address['address1'], address['city'], address['country'], address['zip'] ].compact
   end
 
   def donation_details

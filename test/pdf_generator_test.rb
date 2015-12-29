@@ -19,6 +19,11 @@ class PdfGeneratorTest < ActiveSupport::TestCase
     pdf = generate_pdf(@shop, order, @charity, 20)
   end
 
+  def test_order_no_zip
+    order = JSON.parse(load_fixture('order_no_zip.json'))
+    pdf = generate_pdf(@shop, order, @charity, 20)
+  end
+
   private
 
   def generate_pdf(shop, order, charity, donation_amount)
