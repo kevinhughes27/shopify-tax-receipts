@@ -1,37 +1,33 @@
 <div class="well">
-  <form method="POST" action="/charity" role="form">
+  <form method="POST" action="/charity" role="form" style="max-width: 320px;">
     <% if charity.present? %>
       <input type="hidden" name="_method" value="put" />
     <% end %>
 
     <div class="form-group">
-      <div class="col-sm-4">
-
-        <div class="control-group">
-          <div class="controls">
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-info-sign"></i></span>
-              <input type="text" name="name" placeholder="eg. Amnesty International" <%= "value=\"#{charity.name}\"".html_safe if charity.present? %>>
-            </div>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="controls">
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-info-sign"></i></span>
-              <input type="text" name="charity_id" placeholder="Tax ID # eg. 804" <%= "value='#{charity.charity_id}'" if charity.present? %>>
-            </div>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="controls">
-            <input type="submit" class="btn btn-default" value="save">
-          </div>
-        </div>
-
+      <div class="input-group">
+        <div class="input-group-addon"><i class="fa fa-university"></i></i></div>
+        <input type="text"
+               class="form-control"
+               name="name"
+               placeholder="eg. Amnesty International"
+               <%= "value=\"#{charity.name}\"".html_safe if charity.present? %>>
       </div>
+    </div>
+
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon"><i class="fa fa-hashtag"></i></i></div>
+        <input type="text"
+               class="form-control"
+               name="charity_id"
+               placeholder="Tax ID # eg. 804"
+               <%= "value='#{charity.charity_id}'" if charity.present? %>>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <input type="submit" class="btn btn-default" value="save">
     </div>
   </form>
 </div>

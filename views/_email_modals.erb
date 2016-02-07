@@ -27,74 +27,93 @@
   }
 </script>
 
-<div class="modal hide" id="previewEmailModal">
-  <div class="modal-content">
+<div class="modal fade" id="previewEmailModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal">&times;</button>
-      <h4 class="modal-title">Email Template Preview</h4>
-    </div>
-
-    <form method="POST" action="/charity" role="form">
-      <input type="hidden" name="_method" value="put" />
-      <input type="hidden" name="email_subject" id="email_subject"/>
-      <input type="hidden" name="email_template" id="email_template"/>
-
-      <div class="modal-body">
-        <label for="subject">Email to:</label>
-        <input type="text" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
-
-        <label for="subject">Email subject</label>
-        <input type="text" id="email_subject" disabled="true" style="width: 97%"/>
-        <hr>
-        <textarea id="email_body" rows="12" disabled="true" style="width: 97%"></textarea>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Email Template Preview</h4>
       </div>
 
-      <div class="modal-footer">
-        <div class="pull-left">
-           <button type="button" class="btn btn-default" onclick="$('#previewEmailModal').modal('hide'); $('#editEmailModal').modal('show')">Back to edit</button>
-           <button type="button" class="btn btn-default" onclick="sendTestEmail()">Send test email</button>
+      <form method="POST" action="/charity" role="form">
+        <input type="hidden" name="_method" value="put" />
+        <input type="hidden" name="email_subject" id="email_subject"/>
+        <input type="hidden" name="email_template" id="email_template"/>
+
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="subject">Email to:</label>
+            <input type="text" class="form-control" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Email subject</label>
+            <input type="text" class="form-control" id="email_subject" disabled="true" style="width: 97%"/>
+          </div>
+
+          <hr>
+
+          <textarea id="email_body" rows="12" class="form-control" disabled="true" style="width: 97%"></textarea>
         </div>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </form>
 
+        <div class="modal-footer">
+          <div class="pull-left">
+             <button type="button" class="btn btn-default" onclick="$('#previewEmailModal').modal('hide'); $('#editEmailModal').modal('show')">Back to edit</button>
+             <button type="button" class="btn btn-default" onclick="sendTestEmail()">Send test email</button>
+          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+
+    </div>
   </div>
 </div>
 
-<div class="modal hide" id="editEmailModal">
-  <div class="modal-content">
+<div class="modal fade" id="editEmailModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal">&times;</button>
-      <h4 class="modal-title">Edit "Donation Receipt" Email Template</h4>
-    </div>
-
-    <form method="POST" action="/charity" role="form">
-      <input type="hidden" name="_method" value="put" />
-      <div class="modal-body">
-        <label for="subject">Email to:</label>
-        <input type="text" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
-        <label for="subject">Email subject:</label>
-        <input type="text" name="email_subject" id="subject" value="<%= charity.email_subject %>" style="width: 97%"/>
-        <hr>
-        <textarea name="email_template" id="template" rows="12" style="width: 97%"><%= charity.email_template %></textarea>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit "Donation Receipt" Email Template</h4>
       </div>
 
-      <div class="modal-footer">
-        <div class="pull-left">
-           <button type="button" class="btn btn-default" onclick="previewEmail()">Preview</button>
-           <button type="button" class="btn btn-default" onclick="sendTestEmail()">Send test email</button>
+      <form method="POST" action="/charity" role="form">
+        <input type="hidden" name="_method" value="put" />
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="subject">Email to:</label>
+            <input type="text" class="form-control" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Email subject:</label>
+            <input type="text"  class="form-control" name="email_subject" id="subject" value="<%= charity.email_subject %>" style="width: 97%"/>
+          </div>
+
+          <hr>
+
+          <textarea class="form-control" name="email_template" id="template" rows="12" style="width: 97%"><%= charity.email_template %></textarea>
         </div>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </form>
 
+        <div class="modal-footer">
+          <div class="pull-left">
+             <button type="button" class="btn btn-default" onclick="previewEmail()">Preview</button>
+             <button type="button" class="btn btn-default" onclick="sendTestEmail()">Send test email</button>
+          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+
+    </div>
   </div>
 </div>
 
 <p>
-  <a href="#" onclick="$('#editEmailModal').modal('toggle')">Edit receipt email template</a>
+  <a href="#" onclick="$('#editEmailModal').modal('toggle'); return false;">Edit receipt email template</a>
 </p>
