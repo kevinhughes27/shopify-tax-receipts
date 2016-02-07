@@ -71,6 +71,20 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # update product
+  put '/products' do
+    product = Product.find_by(id: params["id"])
+    product_params = params.slice('percentage')
+
+    if product.update_attributes(product_params)
+      flash[:notice] = "Product Updated"
+    else
+      flash[:error] = "Error!"
+    end
+
+    redirect '/'
+  end
+
   # delete product (stops getting a donation receipt)
   delete '/products' do
     Product.find_by(id: params["id"]).destroy
@@ -101,11 +115,13 @@ class SinatraApp < Sinatra::Base
   # order/create webhook receiver
   post '/order.json' do
     webhook_session do |order|
-      donation_product_ids = Product.where(shop: current_shop_name).pluck(:product_id)
+      donation_products = Product.where(shop: current_shop_name)
+
       donations = []
       order["line_items"].each do |item|
-        if donation_product_ids.include? item["product_id"]
-          donations << item["price"].to_f * item["quantity"].to_i
+        donation_product = donation_products.detect { |product| product.product_id == item["product_id"] }
+        if donation_product
+          donations << item["price"].to_f * item["quantity"].to_i * (donation_product.percentage / 100.0)
         end
       end
 

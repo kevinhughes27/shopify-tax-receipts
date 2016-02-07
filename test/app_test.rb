@@ -11,7 +11,7 @@ class AppTest < ActiveSupport::TestCase
     @noop_shop = "banana.myshopify.com"
   end
 
-  def test_order_enpoint_with_no_products
+  def test_order_endpoint_with_no_products
     order_webhook = load_fixture 'order_webhook.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
@@ -21,11 +21,30 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
-  def test_order_enpoint_with_products
+  def test_order_endpoint_with_products
     order_webhook = load_fixture 'order_webhook.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    Pony.expects(:mail).once
+
+    post '/order.json', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+    assert last_response.ok?
+  end
+
+  def test_order_endpoint_with_product_percentage
+    product = Product.find_by(shop: @shop)
+    product.update_attribute(:percentage, 80)
+
+    order_webhook = load_fixture 'order_webhook.json'
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    SinatraApp.any_instance.expects(:generate_pdf).with do |shop, order, charity, donation_amount|
+      assert_equal 477.6, donation_amount
+    end
+
     Pony.expects(:mail).once
 
     post '/order.json', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
