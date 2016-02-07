@@ -11,7 +11,7 @@ class PdfGeneratorTest < ActiveSupport::TestCase
 
   def test_regular_order
     order = JSON.parse(load_fixture('order_webhook.json'))
-    generate_pdf(@shop, order, @charity, 20)
+    pdf = generate_pdf(@shop, order, @charity, 20)
   end
 
   def test_order_no_address
@@ -21,6 +21,12 @@ class PdfGeneratorTest < ActiveSupport::TestCase
 
   def test_order_no_zip
     order = JSON.parse(load_fixture('order_no_zip.json'))
+    pdf = generate_pdf(@shop, order, @charity, 20)
+  end
+
+  def test_utf8
+    @charity.name += 'Ş'
+    order = JSON.parse(load_fixture('order_webhook.json'))
     pdf = generate_pdf(@shop, order, @charity, 20)
   end
 
