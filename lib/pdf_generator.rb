@@ -3,6 +3,8 @@ require 'prawn'
 class PdfGenerator
   attr_reader :shop, :order, :charity, :donation_amount, :pdf
 
+  FONT_DIR = File.join(Dir.pwd, 'config/fonts/')
+
   def initialize(shop: nil, order: nil, charity: nil, donation_amount: nil)
     @shop, @charity, @order, @donation_amount = shop, charity, order, donation_amount
     @pdf = Prawn::Document.new
@@ -16,8 +18,12 @@ class PdfGenerator
     stroke(1)
     pdf.move_down line_size / 2
 
+    pdf.font_families.update("DejaVuSans" => {
+      normal: FONT_DIR + 'DejaVuSans.ttf',
+      bold: FONT_DIR + 'DejaVuSans-Bold.ttf',
+    })
 
-    pdf.font "Helvetica"
+    pdf.font 'DejaVuSans'
 
     pdf.font_size font_size * 2
     pdf.text_box charity.name,
