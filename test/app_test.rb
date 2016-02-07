@@ -11,6 +11,11 @@ class AppTest < ActiveSupport::TestCase
     @noop_shop = "banana.myshopify.com"
   end
 
+  def test_get_install
+    get '/install'
+    assert last_response.ok?
+  end
+
   def test_order_endpoint_with_no_products
     order_webhook = load_fixture 'order_webhook.json'
 
