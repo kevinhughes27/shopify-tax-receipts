@@ -4,6 +4,7 @@ gem 'rake'
 gem 'foreman'
 
 gem 'shopify-sinatra-app', '~> 0.2.0'
+gem 'sinatra-twitter-bootstrap', '~> 2.3.4', require: 'sinatra/twitter-bootstrap'
 gem 'sinatra-contrib'
 gem 'sinatra-partial'
 

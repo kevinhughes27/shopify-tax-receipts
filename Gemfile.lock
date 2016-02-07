@@ -163,7 +163,8 @@ DEPENDENCIES
   shopify-sinatra-app (~> 0.2.0)
   sinatra-contrib
   sinatra-partial
+  sinatra-twitter-bootstrap (~> 2.3.4)
   sqlite3
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

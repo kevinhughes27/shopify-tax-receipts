@@ -1,4 +1,5 @@
 require 'sinatra/shopify-sinatra-app'
+require 'sinatra/twitter-bootstrap'
 require 'sinatra/content_for'
 require 'sinatra/partial'
 
@@ -13,6 +14,7 @@ require 'pony'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
+  register Sinatra::Twitter::Bootstrap::Assets
   set :scope, 'read_products, read_orders'
 
   register Sinatra::Partial
