@@ -30,6 +30,16 @@ class PdfGeneratorTest < ActiveSupport::TestCase
     pdf = generate_pdf(@shop, order, @charity, 20)
   end
 
+  def test_custom_attributes
+    @charity.pdf_body = "new body"
+    @charity.pdf_charity_identifier = "new identifier"
+    @charity.pdf_signature = "Kevin Hughes"
+
+    order = JSON.parse(load_fixture('order_webhook.json'))
+    pdf = generate_pdf(@shop, order, @charity, 20)
+    write_pdf(pdf)
+  end
+
   private
 
   def generate_pdf(shop, order, charity, donation_amount)
