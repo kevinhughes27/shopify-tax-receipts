@@ -117,7 +117,7 @@ class PdfGenerator
     [
       "Receipt Number: ##{order['number']}",
       "Donation Received: #{Time.parse(order['created_at']).strftime("%B %d, %Y")}",
-      "Amount: #{donation_amount}",
+      "Amount: $#{donation_amount}",
       "Date Issued: #{Time.parse(order['created_at']).strftime("%B %d, %Y")}",
       "Place Issued: #{shop.city}"
     ]
