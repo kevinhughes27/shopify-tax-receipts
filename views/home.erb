@@ -10,6 +10,7 @@
 
 <% if @charity.present? %>
   <%= partial 'email_modals', locals: {shop: @shop, charity: @charity} %>
+  <%= partial 'pdf_modal', locals: {charity: @charity} %>
   <%= partial 'product_picker' %>
   <%= partial 'products', locals: {products: @products} %>
 <% end %>
