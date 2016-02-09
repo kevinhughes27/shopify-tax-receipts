@@ -34,6 +34,14 @@ class SinatraApp < Sinatra::Base
   end
 
   def charity_params(params)
-    params.slice("name", "charity_id", "email_subject", "email_template")
+    params.slice(
+      "name",
+      "charity_id",
+      "email_subject",
+      "email_template",
+      "pdf_body",
+      "pdf_signature",
+      "pdf_charity_identifier"
+    )
   end
 end

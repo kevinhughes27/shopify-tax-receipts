@@ -21,6 +21,7 @@ class PdfGenerator
     pdf.font_families.update("DejaVuSans" => {
       normal: FONT_DIR + 'DejaVuSans.ttf',
       bold: FONT_DIR + 'DejaVuSans-Bold.ttf',
+      italic: FONT_DIR + 'Popsies.ttf',
     })
 
     pdf.font 'DejaVuSans'
@@ -64,8 +65,15 @@ class PdfGenerator
 
     pdf.move_down line_size * 2
 
-    pdf.text_box "Donations are tax deductible to the extent permitted by law",
+    pdf.text_box charity.pdf_body,
       :at => [box_margin,  pdf.cursor]
+
+    if charity.pdf_signature.present?
+      pdf.move_down line_size * 2
+
+      pdf.text_box charity.pdf_signature,
+        :at => [box_margin,  pdf.cursor], :style => :italic
+    end
 
     pdf.move_down line_size * 15
 
@@ -109,7 +117,7 @@ class PdfGenerator
     [
       "Receipt Number: ##{order['number']}",
       "Donation Received: #{Time.parse(order['created_at']).strftime("%B %d, %Y")}",
-      "Amount: #{donation_amount}",
+      "Amount: $#{donation_amount}",
       "Date Issued: #{Time.parse(order['created_at']).strftime("%B %d, %Y")}",
       "Place Issued: #{shop.city}"
     ]
@@ -118,7 +126,7 @@ class PdfGenerator
   def shop_details
     [
       charity.name,
-      "Charity Tax ID # #{charity.charity_id}",
+      "#{charity.pdf_charity_identifier} #{charity.charity_id}",
       shop.address1,
       "#{shop.city}, #{shop.province} #{shop.zip}",
     ]
