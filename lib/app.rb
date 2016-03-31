@@ -128,7 +128,7 @@ class SinatraApp < Sinatra::Base
       unless donations.empty?
         charity = Charity.find_by(shop: current_shop_name)
         shopify_shop = ShopifyAPI::Shop.current
-        donation_amount = donations.sum
+        donation_amount = sprintf( "%0.02f", donations.sum)
         receipt_pdf = generate_pdf(shopify_shop, order, charity, donation_amount)
         deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
       end
