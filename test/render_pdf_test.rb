@@ -1,6 +1,6 @@
-require "test_helper"
+require 'test_helper'
 
-class PdfGeneratorTest < ActiveSupport::TestCase
+class RenderPdfTest < ActiveSupport::TestCase
 
   def setup
     shop_domain = "apple.myshopify.com"
@@ -11,23 +11,24 @@ class PdfGeneratorTest < ActiveSupport::TestCase
 
   def test_regular_order
     order = JSON.parse(load_fixture('order_webhook.json'))
-    pdf = generate_pdf(@shop, order, @charity, 20)
+    pdf = render_pdf(@shop, order, @charity, 20)
+    write_pdf(pdf)
   end
 
   def test_order_no_address
     order = JSON.parse(load_fixture('order_no_address.json'))
-    pdf = generate_pdf(@shop, order, @charity, 20)
+    pdf = render_pdf(@shop, order, @charity, 20)
   end
 
   def test_order_no_zip
     order = JSON.parse(load_fixture('order_no_zip.json'))
-    pdf = generate_pdf(@shop, order, @charity, 20)
+    pdf = render_pdf(@shop, order, @charity, 20)
   end
 
   def test_utf8
     @charity.name += 'Ş'
     order = JSON.parse(load_fixture('order_webhook.json'))
-    pdf = generate_pdf(@shop, order, @charity, 20)
+    pdf = render_pdf(@shop, order, @charity, 20)
   end
 
   def test_custom_attributes
@@ -36,22 +37,28 @@ class PdfGeneratorTest < ActiveSupport::TestCase
     @charity.pdf_signature = "Kevin Hughes"
 
     order = JSON.parse(load_fixture('order_webhook.json'))
-    pdf = generate_pdf(@shop, order, @charity, 20)
-    write_pdf(pdf)
+    pdf = render_pdf(@shop, order, @charity, 20)
   end
 
   private
 
-  def generate_pdf(shop, order, charity, donation_amount)
-    pdf_generator = PdfGenerator.new(shop: shop,
-                                     charity: charity,
-                                     order: order,
-                                     donation_amount: donation_amount)
-    pdf_generator.generate
+  def render_pdf(shop, order, charity, donation_amount)
+    order['created_at'] = Time.parse(order['created_at']).strftime("%B %d, %Y")
+
+    template = Tilt::LiquidTemplate.new { |t| charity.pdf_template }
+    pdf_content = template.render(
+      shop: shop.attributes,
+      order: order,
+      charity: charity,
+      donation_amount: donation_amount
+    )
+
+    WickedPdf.new.pdf_from_string(
+      Tilt::ERBTemplate.new('views/receipt_pdf.erb').render(Object.new, pdf_content: pdf_content)
+    )
   end
 
   def write_pdf(pdf_string)
     File.open('test.pdf', 'w') { |file| file.write(pdf_string) }
   end
-
 end

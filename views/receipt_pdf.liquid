@@ -1,0 +1,50 @@
+<hr>
+<div style="float: left;">
+  <strong style="font-size: 18pt;">{{ charity['name'] }}</strong>
+</div>
+<div style="float: right;">
+  <span style="font-size: 9pt;">OFFICIAL DONATION RECEIPT</span>
+</div>
+<div style="clear: both;">
+
+
+<div style="font-size: 10pt; margin-top: 180px; margin-left: 100px;">
+  {% assign address = order['billing_address'] %}
+  <strong>
+    {{ address['first_name'] }} {{ address['last_name'] }}
+  </strong>
+  <br>
+  {{ address['address1'] }}<br>
+  {{ address['city'] }}<br>
+  {{ address['country'] }}<br>
+  {{ address['zip' }}<br>
+</div>
+
+
+<div style="font-size: 10pt; margin-top: 180px; margin-left: 100px;">
+  <strong>
+    Donation Details:
+  </strong>
+  <br>
+  Receipt Number: #{{ order['number'] }}<br>
+  Donation Received: {{ order['created_at'] }}<br>
+  Amount: ${{ donation_amount }}<br>
+  Date Issued: {{ order['created_at'] }}<br>
+  Place Issued: {{ shop['city'] }}
+</div>
+
+<div style="font-size: 10pt; margin-top: 10px; margin-left: 100px;">
+  {{ charity.pdf_body }}
+</div>
+
+<div style="font-style: italic; font-size: 10pt;  margin-top: 10px; margin-left: 100px;">
+  {{ charity.pdf_signature }}
+</div>
+
+<hr style="margin-top: 280px;">
+<div style="font-size: 10pt; margin-left: 100px;">
+  {{ charity.name }}<br>
+  {{ charity.pdf_charity_identifier }} {{ charity.charity_id }}<br>
+  {{ shop['address1'] }}<br>
+  {{ shop['city'] }}, {{ shop['province'] }} {{ shop['zip'] }}<br>
+</div>
