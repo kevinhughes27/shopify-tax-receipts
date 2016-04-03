@@ -15,10 +15,22 @@ class Charity < ActiveRecord::Base
   end
 
   def to_liquid
-    attributes.reverse_merge({
-      'pdf_body' => read_attribute(:pdf_body) || 'Donations are tax deductible to the extent permitted by law',
-      'pdf_signature' => read_attribute(:pdf_signature) || '',
-      'pdf_charity_identifier' => read_attribute(:pdf_charity_identifier) || 'Charity Tax ID #'
+    body = if read_attribute(:pdf_body).present?
+      read_attribute(:pdf_body)
+    else
+      'Donations are tax deductible to the extent permitted by law'
+    end
+
+    charity_identifier = if read_attribute(:pdf_charity_identifier).present?
+      read_attribute(:pdf_charity_identifier)
+    else
+      'Charity Tax ID #'
+    end
+
+    attributes.merge({
+      'pdf_body' => body,
+      'pdf_signature' => read_attribute(:pdf_signature),
+      'pdf_charity_identifier' => charity_identifier
     })
   end
 end
