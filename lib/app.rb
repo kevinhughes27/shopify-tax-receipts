@@ -1,15 +1,23 @@
 require 'sinatra/shopify-sinatra-app'
 require 'sinatra/content_for'
 require 'sinatra/partial'
+require 'sinatra/reloader'
 
 require './lib/charity_controller'
 require './lib/models/charity'
 require './lib/models/product'
-require './lib/pdf_generator'
 
 require 'tilt/liquid'
+require 'wicked_pdf'
 require 'raygun4ruby'
 require 'pony'
+
+if ENV['DEVELOPMENT']
+  require 'letter_opener'
+  require 'byebug'
+else
+  require 'wkhtmltopdf-heroku'
+end
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
@@ -21,20 +29,27 @@ class SinatraApp < Sinatra::Base
 
   helpers Sinatra::ContentFor
 
-  Pony.options = {
-    :via => :smtp,
-    :via_options => {
-      :address => 'smtp.sendgrid.net',
-      :port => '587',
-      :domain => 'heroku.com',
-      :user_name => ENV['SENDGRID_USERNAME'],
-      :password => ENV['SENDGRID_PASSWORD'],
-      :authentication => :plain,
-      :enable_starttls_auto => true
-    }
-  }
+  if ENV['DEVELOPMENT']
+    register Sinatra::Reloader
 
-  unless ENV['DEVELOPMENT']
+    Pony.options = {
+      :via => LetterOpener::DeliveryMethod,
+      :via_options => {:location => File.expand_path('/tmp/letter_opener', __FILE__)}
+    }
+  else
+    Pony.options = {
+      :via => :smtp,
+      :via_options => {
+        :address => 'smtp.sendgrid.net',
+        :port => '587',
+        :domain => 'heroku.com',
+        :user_name => ENV['SENDGRID_USERNAME'],
+        :password => ENV['SENDGRID_PASSWORD'],
+        :authentication => :plain,
+        :enable_starttls_auto => true
+      }
+    }
+
     Raygun.setup do |config|
       config.api_key = ENV['RAYGUN_APIKEY']
     end
@@ -129,7 +144,7 @@ class SinatraApp < Sinatra::Base
         charity = Charity.find_by(shop: current_shop_name)
         shopify_shop = ShopifyAPI::Shop.current
         donation_amount = sprintf( "%0.02f", donations.sum)
-        receipt_pdf = generate_pdf(shopify_shop, order, charity, donation_amount)
+        receipt_pdf = render_pdf(shopify_shop, order, charity, donation_amount)
         deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
       end
     end
@@ -154,7 +169,7 @@ class SinatraApp < Sinatra::Base
       shopify_shop = ShopifyAPI::Shop.current
       order = mock_order
 
-      receipt_pdf = generate_pdf(shopify_shop, order, charity, 20)
+      receipt_pdf = render_pdf(shopify_shop, order, charity, 20)
       deliver_test_receipt(shopify_shop, order, charity, receipt_pdf, params)
 
       status 200
@@ -221,12 +236,20 @@ class SinatraApp < Sinatra::Base
     end
   end
 
-  def generate_pdf(shop, order, charity, donation_amount)
-    pdf_generator = PdfGenerator.new(shop: shop,
-                                     charity: charity,
-                                     order: order,
-                                     donation_amount: donation_amount)
-    pdf_generator.generate
+  def render_pdf(shop, order, charity, donation_amount)
+    order['created_at'] = Time.parse(order['created_at']).strftime("%B %d, %Y")
+
+    template = Tilt::LiquidTemplate.new { |t| charity.pdf_template }
+    pdf_content = template.render(
+      shop: shop.attributes,
+      order: order,
+      charity: charity,
+      donation_amount: donation_amount
+    )
+
+    WickedPdf.new.pdf_from_string(
+      Tilt::ERBTemplate.new('views/receipt_pdf.erb').render(Object.new, pdf_content: pdf_content)
+    )
   end
 
   def deliver_donation_receipt(shop, order, charity, pdf)
@@ -238,7 +261,7 @@ class SinatraApp < Sinatra::Base
     Pony.mail to: mail_to,
               from: shop.email,
               subject: charity.email_subject,
-              attachments: {"tax_receipt.pdf" => pdf},
+              attachments: {"donation_receipt.pdf" => pdf},
               body: email_body
   end
 
@@ -250,7 +273,7 @@ class SinatraApp < Sinatra::Base
     Pony.mail to: email_to,
               from: shop.email,
               subject: email_subject,
-              attachments: {"tax_receipt.pdf" => pdf},
+              attachments: {"donation_receipt.pdf" => pdf},
               body: email_body
   end
 

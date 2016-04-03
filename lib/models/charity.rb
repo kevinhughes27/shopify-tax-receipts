@@ -10,19 +10,15 @@ class Charity < ActiveRecord::Base
     read_attribute(:email_template) || File.read(File.join('views', 'receipt_email.liquid'))
   end
 
-  def pdf_body
-    read_attribute(:pdf_body) || "Donations are tax deductible to the extent permitted by law"
-  end
-
-  def pdf_charity_identifier
-    read_attribute(:pdf_charity_identifier) || "Charity Tax ID #"
-  end
-
-  def pdf_signature
-    read_attribute(:pdf_signature) || ""
+  def pdf_template
+    read_attribute(:email_template) || File.read(File.join('views', 'receipt_pdf.liquid'))
   end
 
   def to_liquid
-    attributes
+    attributes.reverse_merge({
+      'pdf_body' => read_attribute(:pdf_body) || 'Donations are tax deductible to the extent permitted by law',
+      'pdf_signature' => read_attribute(:pdf_signature) || '',
+      'pdf_charity_identifier' => read_attribute(:pdf_charity_identifier) || 'Charity Tax ID #'
+    })
   end
 end
