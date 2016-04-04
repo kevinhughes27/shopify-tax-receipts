@@ -2,7 +2,6 @@ require 'sinatra/shopify-sinatra-app'
 require './lib/models/charity'
 
 class SinatraApp < Sinatra::Base
-
   post '/charity' do
     shopify_session do
       params.merge!(shop: current_shop_name)

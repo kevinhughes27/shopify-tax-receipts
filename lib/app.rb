@@ -4,6 +4,8 @@ require 'sinatra/partial'
 require 'sinatra/reloader'
 
 require './lib/charity_controller'
+require './lib/products_controller'
+
 require './lib/models/charity'
 require './lib/models/product'
 
@@ -66,45 +68,6 @@ class SinatraApp < Sinatra::Base
       @products = Product.where(shop: current_shop_name)
       erb :home
     end
-  end
-
-  # product index app link receiver
-  get '/products' do
-    shopify_session do
-      add_products(Array.wrap(params["ids"]))
-      flash[:notice] = "Product(s) added!"
-      redirect '/'
-    end
-  end
-
-  # product index app link receiver
-  get '/product' do
-    shopify_session do
-      add_products(Array.wrap(params["id"]))
-      flash[:notice] = "Product added!"
-      redirect '/'
-    end
-  end
-
-  # update product
-  put '/products' do
-    product = Product.find_by(id: params["id"])
-    product_params = params.slice('percentage')
-
-    if product.update_attributes(product_params)
-      flash[:notice] = "Product Updated"
-    else
-      flash[:error] = "Error!"
-    end
-
-    redirect '/'
-  end
-
-  # delete product (stops getting a donation receipt)
-  delete '/products' do
-    Product.find_by(id: params["id"]).destroy
-    flash[:notice] = "Product Removed"
-    redirect '/'
   end
 
   # Help page
@@ -237,16 +200,6 @@ class SinatraApp < Sinatra::Base
 
   def webhook_already_created?(webhook)
     webhook.errors.messages[:address].include? "for this topic has already been taken"
-  end
-
-  def add_products(product_ids)
-    product_ids.each do |id|
-      begin
-        Product.create!(shop: current_shop_name, product_id: id)
-      rescue ActiveRecord::RecordInvalid => e
-        raise unless e.message.include? "Product has already been taken"
-      end
-    end
   end
 
   def render_pdf(shop, order, charity, donation_amount)
