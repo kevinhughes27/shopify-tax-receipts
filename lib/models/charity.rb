@@ -11,7 +11,7 @@ class Charity < ActiveRecord::Base
   end
 
   def pdf_template
-    read_attribute(:email_template) || File.read(File.join('views', 'receipt_pdf.liquid'))
+    File.read(File.join('views', 'receipt_pdf.liquid'))
   end
 
   def to_liquid
