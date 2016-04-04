@@ -162,6 +162,19 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  get '/preview_pdf' do
+    shopify_session do
+      charity = Charity.find_by(shop: current_shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+      donation_amount = '20.00'
+      order = mock_order
+
+      receipt_pdf = render_pdf(shopify_shop, order, charity, donation_amount)
+      content_type 'application/pdf'
+      receipt_pdf
+    end
+  end
+
   # send a test email to the user
   get '/test_email' do
     shopify_session do

@@ -39,9 +39,7 @@ class SinatraApp < Sinatra::Base
       "charity_id",
       "email_subject",
       "email_template",
-      "pdf_body",
-      "pdf_signature",
-      "pdf_charity_identifier"
+      "pdf_template"
     )
   end
 end

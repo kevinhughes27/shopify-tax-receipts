@@ -3,34 +3,30 @@ class Charity < ActiveRecord::Base
   validates_presence_of :name, :charity_id
 
   def email_subject
-    read_attribute(:email_subject) || "Donation receipt for #{name}"
+    if read_attribute(:email_subject).present?
+      read_attribute(:email_subject)
+    else
+      "Donation receipt for #{name}"
+    end
   end
 
   def email_template
-    read_attribute(:email_template) || File.read(File.join('views', 'receipt_email.liquid'))
+    if read_attribute(:email_template).present?
+      read_attribute(:email_template)
+    else
+      File.read(File.join('views', 'receipt_email.liquid'))
+    end
   end
 
   def pdf_template
-    File.read(File.join('views', 'receipt_pdf.liquid'))
+    if read_attribute(:pdf_template).present?
+      read_attribute(:pdf_template)
+    else
+      File.read(File.join('views', 'receipt_pdf.liquid'))
+    end
   end
 
   def to_liquid
-    body = if read_attribute(:pdf_body).present?
-      read_attribute(:pdf_body)
-    else
-      'Donations are tax deductible to the extent permitted by law'
-    end
-
-    charity_identifier = if read_attribute(:pdf_charity_identifier).present?
-      read_attribute(:pdf_charity_identifier)
-    else
-      'Charity Tax ID #'
-    end
-
-    attributes.merge({
-      'pdf_body' => body,
-      'pdf_signature' => read_attribute(:pdf_signature),
-      'pdf_charity_identifier' => charity_identifier
-    })
+    attributes
   end
 end
