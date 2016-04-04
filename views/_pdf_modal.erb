@@ -11,21 +11,16 @@
         <input type="hidden" name="_method" value="put" />
         <div class="modal-body">
 
-          <label for="pdf_body">Pdf Body</label>
-          <textarea class="form-control" name="pdf_body" id="pdf_body" rows="6" style="width: 97%"><%= charity.pdf_body %></textarea>
-
-          <div class="form-group">
-            <label for="pdf_signature">Signature</label>
-            <input type="text" class="form-control" name="pdf_signature" id="pdf_signature" value="<%= charity.pdf_signature %>" style="width: 97%"/>
-          </div>
-
-          <div class="form-group">
-            <label for="pdf_charity_identifier">Charity Identifier</label>
-            <input type="text" class="form-control" name="pdf_charity_identifier" id="pdf_charity_identifier" value="<%= charity.pdf_charity_identifier %>" style="width: 97%"/>
-          </div>
+          <label for="pdf_body">Pdf Template</label>
+          <textarea class="form-control" name="pdf_template" id="pdf_template" rows="18" style="width: 97%">
+            <%= charity.pdf_template %>
+          </textarea>
         </div>
 
         <div class="modal-footer">
+          <div class="pull-left">
+             <a href="/preview_pdf" target="_blank" class="btn btn-default">Preview</a>
+          </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save</button>
         </div>
