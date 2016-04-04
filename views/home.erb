@@ -4,12 +4,21 @@
   </div>
 <% end %>
 
-<%= partial 'charity', locals: {charity: @charity} %>
+<div class="row" style="padding-top: 15px;">
+  <div class="col-md-4">
+    <%= partial 'charity', locals: {charity: @charity} %>
+  </div>
+
+  <div class="col-md-4">
+    <% if @charity.present? %>
+      <%= partial 'email_modals', locals: {shop: @shop, charity: @charity} %>
+      <%= partial 'pdf_modal', locals: {charity: @charity} %>
+      <%= partial 'product_picker' %>
+    <% end %>
+  </div>
+</div>
 
 <% if @charity.present? %>
-  <%= partial 'email_modals', locals: {shop: @shop, charity: @charity} %>
-  <%= partial 'pdf_modal', locals: {charity: @charity} %>
-  <%= partial 'product_picker' %>
   <%= partial 'products', locals: {products: @products} %>
 <% end %>
 

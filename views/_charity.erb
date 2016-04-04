@@ -1,4 +1,5 @@
-<div class="well">
+<div class="well" style="padding-bottom: 50px;">
+  <h4>Charity</h4>
   <form method="POST" action="/charity" role="form" style="max-width: 320px;">
     <% if charity.present? %>
       <input type="hidden" name="_method" value="put" />
@@ -27,7 +28,7 @@
     </div>
 
     <div class="form-group">
-      <input type="submit" class="btn btn-default" value="save">
+      <input type="submit" class="btn btn-default pull-right" value="save">
     </div>
   </form>
 </div>
