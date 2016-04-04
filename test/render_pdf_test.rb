@@ -31,15 +31,6 @@ class RenderPdfTest < ActiveSupport::TestCase
     pdf = render_pdf(@shop, order, @charity, 20)
   end
 
-  def test_custom_attributes
-    @charity.pdf_body = "new body"
-    @charity.pdf_charity_identifier = "new identifier"
-    @charity.pdf_signature = "Kevin Hughes"
-
-    order = JSON.parse(load_fixture('order_webhook.json'))
-    pdf = render_pdf(@shop, order, @charity, 20)
-  end
-
   private
 
   def render_pdf(shop, order, charity, donation_amount)
