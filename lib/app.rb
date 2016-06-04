@@ -199,7 +199,8 @@ class SinatraApp < Sinatra::Base
   end
 
   def webhook_already_created?(webhook)
-    webhook.errors.messages[:address].include? "for this topic has already been taken"
+    webhook.errors.messages[:address].present? &&
+    webhook.errors.messages[:address].include?("for this topic has already been taken")
   end
 
   def render_pdf(shop, order, charity, donation_amount)
