@@ -1,14 +1,16 @@
 <script>
-  window.sendTestEmail = function(){
+  window.sendTestEmail = function() {
     var $activeModal = $('.modal:visible');
 
     var to = $activeModal.find('#to').val();
     var subject = $activeModal.find('#subject').val();
     var template = $activeModal.find('#template').val();
 
-    $.ajax({
-      url: '/test_email?to=' + to + '&subject=' + encodeURIComponent(subject) + '&template=' + encodeURIComponent(template)
-    }).done(function(){
+    var url = '/test_email?to=' + to
+    url += '&subject=' + encodeURIComponent(subject)
+    url += '&template=' + encodeURIComponent(template)
+
+    $.ajax({url: url}).done(function() {
       ShopifyApp.flashNotice("Test email sent");
     });
   }
@@ -16,10 +18,11 @@
   window.previewEmail = function() {
     var subject = $('#subject').val();
     var template = $('#template').val();
-    $.ajax({
-      url: '/preview_email?subject=' + encodeURIComponent(subject) + '&template=' + encodeURIComponent(template),
-      dataType: 'json'
-    }).done(function(response){;
+
+    var url = '/preview_email?subject=' + encodeURIComponent(subject)
+    url += '&template=' + encodeURIComponent(template)
+
+    $.ajax({url: url, dataType: 'json'}).done(function(response) {
       $('#previewEmailModal #email_subject')[0].value = response.email_subject;
       $('#previewEmailModal #email_subject')[1].value = response.email_subject;
       $('#previewEmailModal #email_template')[0].value = response.email_template;

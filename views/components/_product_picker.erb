@@ -1,5 +1,5 @@
 <script>
-  window.productPicker = function(){
+  window.productPicker = function() {
     ShopifyApp.Modal.productPicker({message: "Choose a product"}, function(success, result){
       if(!success){ return; }
       product = result.products[0]
