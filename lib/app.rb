@@ -3,6 +3,9 @@ require 'sinatra/content_for'
 require 'sinatra/partial'
 require 'sinatra/reloader'
 
+require_relative '../config/pony'
+require_relative '../config/exception_tracker'
+
 require_relative 'install'
 require_relative 'models/charity'
 require_relative 'models/product'
@@ -12,11 +15,8 @@ require_relative 'routes/webhooks'
 
 require 'tilt/liquid'
 require 'wicked_pdf'
-require 'raygun4ruby'
-require 'pony'
 
 if ENV['DEVELOPMENT']
-  require 'letter_opener'
   require 'byebug'
 else
   require 'wkhtmltopdf-heroku'
@@ -32,34 +32,7 @@ class SinatraApp < Sinatra::Base
 
   helpers Sinatra::ContentFor
 
-  if ENV['DEVELOPMENT']
-    register Sinatra::Reloader
-
-    Pony.options = {
-      :via => LetterOpener::DeliveryMethod,
-      :via_options => {:location => File.expand_path('/tmp/letter_opener', __FILE__)}
-    }
-  else
-    Pony.options = {
-      :via => :smtp,
-      :via_options => {
-        :address => 'smtp.sendgrid.net',
-        :port => '587',
-        :domain => 'heroku.com',
-        :user_name => ENV['SENDGRID_USERNAME'],
-        :password => ENV['SENDGRID_PASSWORD'],
-        :authentication => :plain,
-        :enable_starttls_auto => true
-      }
-    }
-
-    Raygun.setup do |config|
-      config.api_key = ENV['RAYGUN_APIKEY']
-    end
-
-    set :raise_errors, true
-    use Raygun::Middleware::RackExceptionInterceptor
-  end
+  register Sinatra::Reloader if ENV['DEVELOPMENT']
 
   # Home page
   get '/' do
