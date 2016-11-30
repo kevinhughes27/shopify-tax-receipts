@@ -14,7 +14,7 @@ class Charity < ActiveRecord::Base
     if read_attribute(:email_template).present?
       read_attribute(:email_template)
     else
-      File.read(File.join('views', 'receipt_email.liquid'))
+      File.read(File.join('views', 'receipt/email.liquid'))
     end
   end
 
@@ -22,7 +22,7 @@ class Charity < ActiveRecord::Base
     if read_attribute(:pdf_template).present?
       read_attribute(:pdf_template)
     else
-      File.read(File.join('views', 'receipt_pdf.liquid'))
+      File.read(File.join('views', 'receipt/pdf.liquid'))
     end
   end
 
