@@ -4,10 +4,11 @@ require 'sinatra/partial'
 require 'sinatra/reloader'
 
 require_relative 'install'
-require_relative 'charity_routes'
-require_relative 'product_routes'
 require_relative 'models/charity'
 require_relative 'models/product'
+require_relative 'routes/charity'
+require_relative 'routes/products'
+require_relative 'routes/webhooks'
 
 require 'tilt/liquid'
 require 'wicked_pdf'
@@ -74,21 +75,6 @@ class SinatraApp < Sinatra::Base
   get '/help' do
     erb :help
   end
-
-  get '/webhooks' do
-    shopify_session do
-      @webhooks = ShopifyAPI::Webhook.all
-      erb :webhooks
-    end
-  end
-
-  # delete '/webhooks' do
-  #   shopify_session do
-  #     ShopifyAPI::Webhook.find(params["id"]).destroy
-  #     flash[:notice] = "Webhook Removed"
-  #     redirect '/webhooks'
-  #   end
-  # end
 
   # order/create webhook receiver
   post '/order.json' do
