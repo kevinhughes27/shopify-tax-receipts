@@ -4,6 +4,7 @@ require 'sinatra/partial'
 require 'sinatra/reloader'
 
 require_relative '../config/pony'
+require_relative '../config/pdf_engine'
 require_relative '../config/exception_tracker'
 
 require_relative 'install'
@@ -16,11 +17,7 @@ require_relative 'routes/webhooks'
 require 'tilt/liquid'
 require 'wicked_pdf'
 
-if ENV['DEVELOPMENT']
-  require 'byebug'
-else
-  require 'wkhtmltopdf-heroku'
-end
+require 'byebug' if ENV['DEVELOPMENT']
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
