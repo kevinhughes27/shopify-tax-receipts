@@ -25,7 +25,6 @@ namespace :test do
   task :prepare do
     `RACK_ENV=test rake db:create`
     `RACK_ENV=test rake db:migrate`
-    `RACK_ENV=test SECRET=secret rake db:seed`
   end
 end
 
