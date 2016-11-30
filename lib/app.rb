@@ -3,8 +3,8 @@ require 'sinatra/content_for'
 require 'sinatra/partial'
 require 'sinatra/reloader'
 
-require './lib/charity_controller'
-require './lib/products_controller'
+require './lib/charity_routes'
+require './lib/product_routes'
 
 require './lib/models/charity'
 require './lib/models/product'
