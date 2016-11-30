@@ -7,7 +7,7 @@ require_relative '../config/pony'
 require_relative '../config/pdf_engine'
 require_relative '../config/exception_tracker'
 
-require_relative 'install'
+require_relative 'concerns/install'
 require_relative 'models/charity'
 require_relative 'models/product'
 require_relative 'routes/charity'
