@@ -1,11 +1,11 @@
 require 'sinatra/shopify-sinatra-app'
 require 'sinatra/content_for'
 require 'sinatra/partial'
-require 'sinatra/reloader'
 
 require_relative '../config/pony'
 require_relative '../config/pdf_engine'
 require_relative '../config/exception_tracker'
+require_relative '../config/development' if ENV['DEVELOPMENT']
 
 require_relative 'concerns/install'
 require_relative 'models/charity'
@@ -17,8 +17,6 @@ require_relative 'routes/webhooks'
 require 'tilt/liquid'
 require 'wicked_pdf'
 
-require 'byebug' if ENV['DEVELOPMENT']
-
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
   set :scope, 'read_products, read_orders'
@@ -28,8 +26,6 @@ class SinatraApp < Sinatra::Base
   enable :partial_underscores
 
   helpers Sinatra::ContentFor
-
-  register Sinatra::Reloader if ENV['DEVELOPMENT']
 
   # Home page
   get '/' do
