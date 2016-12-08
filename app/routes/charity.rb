@@ -1,5 +1,5 @@
 require 'sinatra/shopify-sinatra-app'
-require './lib/models/charity'
+require_relative '../models/charity'
 
 class SinatraApp < Sinatra::Base
   post '/charity' do

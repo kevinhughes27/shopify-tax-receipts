@@ -10,7 +10,7 @@ require 'mocha/setup'
 require 'fakeweb'
 require 'byebug'
 
-require "./lib/app"
+require "./app/app"
 
 FakeWeb.allow_net_connect = false
 

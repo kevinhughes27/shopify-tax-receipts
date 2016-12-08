@@ -1,6 +1,6 @@
 require 'sinatra/activerecord/rake'
 require 'rake/testtask'
-require './lib/app'
+require './app/app'
 
 task :clear do
   Rake::Task["clear_products"].invoke
