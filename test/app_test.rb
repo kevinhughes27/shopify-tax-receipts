@@ -6,17 +6,17 @@ class AppTest < ActiveSupport::TestCase
     SinatraApp
   end
 
-  def setup
+  setup do
     @shop = "apple.myshopify.com"
     @noop_shop = "banana.myshopify.com"
   end
 
-  def test_get_install
+  test "get_install" do
     get '/install'
     assert last_response.ok?
   end
 
-  def test_order_endpoint_with_no_products
+  test "order_endpoint_with_no_products" do
     order_webhook = load_fixture 'order_webhook.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
@@ -26,7 +26,7 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
-  def test_order_endpoint_with_products
+  test "order_endpoint_with_products" do
     order_webhook = load_fixture 'order_webhook.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
@@ -37,7 +37,7 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
-  def test_order_endpoint_with_product_percentage
+  test "order_endpoint_with_product_percentage" do
     product = Product.find_by(shop: @shop)
     product.update_attribute(:percentage, 80)
 
@@ -56,7 +56,7 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
-  def test_charity_with_default_email_template
+  test "charity_with_default_email_template" do
     charity = Charity.find_by(shop: @shop)
     charity.update_attribute(:email_template, nil)
 
@@ -70,7 +70,7 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
-  def test_charity_with_custom_email_template
+  test "charity_with_custom_email_template" do
     charity = Charity.find_by(shop: @shop)
     charity.update_attribute(:email_template, "liquid test {{ charity['name'] }}")
 
@@ -84,7 +84,7 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
-  def test_test_email
+  test "test_email" do
     charity = Charity.find_by(shop: @shop)
     charity.update_attribute(:email_template, nil)
 
@@ -94,6 +94,8 @@ class AppTest < ActiveSupport::TestCase
     get '/test_email', {}, 'rack.session' => session
     assert last_response.ok?
   end
+
+  private
 
   def session
     { shopify: {shop: 'apple.myshopify.com', token: 'token'} }

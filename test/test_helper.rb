@@ -8,7 +8,6 @@ require 'active_support/test_case'
 require 'rack/test'
 require 'mocha/setup'
 require 'fakeweb'
-require 'byebug'
 
 require "./app/app"
 
@@ -49,14 +48,14 @@ module Helpers
   end
 end
 
-class Minitest::Test
+class ActiveSupport::TestCase
   include Helpers
 
-  def setup
+  setup do
     init_db
   end
 
-  def teardown
+  teardown do
     reset_db
   end
 end

@@ -2,30 +2,30 @@ require 'test_helper'
 
 class RenderPdfTest < ActiveSupport::TestCase
 
-  def setup
+  setup do
     shop_domain = "apple.myshopify.com"
     activate_shopify_session(shop_domain, 'token')
     @shop = ShopifyAPI::Shop.new(JSON.parse(load_fixture('shop.json')))
     @charity = Charity.find_by(shop: shop_domain)
   end
 
-  def test_regular_order
+  test "regular_order" do
     order = JSON.parse(load_fixture('order_webhook.json'))
     pdf = render_pdf(@shop, order, @charity, 20)
     write_pdf(pdf)
   end
 
-  def test_order_no_address
+  test "order_no_address" do
     order = JSON.parse(load_fixture('order_no_address.json'))
     pdf = render_pdf(@shop, order, @charity, 20)
   end
 
-  def test_order_no_zip
+  test "order_no_zip" do
     order = JSON.parse(load_fixture('order_no_zip.json'))
     pdf = render_pdf(@shop, order, @charity, 20)
   end
 
-  def test_utf8
+  test "utf8" do
     @charity.name += 'Ş'
     order = JSON.parse(load_fixture('order_webhook.json'))
     pdf = render_pdf(@shop, order, @charity, 20)
