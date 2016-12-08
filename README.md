@@ -1,4 +1,4 @@
-Tax Receipts [![Build Status](https://travis-ci.org/kevinhughes27/shopify-tax-receipts.svg)](https://travis-ci.org/kevinhughes27/shopify-tax-receipts)
+Tax Receipts [![Build Status](https://travis-ci.org/kevinhughes27/shopify-tax-receipts.svg?branch=master)](https://travis-ci.org/kevinhughes27/shopify-tax-receipts)
 ============
 
 Shopify App for automatically sending customers tax receipts for specified products
