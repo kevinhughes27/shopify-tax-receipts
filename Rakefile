@@ -1,7 +1,6 @@
 require 'sinatra/activerecord/rake'
-require 'resque/tasks'
 require 'rake/testtask'
-require './lib/app'
+require './app/app'
 
 task :clear do
   Rake::Task["clear_products"].invoke
@@ -25,7 +24,6 @@ namespace :test do
   task :prepare do
     `RACK_ENV=test rake db:create`
     `RACK_ENV=test rake db:migrate`
-    `RACK_ENV=test SECRET=secret rake db:seed`
   end
 end
 

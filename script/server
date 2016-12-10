@@ -1,1 +1,1 @@
-foreman run bundle exec rackup config.ru
+DEVELOPMENT=1 foreman run bundle exec rackup config.ru

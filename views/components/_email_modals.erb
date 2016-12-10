@@ -1,14 +1,21 @@
 <script>
-  window.sendTestEmail = function(){
+  window.sendTestEmail = function() {
     var $activeModal = $('.modal:visible');
 
     var to = $activeModal.find('#to').val();
+    var bcc = $activeModal.find('#bcc').val();
+    var from = $activeModal.find('#from').val();
     var subject = $activeModal.find('#subject').val();
     var template = $activeModal.find('#template').val();
 
-    $.ajax({
-      url: '/test_email?to=' + to + '&subject=' + encodeURIComponent(subject) + '&template=' + encodeURIComponent(template)
-    }).done(function(){
+    var url = '/test_email'
+    url += '?to=' + to
+    url += '&bcc=' + bcc
+    url += '&from=' + from
+    url += '&subject=' + encodeURIComponent(subject)
+    url += '&template=' + encodeURIComponent(template)
+
+    $.ajax({url: url}).done(function() {
       ShopifyApp.flashNotice("Test email sent");
     });
   }
@@ -16,10 +23,12 @@
   window.previewEmail = function() {
     var subject = $('#subject').val();
     var template = $('#template').val();
-    $.ajax({
-      url: '/preview_email?subject=' + encodeURIComponent(subject) + '&template=' + encodeURIComponent(template),
-      dataType: 'json'
-    }).done(function(response){;
+
+    var url = '/preview_email'
+    url += '?subject=' + encodeURIComponent(subject)
+    url += '&template=' + encodeURIComponent(template)
+
+    $.ajax({url: url, dataType: 'json'}).done(function(response) {
       $('#previewEmailModal #email_subject')[0].value = response.email_subject;
       $('#previewEmailModal #email_subject')[1].value = response.email_subject;
       $('#previewEmailModal #email_template')[0].value = response.email_template;
@@ -47,8 +56,18 @@
         <div class="modal-body">
 
           <div class="form-group">
-            <label for="subject">Email to:</label>
+            <label for="subject">To</label>
             <input type="text" class="form-control" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Bcc</label>
+            <input type="text" class="form-control" name="email_bcc" id="bcc" value="<%= charity.email_bcc %>" style="width: 97%"/>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">From</label>
+            <input type="text" class="form-control" name="email_from" id="from" value="<%= charity.email_from || shop.email %>" style="width: 97%"/>
           </div>
 
           <div class="form-group">
@@ -89,12 +108,22 @@
         <div class="modal-body">
 
           <div class="form-group">
-            <label for="subject">Email to:</label>
+            <label for="subject">To</label>
             <input type="text" class="form-control" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
           </div>
 
           <div class="form-group">
-            <label for="subject">Email subject:</label>
+            <label for="subject">Bcc</label>
+            <input type="text" class="form-control" name="email_bcc" id="bcc" value="<%= charity.email_bcc %>" style="width: 97%"/>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">From</label>
+            <input type="text" class="form-control" name="email_from" id="from" value="<%= charity.email_from || shop.email %>" style="width: 97%"/>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject</label>
             <input type="text"  class="form-control" name="email_subject" id="subject" value="<%= charity.email_subject %>" style="width: 97%"/>
           </div>
 
@@ -118,5 +147,5 @@
 </div>
 
 <p>
-  <a href="#" class="btn btn-default" onclick="$('#editEmailModal').modal('toggle'); return false;">Edit receipt email template</a>
+  <a href="#" class="btn btn-default" onclick="$('#editEmailModal').modal('toggle'); return false;">Edit receipt email</a>
 </p>

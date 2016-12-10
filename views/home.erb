@@ -1,5 +1,5 @@
 <% if @charity.blank? %>
-  <div class="alert alert-danger" role="alert">
+  <div class="alert alert-warning" role="alert" style="margin-top: 15px;">
     <p>Please Enter your Charity details to complete the installation</p>
   </div>
 <% end %>
@@ -11,9 +11,9 @@
 
   <div class="col-md-4">
     <% if @charity.present? %>
-      <%= partial 'email_modals', locals: {shop: @shop, charity: @charity} %>
-      <%= partial 'pdf_modal', locals: {charity: @charity} %>
-      <%= partial 'product_picker' %>
+      <%= partial 'components/email_modals', locals: {shop: @shop, charity: @charity} %>
+      <%= partial 'components/pdf_modal', locals: {charity: @charity} %>
+      <%= partial 'components/product_picker' %>
     <% end %>
   </div>
 </div>
