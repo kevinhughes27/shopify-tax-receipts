@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160404005521) do
+ActiveRecord::Schema.define(version: 20161210165450) do
 
   create_table "charities", force: true do |t|
     t.string "name"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20160404005521) do
     t.string "pdf_charity_identifier"
     t.string "pdf_signature"
     t.text   "pdf_template"
+    t.string "email_from"
+    t.string "email_bcc"
   end
 
   add_index "charities", ["shop"], name: "index_charities_on_shop"

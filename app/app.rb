@@ -126,25 +126,32 @@ class SinatraApp < Sinatra::Base
     return unless order["customer"]
     return unless mail_to = order["customer"]["email"]
     return unless order["billing_address"]
-    email_body = liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
 
-    Pony.mail to: mail_to,
-              from: shop.email,
-              subject: charity.email_subject,
-              attachments: {"donation_receipt.pdf" => pdf},
-              body: email_body
+    bcc = charity.email_bcc
+    from = charity.email_from || shop.email
+    subject = charity.email_subject
+    body = liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
+
+    send_email(to, bcc, from, subject, body, pdf)
   end
 
   def deliver_test_receipt(shop, order, charity, pdf, params = {})
-    email_to = params["to"] || shop.email
-    email_subject = params["subject"] || charity.email_subject
-    email_body = liquid(params["template"] || charity.email_template, layout: false, locals: {order: order, charity: charity})
+    to = params["to"] || shop.email
+    bcc = params["bcc"] || charity.email_bcc
+    from = params["from"] || charity.email_from || shop.email
+    subject = params["subject"] || charity.email_subject
+    body = liquid(params["template"] || charity.email_template, layout: false, locals: {order: order, charity: charity})
 
-    Pony.mail to: email_to,
-              from: shop.email,
-              subject: email_subject,
+    send_email(to, bcc, from, subject, body, pdf)
+  end
+
+  def send_email(to, bcc, from, subject, body, pdf)
+    Pony.mail to: to,
+              bcc: bcc,
+              from: from,
+              subject: subject,
               attachments: {"donation_receipt.pdf" => pdf},
-              body: email_body
+              body: body
   end
 
   def mock_order

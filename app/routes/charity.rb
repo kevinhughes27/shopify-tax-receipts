@@ -36,6 +36,8 @@ class SinatraApp < Sinatra::Base
     params.slice(
       "name",
       "charity_id",
+      "email_from",
+      "email_bcc",
       "email_subject",
       "email_template",
       "pdf_template"
