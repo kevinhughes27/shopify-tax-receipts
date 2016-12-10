@@ -3,8 +3,8 @@ class Charity < ActiveRecord::Base
 
   validates :shop, uniqueness: true
   validates_presence_of :name, :charity_id
-  validates_format_of :email_bcc, with: EMAIL_REGEX
-  validates_format_of :email_from, with: EMAIL_REGEX
+  validates_format_of :email_bcc, with: EMAIL_REGEX, allow_blank: true
+  validates_format_of :email_from, with: EMAIL_REGEX, allow_blank: true
 
   def email_subject
     if read_attribute(:email_subject).present?
