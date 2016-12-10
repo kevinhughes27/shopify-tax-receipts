@@ -124,7 +124,7 @@ class SinatraApp < Sinatra::Base
 
   def deliver_donation_receipt(shop, order, charity, pdf)
     return unless order["customer"]
-    return unless mail_to = order["customer"]["email"]
+    return unless to = order["customer"]["email"]
     return unless order["billing_address"]
 
     bcc = charity.email_bcc
