@@ -4,7 +4,7 @@ ruby '2.3.1'
 gem 'rake'
 gem 'foreman'
 
-gem 'shopify-sinatra-app', '~> 0.3.0'
+gem 'shopify-sinatra-app', '~> 0.3.2'
 gem 'sinatra-contrib'
 gem 'sinatra-partial'
 
