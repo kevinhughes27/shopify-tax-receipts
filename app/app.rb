@@ -13,9 +13,7 @@ require_relative 'models/product'
 require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/webhooks'
-
-require 'tilt/liquid'
-require 'wicked_pdf'
+require_relative 'utils/render_pdf'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
@@ -106,26 +104,9 @@ class SinatraApp < Sinatra::Base
 
   private
 
-  def render_pdf(shop, order, charity, donation_amount)
-    order['created_at'] = Time.parse(order['created_at']).strftime("%B %d, %Y")
-
-    template = Tilt::LiquidTemplate.new { |t| charity.pdf_template }
-    pdf_content = template.render(
-      shop: shop.attributes,
-      order: order,
-      charity: charity,
-      donation_amount: donation_amount
-    )
-
-    WickedPdf.new.pdf_from_string(
-      Tilt::ERBTemplate.new('views/receipt/pdf.erb').render(Object.new, pdf_content: pdf_content)
-    )
-  end
-
   def deliver_donation_receipt(shop, order, charity, pdf)
     return unless order["customer"]
     return unless to = order["customer"]["email"]
-    return unless order["billing_address"]
 
     bcc = charity.email_bcc
     from = charity.email_from || shop.email
