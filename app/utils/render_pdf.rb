@@ -3,7 +3,7 @@ require 'wicked_pdf'
 
 def render_pdf(shop, order, charity, donation_amount)
   order['created_at'] = Time.parse(order['created_at']).strftime("%B %d, %Y")
-  order['billing_address'] ||= order['customer']['default_address']
+  order['billing_address'] ||= order.dig('default_address')
 
   template = Tilt::LiquidTemplate.new { |t| charity.pdf_template }
   pdf_content = template.render(
