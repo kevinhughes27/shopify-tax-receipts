@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161210172758) do
+ActiveRecord::Schema.define(version: 20171019183557) do
 
   create_table "charities", force: true do |t|
     t.string "name"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20161210172758) do
   create_table "products", force: true do |t|
     t.integer "product_id", limit: 8
     t.string  "shop"
-    t.integer "percentage",           default: 100
+    t.decimal "percentage",           default: 100.0
   end
 
   add_index "products", ["shop"], name: "index_products_on_shop"
