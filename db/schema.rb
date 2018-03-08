@@ -22,23 +22,20 @@ ActiveRecord::Schema.define(version: 20171019183557) do
     t.text   "pdf_template"
     t.string "email_from"
     t.string "email_bcc"
+    t.index ["shop"], name: "index_charities_on_shop"
   end
-
-  add_index "charities", ["shop"], name: "index_charities_on_shop"
 
   create_table "products", force: true do |t|
     t.integer "product_id", limit: 8
     t.string  "shop"
     t.decimal "percentage",           default: 100.0
+    t.index ["shop"], name: "index_products_on_shop"
   end
-
-  add_index "products", ["shop"], name: "index_products_on_shop"
 
   create_table "shops", force: true do |t|
     t.string "name"
     t.string "token_encrypted"
+    t.index ["name"], name: "index_shops_on_name"
   end
-
-  add_index "shops", ["name"], name: "index_shops_on_name"
 
 end
