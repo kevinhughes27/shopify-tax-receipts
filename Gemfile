@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
-ruby '2.3.4'
+ruby '2.5.0'
 
 gem 'rake'
 gem 'foreman'
 
-gem 'shopify-sinatra-app', '~> 0.3.2'
+gem 'shopify-sinatra-app', '~> 0.4.0'
 gem 'sinatra-contrib'
 gem 'sinatra-partial'
 
