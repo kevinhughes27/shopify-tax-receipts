@@ -1,6 +1,6 @@
 require 'sinatra/activerecord/rake'
 require 'rake/testtask'
-require './app/app'
+require './src/app'
 
 namespace :test do
   task :prepare do

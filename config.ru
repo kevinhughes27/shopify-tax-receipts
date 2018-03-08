@@ -1,2 +1,2 @@
-require './app/app'
+require './src/app'
 SinatraApp.run!

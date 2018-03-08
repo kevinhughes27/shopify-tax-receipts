@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative '../app/utils/render_pdf'
+require_relative '../src/utils/render_pdf'
 
 class RenderPdfTest < ActiveSupport::TestCase
 

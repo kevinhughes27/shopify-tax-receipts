@@ -9,7 +9,7 @@ require 'rack/test'
 require 'mocha/setup'
 require 'fakeweb'
 
-require "./app/app"
+require "./src/app"
 
 FakeWeb.allow_net_connect = false
 
