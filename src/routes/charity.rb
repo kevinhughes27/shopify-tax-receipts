@@ -4,9 +4,11 @@ require_relative '../models/charity'
 class SinatraApp < Sinatra::Base
   post '/charity' do
     shopify_session do
-      params.merge!(shop: current_shop_name)
-
-      charity = Charity.new(params)
+      charity = Charity.new(
+        name: params['name'],
+        charity_id: params['charity_id'],
+        shop: current_shop_name
+      )
 
       if charity.save
         flash[:notice] = "Charity Information Saved"
