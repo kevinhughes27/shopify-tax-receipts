@@ -7,6 +7,7 @@
     var from = $activeModal.find('#from').val();
     var subject = $activeModal.find('#subject').val();
     var template = $activeModal.find('#template').val();
+    var filename = $activeModal.find('#filename').val();
 
     var url = '/test_email'
     url += '?to=' + to
@@ -14,6 +15,7 @@
     url += '&from=' + from
     url += '&subject=' + encodeURIComponent(subject)
     url += '&template=' + encodeURIComponent(template)
+    url += '&filename=' + filename
 
     $.ajax({url: url}).done(function() {
       ShopifyApp.flashNotice("Test email sent");
@@ -56,23 +58,28 @@
         <div class="modal-body">
 
           <div class="form-group">
-            <label for="subject">To</label>
+            <label for="email_to">To</label>
             <input type="text" class="form-control" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
           </div>
 
           <div class="form-group">
-            <label for="subject">Bcc</label>
+            <label for="email_bcc">Bcc</label>
             <input type="text" class="form-control" name="email_bcc" id="bcc" value="<%= charity.email_bcc %>" style="width: 97%"/>
           </div>
 
           <div class="form-group">
-            <label for="subject">From</label>
+            <label for="email_from">From</label>
             <input type="text" class="form-control" name="email_from" id="from" value="<%= charity.email_from || shop.email %>" style="width: 97%"/>
           </div>
 
           <div class="form-group">
-            <label for="subject">Email subject</label>
+            <label for="email_subject">Email subject</label>
             <input type="text" class="form-control" id="email_subject" disabled="true" style="width: 97%"/>
+          </div>
+
+          <div class="form-group">
+            <label for="pdf_filename">Attachment filename (.pdf)</label>
+            <input type="text" class="form-control" name="pdf_filename" value="<%= charity.pdf_filename %>" style="width: 97%"/>
           </div>
 
           <hr>
@@ -108,23 +115,28 @@
         <div class="modal-body">
 
           <div class="form-group">
-            <label for="subject">To</label>
+            <label for="email_to">To</label>
             <input type="text" class="form-control" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
           </div>
 
           <div class="form-group">
-            <label for="subject">Bcc</label>
+            <label for="email_bcc">Bcc</label>
             <input type="text" class="form-control" name="email_bcc" id="bcc" value="<%= charity.email_bcc %>" style="width: 97%"/>
           </div>
 
           <div class="form-group">
-            <label for="subject">From</label>
+            <label for="email_from">From</label>
             <input type="text" class="form-control" name="email_from" id="from" value="<%= charity.email_from || shop.email %>" style="width: 97%"/>
           </div>
 
           <div class="form-group">
-            <label for="subject">Subject</label>
+            <label for="email_subject">Subject</label>
             <input type="text"  class="form-control" name="email_subject" id="subject" value="<%= charity.email_subject %>" style="width: 97%"/>
+          </div>
+
+          <div class="form-group">
+            <label for="pdf_filename">Attachment filename (.pdf)</label>
+            <input type="text" class="form-control" name="pdf_filename" id="filename" value="<%= charity.pdf_filename %>" style="width: 97%"/>
           </div>
 
           <hr>

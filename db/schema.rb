@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,30 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171019183557) do
+ActiveRecord::Schema.define(version: 20180322143108) do
 
-  create_table "charities", force: true do |t|
-    t.string "name"
-    t.string "charity_id"
-    t.string "shop"
-    t.text   "email_template", limit: 255
-    t.string "email_subject"
-    t.text   "pdf_template"
-    t.string "email_from"
-    t.string "email_bcc"
+  create_table "charities", force: :cascade do |t|
+    t.string "name", limit: 255
+    t.string "charity_id", limit: 255
+    t.string "shop", limit: 255
+    t.text "email_template", limit: 255
+    t.string "email_subject", limit: 255
+    t.text "pdf_template"
+    t.string "email_from", limit: 255
+    t.string "email_bcc", limit: 255
+    t.string "pdf_filename", default: "donation_receipt"
     t.index ["shop"], name: "index_charities_on_shop"
   end
 
-  create_table "products", force: true do |t|
+  create_table "donations", force: :cascade do |t|
+    t.integer "order_id", limit: 8, null: false
+    t.string "order_number", null: false
+    t.decimal "donation_amount", precision: 8, scale: 2, null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "address1"
+    t.string "city"
+    t.string "country"
+    t.string "zip"
+  end
+
+  create_table "products", force: :cascade do |t|
     t.integer "product_id", limit: 8
-    t.string  "shop"
-    t.decimal "percentage",           default: 100.0
+    t.string "shop", limit: 255
+    t.decimal "percentage", default: "100.0"
     t.index ["shop"], name: "index_products_on_shop"
   end
 
-  create_table "shops", force: true do |t|
-    t.string "name"
-    t.string "token_encrypted"
+  create_table "shops", force: :cascade do |t|
+    t.string "name", limit: 255
+    t.string "token_encrypted", limit: 255
     t.index ["name"], name: "index_shops_on_name"
   end
 
