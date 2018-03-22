@@ -123,7 +123,7 @@ class SinatraApp < Sinatra::Base
     from = params["from"] || charity.email_from || shop.email
     subject = params["subject"] || charity.email_subject
     body = liquid(params["template"] || charity.email_template, layout: false, locals: {order: order, charity: charity})
-    filename =  charity.pdf_filename
+    filename =  params["filename"] || charity.pdf_filename
 
     send_email(to, bcc, from, subject, body, pdf, filename)
   end
