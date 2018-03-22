@@ -112,8 +112,9 @@ class SinatraApp < Sinatra::Base
     from = charity.email_from || shop.email
     subject = charity.email_subject
     body = liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
+    filename =  charity.pdf_filename
 
-    send_email(to, bcc, from, subject, body, pdf)
+    send_email(to, bcc, from, subject, body, pdf, filename)
   end
 
   def deliver_test_receipt(shop, order, charity, pdf, params = {})
@@ -122,16 +123,17 @@ class SinatraApp < Sinatra::Base
     from = params["from"] || charity.email_from || shop.email
     subject = params["subject"] || charity.email_subject
     body = liquid(params["template"] || charity.email_template, layout: false, locals: {order: order, charity: charity})
+    filename =  charity.pdf_filename
 
-    send_email(to, bcc, from, subject, body, pdf)
+    send_email(to, bcc, from, subject, body, pdf, filename)
   end
 
-  def send_email(to, bcc, from, subject, body, pdf)
+  def send_email(to, bcc, from, subject, body, pdf, filename)
     Pony.mail to: to,
               bcc: bcc,
               from: from,
               subject: subject,
-              attachments: {"donation_receipt.pdf" => pdf},
+              attachments: {"#{filename}.pdf" => pdf},
               body: body
   end
 
