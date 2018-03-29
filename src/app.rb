@@ -59,9 +59,10 @@ class SinatraApp < Sinatra::Base
         shopify_shop = ShopifyAPI::Shop.current
         donation_amount = sprintf( "%0.02f", donations.sum)
 
-        save_donation(current_shop_name, order, donation_amount)
-        receipt_pdf = render_pdf(shopify_shop, order, charity, donation_amount)
-        deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
+        if donation = save_donation(current_shop_name, order, donation_amount)
+          receipt_pdf = render_pdf(shopify_shop, order, charity, donation_amount)
+          deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
+        end
       end
     end
   end
@@ -113,7 +114,7 @@ class SinatraApp < Sinatra::Base
     donation
   rescue ActiveRecord::RecordInvalid => e
     raise unless e.message == 'Validation failed: Order has already been taken'
-    donation
+    false
   end
 
   def deliver_donation_receipt(shop, order, charity, pdf)
