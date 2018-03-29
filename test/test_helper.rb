@@ -28,6 +28,7 @@ module Helpers
   def reset_db
     Charity.delete_all
     Product.delete_all
+    Donation.delete_all
   end
 
   def load_fixture(name)

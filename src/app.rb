@@ -10,6 +10,7 @@ require_relative '../config/development' if ENV['DEVELOPMENT']
 require_relative 'concerns/install'
 require_relative 'models/charity'
 require_relative 'models/product'
+require_relative 'models/donation'
 require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/webhooks'
@@ -57,6 +58,10 @@ class SinatraApp < Sinatra::Base
         charity = Charity.find_by(shop: current_shop_name)
         shopify_shop = ShopifyAPI::Shop.current
         donation_amount = sprintf( "%0.02f", donations.sum)
+
+        donation = Donation.new(shop: current_shop_name, order_id: order['id'], donation_amount: donation_amount)
+        donation.save!
+
         receipt_pdf = render_pdf(shopify_shop, order, charity, donation_amount)
         deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
       end
