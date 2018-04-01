@@ -6,7 +6,7 @@ Sinatra console on production:
 ```
 heroku run irb --app taxreceipts
 
-require_relative 'src.app.rb'
+require_relative 'src/app.rb'
 ```
 
 Check webhook for shop:
