@@ -100,7 +100,7 @@ class SinatraApp < Sinatra::Base
       order = mock_order
 
       receipt_pdf = render_pdf(shopify_shop, order, charity, 20)
-      deliver_test_receipt(shopify_shop, order, charity, receipt_pdf, params)
+      deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf, params['to'])
 
       status 200
     end
@@ -117,26 +117,15 @@ class SinatraApp < Sinatra::Base
     false
   end
 
-  def deliver_donation_receipt(shop, order, charity, pdf)
+  def deliver_donation_receipt(shop, order, charity, pdf, to = nil)
     return unless order["customer"]
-    return unless to = order["customer"]["email"]
+    return unless to ||= order["customer"]["email"]
 
     bcc = charity.email_bcc
     from = charity.email_from || shop.email
     subject = charity.email_subject
     body = liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
     filename = charity.pdf_filename
-
-    send_email(to, bcc, from, subject, body, pdf, filename)
-  end
-
-  def deliver_test_receipt(shop, order, charity, pdf, params = {})
-    to = params["to"] || shop.email
-    bcc = params["bcc"] || charity.email_bcc
-    from = params["from"] || charity.email_from || shop.email
-    subject = params["subject"] || charity.email_subject
-    body = liquid(params["template"] || charity.email_template, layout: false, locals: {order: order, charity: charity})
-    filename = params["filename"] || charity.pdf_filename
 
     send_email(to, bcc, from, subject, body, pdf, filename)
   end

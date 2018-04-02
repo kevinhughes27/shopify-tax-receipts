@@ -1,0 +1,46 @@
+<script>
+  window.sendTestEmail = function() {
+    var $modal = $('#testEmailModal');
+    var to = $modal.find('#to').val();
+    var url = '/test_email?to=' + to;
+
+    $.ajax({url: url})
+      .done(function() {
+        $('#testEmailModal').modal('hide');
+        ShopifyApp.flashNotice("Test email sent");
+      })
+      .error(function() {
+        $('#testEmailModal').modal('hide');
+        ShopifyApp.flashNotice("Error!");
+      });
+  }
+</script>
+
+<div class="modal fade" id="testEmailModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Test Email</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="email_to">To</label>
+          <input type="text" class="form-control" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" onclick="sendTestEmail()">Send</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<p>
+  <a href="#" class="btn btn-default" onclick="$('#testEmailModal').modal('toggle'); return false;">Send test email</a>
+</p>
