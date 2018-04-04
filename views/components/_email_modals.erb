@@ -1,27 +1,4 @@
 <script>
-  window.sendTestEmail = function() {
-    var $activeModal = $('.modal:visible');
-
-    var to = $activeModal.find('#to').val();
-    var bcc = $activeModal.find('#bcc').val();
-    var from = $activeModal.find('#from').val();
-    var subject = $activeModal.find('#subject').val();
-    var template = $activeModal.find('#template').val();
-    var filename = $activeModal.find('#filename').val();
-
-    var url = '/test_email'
-    url += '?to=' + to
-    url += '&bcc=' + bcc
-    url += '&from=' + from
-    url += '&subject=' + encodeURIComponent(subject)
-    url += '&template=' + encodeURIComponent(template)
-    url += '&filename=' + filename
-
-    $.ajax({url: url}).done(function() {
-      ShopifyApp.flashNotice("Test email sent");
-    });
-  }
-
   window.previewEmail = function() {
     var subject = $('#subject').val();
     var template = $('#template').val();
@@ -56,12 +33,6 @@
         <input type="hidden" name="email_template" id="email_template"/>
 
         <div class="modal-body">
-
-          <div class="form-group">
-            <label for="email_to">To</label>
-            <input type="text" class="form-control" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
-          </div>
-
           <div class="form-group">
             <label for="email_bcc">Bcc</label>
             <input type="text" class="form-control" name="email_bcc" id="bcc" value="<%= charity.email_bcc %>" style="width: 97%"/>
@@ -89,8 +60,7 @@
 
         <div class="modal-footer">
           <div class="pull-left">
-             <button type="button" class="btn btn-default" onclick="$('#previewEmailModal').modal('hide'); $('#editEmailModal').modal('show')">Back to edit</button>
-             <button type="button" class="btn btn-default" onclick="sendTestEmail()">Send test email</button>
+            <button type="button" class="btn btn-default" onclick="$('#previewEmailModal').modal('hide'); $('#editEmailModal').modal('show')">Back to edit</button>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save</button>
@@ -113,11 +83,6 @@
       <form method="POST" action="/charity" role="form">
         <input type="hidden" name="_method" value="put" />
         <div class="modal-body">
-
-          <div class="form-group">
-            <label for="email_to">To</label>
-            <input type="text" class="form-control" name="email_to" id="to" value="<%= shop.email %>" style="width: 97%"/>
-          </div>
 
           <div class="form-group">
             <label for="email_bcc">Bcc</label>
@@ -146,8 +111,7 @@
 
         <div class="modal-footer">
           <div class="pull-left">
-             <button type="button" class="btn btn-default" onclick="previewEmail()">Preview</button>
-             <button type="button" class="btn btn-default" onclick="sendTestEmail()">Send test email</button>
+            <button type="button" class="btn btn-default" onclick="previewEmail()">Preview</button>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save</button>
