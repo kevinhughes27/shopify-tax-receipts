@@ -10,3 +10,9 @@ script:
   - bundle exec rake db:schema:load
   - bundle exec rake test:prepare
   - bundle exec rake test
+
+notifications:
+  email:
+    on_success: never
+    on_failure: never
+    
