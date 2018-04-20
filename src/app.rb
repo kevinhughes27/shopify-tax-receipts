@@ -28,6 +28,15 @@ class SinatraApp < Sinatra::Base
       @charity = Charity.find_by(shop: current_shop_name)
       @products = Product.where(shop: current_shop_name).page(params[:products_page])
       @donations = Donation.where(shop: current_shop_name).page(params[:donations_page])
+
+      @tab = if params[:products_page]
+        'products'
+      elsif params[:donations_page]
+        'donations'
+      else
+        'products'
+      end
+
       erb :home
     end
   end
