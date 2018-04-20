@@ -1,10 +1,9 @@
 require 'sinatra/shopify-sinatra-app'
-require 'sinatra/content_for'
-require 'sinatra/partial'
 
 require_relative '../config/pony'
 require_relative '../config/pdf_engine'
 require_relative '../config/exception_tracker'
+require_relative '../config/pagination'
 require_relative '../config/development' if ENV['DEVELOPMENT']
 
 require_relative 'concerns/install'
@@ -20,11 +19,7 @@ class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
   set :scope, 'read_products, read_orders'
 
-  register Sinatra::Partial
-  set :partial_template_engine, :erb
-  enable :partial_underscores
-
-  helpers Sinatra::ContentFor
+  register Kaminari::Helpers::SinatraHelpers
 
   # Home page
   get '/' do
@@ -32,7 +27,7 @@ class SinatraApp < Sinatra::Base
       @shop = ShopifyAPI::Shop.current
       @charity = Charity.find_by(shop: current_shop_name)
       @products = Product.where(shop: current_shop_name)
-      @donations = Donation.where(shop: current_shop_name)
+      @donations = Donation.where(shop: current_shop_name).page(params[:donations_page])
       erb :home
     end
   end

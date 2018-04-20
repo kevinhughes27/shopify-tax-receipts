@@ -6,7 +6,8 @@ gem 'foreman'
 
 gem 'shopify-sinatra-app', '~> 0.4.0'
 gem 'sinatra-contrib'
-gem 'sinatra-partial'
+gem 'kaminari-sinatra'
+gem 'kaminari-activerecord'
 
 gem 'wicked_pdf'
 gem 'pony'
