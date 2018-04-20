@@ -20,7 +20,7 @@
 </div>
 
 <% if @charity.present? %>
-  <%= partial 'products', locals: {products: @products} %>
+  <%= partial 'tabs', locals: {products: @products, donations: @donations} %>
 <% end %>
 
 <% content_for :footer do %>
