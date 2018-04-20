@@ -26,7 +26,7 @@ class SinatraApp < Sinatra::Base
     shopify_session do
       @shop = ShopifyAPI::Shop.current
       @charity = Charity.find_by(shop: current_shop_name)
-      @products = Product.where(shop: current_shop_name)
+      @products = Product.where(shop: current_shop_name).page(params[:products_page])
       @donations = Donation.where(shop: current_shop_name).page(params[:donations_page])
       erb :home
     end

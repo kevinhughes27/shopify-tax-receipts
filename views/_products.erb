@@ -47,6 +47,10 @@
       <% end %>
     </tbody>
   </table>
+
+  <div style="padding-left: 5px;">
+    <%= paginate products, param_name: :products_page %>
+  </div>
 <% else %>
   <p>No products are currently setup for tax receipts. Visit the <a href="/help">help page</a> to see how to get started!</p>
 <% end %>
