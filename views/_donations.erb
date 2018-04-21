@@ -20,7 +20,7 @@
   </table>
 
   <div style="padding-left: 5px;">
-    <%= paginate donations, param_name: :donations_page %>
+    <%= paginate donations, param_name: :donations_page, params: {tab: 'donations'} %>
   </div>
 <% else %>
   <p>No donations have been sent yet</p>
