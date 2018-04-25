@@ -1,0 +1,26 @@
+<ul class="nav nav-tabs" id="tabs">
+  <li class="<%= 'active' if tab == 'products' %>">
+    <a href="#products">Products</a>
+  </li>
+  <li class="<%= 'active' if tab == 'donations' %>">
+    <a href="#donations">Donations</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane <%= 'active' if tab == 'products' %>" id="products">
+    <br>
+    <%= partial 'products', locals: {products: products} %>
+  </div>
+  <div class="tab-pane <%= 'active' if tab == 'donations' %>" id="donations">
+    <br>
+    <%= partial 'donations', locals: {donations: donations} %>
+  </div>
+</div>
+
+<script>
+  $('#tabs a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+</script>

@@ -1,0 +1,27 @@
+<% if donations.present? %>
+  <table class="table table-striped table-hover">
+    <tbody>
+      <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Amount</th>
+      </tr>
+
+      <% donations.each do |donation| %>
+        <tr>
+          <td>
+            <a href=<%="#{current_shop_url}/admin/orders/#{donation.order_id}"%> target="_blank"> <%= donation.order_id %></a>
+          </td>
+          <td><%= donation.created_at %></td>
+          <td><%= donation.donation_amount %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div style="padding-left: 5px;">
+    <%= paginate donations, param_name: :donations_page, params: {tab: 'donations'} %>
+  </div>
+<% else %>
+  <p>No donations have been sent yet</p>
+<% end %>
