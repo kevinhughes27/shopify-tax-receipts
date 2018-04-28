@@ -131,6 +131,7 @@ class SinatraApp < Sinatra::Base
       end_date = Date.parse(params['end_date'])
 
       csv = export_csv(current_shop_name, start_date, end_date)
+      attachment   'donations.csv'
       content_type 'application/csv'
       csv
     end
