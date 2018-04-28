@@ -84,6 +84,22 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
+  test "resend" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
+
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order_webhook.json')
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    Pony.expects(:mail).once
+
+    params = {id: donation.id}
+    post '/resend', params, 'rack.session' => session
+
+    assert last_response.redirect?
+    assert_equal 'Email resent!', last_request.env['x-rack.flash'][:notice]
+  end
+
   test "test_email" do
     charity = Charity.find_by(shop: @shop)
     charity.update_attribute(:email_template, nil)
@@ -98,6 +114,6 @@ class AppTest < ActiveSupport::TestCase
   private
 
   def session
-    { shopify: {shop: 'apple.myshopify.com', token: 'token'} }
+    { shopify: {shop: @shop, token: 'token'} }
   end
 end
