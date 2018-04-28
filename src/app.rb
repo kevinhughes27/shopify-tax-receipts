@@ -64,6 +64,25 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # resend a donation receipt
+  post '/resend' do
+    shopify_session do
+      donation = Donation.find_by(id: params['id'])
+
+      charity = Charity.find_by(shop: current_shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+
+      order = JSON.parse(donation.order.to_json)
+      donation_amount = donation.donation_amount
+
+      receipt_pdf = render_pdf(shopify_shop, order, charity, donation_amount)
+      deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
+
+      flash[:notice] = "Email resent!"
+      redirect '/'
+    end
+  end
+
   # render a preview of user edited email template
   get '/preview_email' do
     shopify_session do
@@ -76,6 +95,7 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # render a preview of the user edited pdf template
   get '/preview_pdf' do
     shopify_session do
       charity = Charity.find_by(shop: current_shop_name)
