@@ -5,6 +5,7 @@
         <th>Order ID</th>
         <th>Date</th>
         <th>Amount</th>
+        <th></th>
       </tr>
 
       <% donations.each do |donation| %>
@@ -14,6 +15,13 @@
           </td>
           <td><%= donation.created_at %></td>
           <td><%= donation.donation_amount %></td>
+
+          <form method="POST" action="/resend">
+            <td style="width:1px;">
+              <input type="hidden" name="id" value="<%= donation.id %>" />
+              <input type="submit" class="btn btn-default align-right" value="resend">
+            </td>
+          </form>
         </tr>
       <% end %>
     </tbody>
