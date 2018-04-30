@@ -5,7 +5,7 @@ def export_csv(shop_name, start_date, end_date)
 
   csv = CSV.generate do |csv|
     csv << ['Order ID', 'Date', 'Amount']
-    donations.each do |d|
+    donations.find_each do |d|
       csv << [d.order_id, d.created_at, d.donation_amount]
     end
   end
