@@ -14,4 +14,8 @@ class Donation < ActiveRecord::Base
   def order
     @order ||= ShopifyAPI::Order.find(order_id)
   end
+
+  def donation_amount
+    sprintf( "%0.02f", read_attribute(:donation_amount))
+  end
 end
