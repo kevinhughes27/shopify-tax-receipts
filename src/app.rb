@@ -58,8 +58,8 @@ class SinatraApp < Sinatra::Base
         donation_amount = sprintf( "%0.02f", donations.sum)
 
         if donation = save_donation(current_shop_name, order, donation_amount)
-          receipt_pdf = render_pdf(shopify_shop, order, charity, donation_amount)
-          deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
+          receipt_pdf = render_pdf(shopify_shop, order, charity, donation)
+          deliver_donation_receipt(shopify_shop, order, charity, donation, receipt_pdf)
         end
       end
     end
@@ -69,15 +69,13 @@ class SinatraApp < Sinatra::Base
   post '/resend' do
     shopify_session do
       donation = Donation.find_by(id: params['id'])
+      order = JSON.parse(donation.order.to_json)
 
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
-      order = JSON.parse(donation.order.to_json)
-      donation_amount = donation.donation_amount
-
-      receipt_pdf = render_pdf(shopify_shop, order, charity, donation_amount)
-      deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf)
+      receipt_pdf = render_pdf(shopify_shop, order, charity, donation)
+      deliver_donation_receipt(shopify_shop, order, charity, donation, receipt_pdf)
 
       flash[:notice] = "Email resent!"
       redirect '/'
@@ -90,7 +88,8 @@ class SinatraApp < Sinatra::Base
       charity = Charity.find_by(shop: current_shop_name)
       subject = params['subject']
       template = params['template']
-      email_body = liquid(template, layout: false, locals: {order: mock_order, charity: charity})
+
+      email_body = liquid(template, layout: false, locals: {order: mock_order, charity: charity, donation: mock_donation})
 
       {email_subject: subject, email_body: email_body, email_template: template}.to_json
     end
@@ -101,10 +100,10 @@ class SinatraApp < Sinatra::Base
     shopify_session do
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
-      donation_amount = '20.00'
       order = mock_order
+      donation = mock_donation
 
-      receipt_pdf = render_pdf(shopify_shop, order, charity, donation_amount)
+      receipt_pdf = render_pdf(shopify_shop, order, charity, donation)
       content_type 'application/pdf'
       receipt_pdf
     end
@@ -116,9 +115,10 @@ class SinatraApp < Sinatra::Base
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
       order = mock_order
+      donation = mock_donation
 
-      receipt_pdf = render_pdf(shopify_shop, order, charity, 20)
-      deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf, params['to'])
+      receipt_pdf = render_pdf(shopify_shop, order, charity, donation)
+      deliver_donation_receipt(shopify_shop, order, charity, donation, receipt_pdf, params['to'])
 
       status 200
     end
@@ -148,14 +148,14 @@ class SinatraApp < Sinatra::Base
     false
   end
 
-  def deliver_donation_receipt(shop, order, charity, pdf, to = nil)
+  def deliver_donation_receipt(shop, order, charity, donation, pdf, to = nil)
     return unless order["customer"]
     return unless to ||= order["customer"]["email"]
 
     bcc = charity.email_bcc
     from = charity.email_from || shop.email
     subject = charity.email_subject
-    body = liquid(charity.email_template, layout: false, locals: {order: order, charity: charity})
+    body = liquid(charity.email_template, layout: false, locals: {order: order, charity: charity, donation: donation})
     filename = charity.pdf_filename
 
     send_email(to, bcc, from, subject, body, pdf, filename)
@@ -168,6 +168,12 @@ class SinatraApp < Sinatra::Base
               subject: subject,
               attachments: {"#{filename}.pdf" => pdf},
               body: body
+  end
+
+  def mock_donation
+    donation = Donation.new(shop: current_shop_name, order_id: mock_order['id'], donation_amount: 20.00)
+    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(mock_order))
+    donation
   end
 
   def mock_order

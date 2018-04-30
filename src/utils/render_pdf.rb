@@ -22,7 +22,7 @@ end
 
 require 'wicked_pdf'
 
-def render_pdf(shop, order, charity, donation_amount)
+def render_pdf(shop, order, charity, donation)
   order['created_at'] = Time.parse(order['created_at']).strftime("%B %d, %Y")
   order['billing_address'] ||= order.dig('default_address')
 
@@ -31,7 +31,8 @@ def render_pdf(shop, order, charity, donation_amount)
     shop: shop.attributes,
     order: order,
     charity: charity,
-    donation_amount: donation_amount
+    donation: donation,
+    donation_amount: donation.donation_amount
   )
 
   WickedPdf.new.pdf_from_string(

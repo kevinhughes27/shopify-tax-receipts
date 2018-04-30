@@ -4,37 +4,52 @@ require_relative '../src/utils/render_pdf'
 class RenderPdfTest < ActiveSupport::TestCase
 
   setup do
-    shop_domain = "apple.myshopify.com"
-    activate_shopify_session(shop_domain, 'token')
+    @shop_domain = "apple.myshopify.com"
+    activate_shopify_session(@shop_domain, 'token')
     @shop = ShopifyAPI::Shop.new(JSON.parse(load_fixture('shop.json')))
-    @charity = Charity.find_by(shop: shop_domain)
+    @charity = Charity.find_by(shop: @shop_domain)
   end
 
   test "regular_order" do
     order = JSON.parse(load_fixture('order_webhook.json'))
-    pdf = render_pdf(@shop, order, @charity, 20)
+    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
+    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+
+    pdf = render_pdf(@shop, order, @charity, donation)
     write_pdf(pdf)
   end
 
   test "order_no_address" do
     order = JSON.parse(load_fixture('order_no_address.json'))
-    pdf = render_pdf(@shop, order, @charity, 20)
+    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
+    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+
+    pdf = render_pdf(@shop, order, @charity, donation)
   end
 
   test "order_no_billing_address_uses_customer_default_address" do
     order = JSON.parse(load_fixture('order_customer_address.json'))
-    pdf = render_pdf(@shop, order, @charity, 20)
+    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
+    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+
+    pdf = render_pdf(@shop, order, @charity, donation)
   end
 
   test "order_no_zip" do
     order = JSON.parse(load_fixture('order_no_zip.json'))
-    pdf = render_pdf(@shop, order, @charity, 20)
+    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
+    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+
+    pdf = render_pdf(@shop, order, @charity, donation)
   end
 
   test "utf8" do
     @charity.name += 'Ş'
     order = JSON.parse(load_fixture('order_webhook.json'))
-    pdf = render_pdf(@shop, order, @charity, 20)
+    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
+    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+
+    pdf = render_pdf(@shop, order, @charity, donation)
   end
 
   private
