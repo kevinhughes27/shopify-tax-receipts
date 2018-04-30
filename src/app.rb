@@ -145,6 +145,7 @@ class SinatraApp < Sinatra::Base
   def save_donation(shop_name, order, donation_amount)
     donation = Donation.new(shop: shop_name, order_id: order['id'], donation_amount: donation_amount)
     donation.save!
+    donation.order = ShopifyAPI::Order.new(order)
     donation
   rescue ActiveRecord::RecordInvalid => e
     raise unless e.message == 'Validation failed: Order has already been taken'
@@ -175,7 +176,7 @@ class SinatraApp < Sinatra::Base
 
   def mock_donation
     donation = Donation.new(shop: current_shop_name, order_id: mock_order['id'], donation_amount: 20.00)
-    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(mock_order))
+    donation.order = ShopifyAPI::Order.new(mock_order)
     donation
   end
 
