@@ -111,6 +111,18 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
+  test "export" do
+    Donation.create!(shop: @shop, order_id: 1234, donation_amount: 10, created_at: Time.now - 5.days)
+    Donation.create!(shop: @shop, order_id: 5678, donation_amount: 10)
+
+    params = {start_date: Time.now - 3.days, end_date: Time.now + 2.days}
+    post '/export', params, 'rack.session' => session
+
+    assert last_response.ok?
+    refute_match "1234", last_response.body
+    assert_match "5678", last_response.body
+  end
+
   private
 
   def session

@@ -14,6 +14,7 @@ require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/webhooks'
 require_relative 'utils/render_pdf'
+require_relative 'utils/export_csv'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
@@ -120,6 +121,19 @@ class SinatraApp < Sinatra::Base
       deliver_donation_receipt(shopify_shop, order, charity, receipt_pdf, params['to'])
 
       status 200
+    end
+  end
+
+  # export donations
+  post '/export' do
+    shopify_session do
+      start_date = Date.parse(params['start_date'])
+      end_date = Date.parse(params['end_date'])
+
+      csv = export_csv(current_shop_name, start_date, end_date)
+      attachment   'donations.csv'
+      content_type 'application/csv'
+      csv
     end
   end
 
