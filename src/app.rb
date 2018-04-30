@@ -42,6 +42,9 @@ class SinatraApp < Sinatra::Base
   # order/create webhook receiver
   post '/order.json' do
     webhook_session do |order|
+      return unless order['customer']
+      return unless order['customer']['email']
+
       donation_products = Product.where(shop: current_shop_name)
 
       donations = []
