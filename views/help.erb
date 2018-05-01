@@ -18,6 +18,34 @@ ShopifyApp.ready(function(){
 <hr>
 
 <h3>Editing the Email Template</h3>
-<p>You can edit the template for the email that gets sent out with the donation receipt. The email template is written in liquid just like your Shopify theme and other shop emails. However the data passed into the liquid template is a little bit different - you have access to all the order fields but you have to access them via a hash e.g. order['billing_address']['first_name']. Have a look at the fields <a href="http://docs.shopify.com/api/order">here</a>. You also have access to charity['name'] and charity['charity_id']. </p>
+<p>You can edit the templates for the email and receipt pdf that gets sent out for a donation. The templates are written in liquid just like your Shopify theme and other shop emails.</p>
+<p>The following objects are available in the templates:</p>
+
+<strong>charity</strong>
+<pre>
+name
+charity_id
+</pre>
+
+<strong>donation</strong>
+<pre>
+order_number
+email
+first_name
+last_name
+address1
+city
+country
+zip
+created_at
+donation_amount
+</pre>
+
+<strong>shop</strong>
+<p>
+  <a href="https://help.shopify.com/api/reference/shop">shop fields</a>
+</p>
+
+<p>Object fields can be accessed via dot syntax `charity.name` or hash syntax `charity['name']`. Remember to always check your templates with preview and test email buttons after editing.</p>
 
 <hr>
