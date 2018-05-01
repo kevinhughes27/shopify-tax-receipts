@@ -13,7 +13,7 @@ class RenderPdfTest < ActiveSupport::TestCase
   test "regular_order" do
     order = JSON.parse(load_fixture('order_webhook.json'))
     donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+    donation.order = ShopifyAPI::Order.new(order)
 
     pdf = render_pdf(@shop, order, @charity, donation)
     write_pdf(pdf)
@@ -22,7 +22,7 @@ class RenderPdfTest < ActiveSupport::TestCase
   test "order_no_address" do
     order = JSON.parse(load_fixture('order_no_address.json'))
     donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+    donation.order = ShopifyAPI::Order.new(order)
 
     pdf = render_pdf(@shop, order, @charity, donation)
   end
@@ -30,7 +30,7 @@ class RenderPdfTest < ActiveSupport::TestCase
   test "order_no_billing_address_uses_customer_default_address" do
     order = JSON.parse(load_fixture('order_customer_address.json'))
     donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+    donation.order = ShopifyAPI::Order.new(order)
 
     pdf = render_pdf(@shop, order, @charity, donation)
   end
@@ -38,7 +38,7 @@ class RenderPdfTest < ActiveSupport::TestCase
   test "order_no_zip" do
     order = JSON.parse(load_fixture('order_no_zip.json'))
     donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+    donation.order = ShopifyAPI::Order.new(order)
 
     pdf = render_pdf(@shop, order, @charity, donation)
   end
@@ -47,7 +47,7 @@ class RenderPdfTest < ActiveSupport::TestCase
     @charity.name += 'Ş'
     order = JSON.parse(load_fixture('order_webhook.json'))
     donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.instance_variable_set(:@order, ShopifyAPI::Order.new(order))
+    donation.order = ShopifyAPI::Order.new(order)
 
     pdf = render_pdf(@shop, order, @charity, donation)
   end
