@@ -75,7 +75,7 @@ class AppTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
 
     SinatraApp.any_instance.expects(:render_pdf).with do |shop, order, charity, donation|
-      assert_equal '477.60', donation.donation_amount
+      assert_equal '477.60', donation.to_liquid['donation_amount']
     end
 
     Pony.expects(:mail).once
@@ -92,7 +92,7 @@ class AppTest < ActiveSupport::TestCase
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
-    Pony.expects(:mail).with(has_entry(body: "Dear Bob Norman,\n\nOn behalf of Amnesty, we would like to thank you from the bottom of our hearts for your contribution to our cause. It may seem like a small gesture to you, but to us, it’s what we thrive on. Feel free to share the word to your friends and family as well!\n\nYou’ll find a copy of your tax receipt as an attachment in this email.\n\nAgain, thank you. We wouldn’t be here without you.\n\nAmnesty\n"))
+    Pony.expects(:mail).with(has_entry(body: "Dear Bob Norman,\n\nOn behalf of Amnesty, we would like to thank you from the bottom of our hearts for your contribution to our cause. It may seem like a small gesture to you, but to us, it’s what we thrive on. Feel free to share the word to your friends and family as well!\n\nYou’ll find a copy of your tax receipt as an attachment in this email.\n\nAgain, thank you. We wouldn't be here without you.\n\nAmnesty\n"))
 
     post '/order.json', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
     assert last_response.ok?
@@ -133,7 +133,7 @@ class AppTest < ActiveSupport::TestCase
     charity.update_attribute(:email_template, nil)
 
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
-    Pony.expects(:mail).with(has_entry(body: "Dear Bob Norman,\n\nOn behalf of Amnesty, we would like to thank you from the bottom of our hearts for your contribution to our cause. It may seem like a small gesture to you, but to us, it’s what we thrive on. Feel free to share the word to your friends and family as well!\n\nYou’ll find a copy of your tax receipt as an attachment in this email.\n\nAgain, thank you. We wouldn’t be here without you.\n\nAmnesty\n"))
+    Pony.expects(:mail).with(has_entry(body: "Dear Bob Norman,\n\nOn behalf of Amnesty, we would like to thank you from the bottom of our hearts for your contribution to our cause. It may seem like a small gesture to you, but to us, it’s what we thrive on. Feel free to share the word to your friends and family as well!\n\nYou’ll find a copy of your tax receipt as an attachment in this email.\n\nAgain, thank you. We wouldn't be here without you.\n\nAmnesty\n"))
 
     get '/test_email', {}, 'rack.session' => session
     assert last_response.ok?

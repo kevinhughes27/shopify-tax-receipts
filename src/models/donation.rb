@@ -36,10 +36,6 @@ class Donation < ActiveRecord::Base
     address.last_name
   end
 
-  def donation_amount
-    sprintf( "%0.02f", read_attribute(:donation_amount))
-  end
-
   def to_liquid
     {
       'order_number' => order_number,
@@ -50,8 +46,8 @@ class Donation < ActiveRecord::Base
       'city' => city,
       'country' => country,
       'zip' => zip,
-      'created_at' => created_at,
-      'donation_amount' => donation_amount
+      'created_at' => (created_at || Time.now).strftime("%B %d, %Y"),
+      'donation_amount' => sprintf( "%0.02f", donation_amount)
     }
   end
 end
