@@ -37,6 +37,34 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
+  test "order with no email" do
+    order_webhook = JSON.parse(load_fixture('order_webhook.json'))
+    order_webhook['customer'].delete('email')
+    order_webhook = order_webhook.to_json
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    Pony.expects(:mail).never
+
+    post '/order.json', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+    assert last_response.ok?
+  end
+
+  test "order with no customer" do
+    order_webhook = JSON.parse(load_fixture('order_webhook.json'))
+    order_webhook.delete('customer')
+    order_webhook = order_webhook.to_json
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    Pony.expects(:mail).never
+
+    post '/order.json', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+    assert last_response.ok?
+  end
+
   test "order_endpoint_with_product_percentage" do
     product = Product.find_by(shop: @shop)
     product.update_attribute(:percentage, 80)
