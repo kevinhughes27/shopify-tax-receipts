@@ -31,6 +31,9 @@ class Charity < ActiveRecord::Base
   end
 
   def to_liquid
-    attributes
+    {
+      'name' => name,
+      'charity_id' => charity_id
+    }
   end
 end
