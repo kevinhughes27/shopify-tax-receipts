@@ -30,7 +30,7 @@ class SinatraApp < Sinatra::Base
       @shop = ShopifyAPI::Shop.current
       @charity = Charity.find_by(shop: current_shop_name)
       @products = Product.where(shop: current_shop_name).page(params[:products_page])
-      @donations = Donation.where(shop: current_shop_name).page(params[:donations_page])
+      @donations = Donation.where(shop: current_shop_name).order('created_at DESC').page(params[:donations_page])
       @tab = params[:tab] || 'products'
       erb :home
     end
