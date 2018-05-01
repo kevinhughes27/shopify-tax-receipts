@@ -1,6 +1,6 @@
 <hr>
 <div style="float: left;">
-  <strong style="font-size: 18pt;">{{ charity['name'] }}</strong>
+  <strong style="font-size: 18pt;">{{ charity.name }}</strong>
 </div>
 <div style="float: right;">
   <span style="font-size: 9pt;">OFFICIAL DONATION RECEIPT</span>
@@ -9,15 +9,14 @@
 
 
 <div style="font-size: 10pt; margin-top: 180px; margin-left: 100px;">
-  {% assign address = order['billing_address'] %}
   <strong>
-    {{ address['first_name'] }} {{ address['last_name'] }}
+    {{ donation.first_name }} {{ donation.last_name }}
   </strong>
   <br>
-  {{ address['address1'] }}<br>
-  {{ address['city'] }}<br>
-  {{ address['country'] }}<br>
-  {{ address['zip' }}<br>
+  {{ donation.address1 }}<br>
+  {{ donation.city }}<br>
+  {{ donation.country }}<br>
+  {{ donation.zip }}<br>
 </div>
 
 
@@ -26,10 +25,10 @@
     Donation Details:
   </strong>
   <br>
-  Receipt Number: #{{ order['number'] }}<br>
-  Donation Received: {{ order['created_at'] }}<br>
-  Amount: ${{ donation_amount }}<br>
-  Date Issued: {{ order['created_at'] }}<br>
+  Receipt Number: #{{ donation.order_number }}<br>
+  Donation Received: {{ donation.created_at }}<br>
+  Amount: ${{ donation.donation_amount }}<br>
+  Date Issued: {{ donation.created_at }}<br>
   Place Issued: {{ shop['city'] }}
 </div>
 
