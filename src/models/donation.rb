@@ -50,7 +50,7 @@ class Donation < ActiveRecord::Base
       'city' => city,
       'country' => country,
       'zip' => zip,
-      'created_at' => created_at,
+      'created_at' => (created_at || Time.now).strftime("%B %d, %Y"),
       'donation_amount' => donation_amount
     }
   end
