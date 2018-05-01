@@ -13,6 +13,8 @@ require_relative 'models/donation'
 require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/webhooks'
+
+require_relative 'utils/donation_service'
 require_relative 'utils/render_pdf'
 require_relative 'utils/export_csv'
 
@@ -142,16 +144,6 @@ class SinatraApp < Sinatra::Base
 
   private
 
-  def save_donation(shop_name, order, donation_amount)
-    donation = Donation.new(shop: shop_name, order_id: order['id'], donation_amount: donation_amount)
-    donation.save!
-    donation.order = ShopifyAPI::Order.new(order)
-    donation
-  rescue ActiveRecord::RecordInvalid => e
-    raise unless e.message == 'Validation failed: Order has already been taken'
-    false
-  end
-
   def deliver_donation_receipt(shop, order, charity, donation, pdf, to = nil)
     return unless order["customer"]
     return unless to ||= order["customer"]["email"]
@@ -175,9 +167,7 @@ class SinatraApp < Sinatra::Base
   end
 
   def mock_donation
-    donation = Donation.new(shop: current_shop_name, order_id: mock_order['id'], donation_amount: 20.00)
-    donation.order = ShopifyAPI::Order.new(mock_order)
-    donation
+    build_donation(current_shop_name, mock_order, 20.00)
   end
 
   def mock_order

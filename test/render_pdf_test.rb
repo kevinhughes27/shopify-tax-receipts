@@ -1,4 +1,5 @@
 require 'test_helper'
+require_relative '../src/utils/donation_service'
 require_relative '../src/utils/render_pdf'
 
 class RenderPdfTest < ActiveSupport::TestCase
@@ -12,8 +13,7 @@ class RenderPdfTest < ActiveSupport::TestCase
 
   test "regular_order" do
     order = JSON.parse(load_fixture('order_webhook.json'))
-    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.order = ShopifyAPI::Order.new(order)
+    donation = build_donation(@shop_domain, order, 20)
 
     pdf = render_pdf(@shop, order, @charity, donation)
     write_pdf(pdf)
@@ -21,24 +21,21 @@ class RenderPdfTest < ActiveSupport::TestCase
 
   test "order_no_address" do
     order = JSON.parse(load_fixture('order_no_address.json'))
-    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.order = ShopifyAPI::Order.new(order)
+    donation = build_donation(@shop_domain, order, 20)
 
     pdf = render_pdf(@shop, order, @charity, donation)
   end
 
   test "order_no_billing_address_uses_customer_default_address" do
     order = JSON.parse(load_fixture('order_customer_address.json'))
-    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.order = ShopifyAPI::Order.new(order)
+    donation = build_donation(@shop_domain, order, 20)
 
     pdf = render_pdf(@shop, order, @charity, donation)
   end
 
   test "order_no_zip" do
     order = JSON.parse(load_fixture('order_no_zip.json'))
-    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.order = ShopifyAPI::Order.new(order)
+    donation = build_donation(@shop_domain, order, 20)
 
     pdf = render_pdf(@shop, order, @charity, donation)
   end
@@ -46,8 +43,7 @@ class RenderPdfTest < ActiveSupport::TestCase
   test "utf8" do
     @charity.name += 'Ş'
     order = JSON.parse(load_fixture('order_webhook.json'))
-    donation = Donation.new(shop: @shop_domain, order_id: order['id'], donation_amount: 20)
-    donation.order = ShopifyAPI::Order.new(order)
+    donation = build_donation(@shop_domain, order, 20)
 
     pdf = render_pdf(@shop, order, @charity, donation)
   end
