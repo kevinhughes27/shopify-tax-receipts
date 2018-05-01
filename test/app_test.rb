@@ -75,7 +75,7 @@ class AppTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
 
     SinatraApp.any_instance.expects(:render_pdf).with do |shop, order, charity, donation|
-      assert_equal '477.60', donation.donation_amount
+      assert_equal '477.60', donation.to_liquid['donation_amount']
     end
 
     Pony.expects(:mail).once
