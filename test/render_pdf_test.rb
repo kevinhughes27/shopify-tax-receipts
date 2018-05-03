@@ -15,7 +15,7 @@ class RenderPdfTest < ActiveSupport::TestCase
     order = JSON.parse(load_fixture('order_webhook.json'))
     donation = build_donation(@shop_domain, order, 20)
 
-    pdf = render_pdf(@shop, order, @charity, donation)
+    pdf = render_pdf(@shop, @charity, donation)
     write_pdf(pdf)
   end
 
@@ -23,21 +23,21 @@ class RenderPdfTest < ActiveSupport::TestCase
     order = JSON.parse(load_fixture('order_no_address.json'))
     donation = build_donation(@shop_domain, order, 20)
 
-    pdf = render_pdf(@shop, order, @charity, donation)
+    pdf = render_pdf(@shop, @charity, donation)
   end
 
   test "order_no_billing_address_uses_customer_default_address" do
     order = JSON.parse(load_fixture('order_customer_address.json'))
     donation = build_donation(@shop_domain, order, 20)
 
-    pdf = render_pdf(@shop, order, @charity, donation)
+    pdf = render_pdf(@shop, @charity, donation)
   end
 
   test "order_no_zip" do
     order = JSON.parse(load_fixture('order_no_zip.json'))
     donation = build_donation(@shop_domain, order, 20)
 
-    pdf = render_pdf(@shop, order, @charity, donation)
+    pdf = render_pdf(@shop, @charity, donation)
   end
 
   test "utf8" do
@@ -45,7 +45,7 @@ class RenderPdfTest < ActiveSupport::TestCase
     order = JSON.parse(load_fixture('order_webhook.json'))
     donation = build_donation(@shop_domain, order, 20)
 
-    pdf = render_pdf(@shop, order, @charity, donation)
+    pdf = render_pdf(@shop, @charity, donation)
   end
 
   private
