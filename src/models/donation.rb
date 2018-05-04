@@ -40,6 +40,13 @@ class Donation < ActiveRecord::Base
     address.last_name
   end
 
+  def order_to_liquid
+    drop = order.attributes
+    drop['created_at'] = Time.parse(drop['created_at']).strftime("%B %d, %Y")
+    drop['billing_address'] ||= drop.dig('default_address')
+    drop
+  end
+
   def to_liquid
     {
       'order_name' => order_name,
