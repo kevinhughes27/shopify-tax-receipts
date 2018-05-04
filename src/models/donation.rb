@@ -20,6 +20,10 @@ class Donation < ActiveRecord::Base
     order.billing_address || order.attributes.dig('default_address')
   end
 
+  def order_name
+    order.name
+  end
+
   def order_number
     order.number
   end
@@ -38,6 +42,7 @@ class Donation < ActiveRecord::Base
 
   def to_liquid
     {
+      'order_name' => order_name,
       'order_number' => order_number,
       'email' => email,
       'first_name' => first_name,
