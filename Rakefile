@@ -4,7 +4,7 @@ require './src/app'
 
 namespace :test do
   task :prepare do
-    `RACK_ENV=test rake db:create`
+    `RACK_ENV=test rake db:setup`
     `RACK_ENV=test rake db:migrate`
   end
 end
