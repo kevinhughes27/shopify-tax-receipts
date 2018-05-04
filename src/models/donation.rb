@@ -41,7 +41,7 @@ class Donation < ActiveRecord::Base
   end
 
   def order_to_liquid
-    drop = order.attributes
+    drop = JSON.parse(order.to_json)
     drop['created_at'] = Time.parse(drop['created_at']).strftime("%B %d, %Y")
     drop['billing_address'] ||= drop.dig('default_address')
     drop
