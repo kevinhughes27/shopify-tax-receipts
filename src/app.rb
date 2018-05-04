@@ -15,6 +15,7 @@ require_relative 'routes/products'
 require_relative 'routes/webhooks'
 
 require_relative 'utils/donation_service'
+require_relative 'utils/email_service'
 require_relative 'utils/render_pdf'
 require_relative 'utils/export_csv'
 
@@ -47,15 +48,7 @@ class SinatraApp < Sinatra::Base
       return unless order['customer']
       return unless order['customer']['email']
 
-      donation_products = Product.where(shop: current_shop_name)
-
-      donations = []
-      order["line_items"].each do |item|
-        donation_product = donation_products.detect { |product| product.product_id == item["product_id"] }
-        if donation_product
-          donations << item["price"].to_f * item["quantity"].to_i * (donation_product.percentage / 100.0)
-        end
-      end
+      donations = donations_from_order(current_shop_name, order)
 
       unless donations.empty?
         charity = Charity.find_by(shop: current_shop_name)
@@ -138,38 +131,6 @@ class SinatraApp < Sinatra::Base
   end
 
   private
-
-  def deliver_donation_receipt(shop, charity, donation, pdf, to = nil)
-    to ||= donation.email
-    bcc = charity.email_bcc
-    from = charity.email_from || shop.email
-    subject = charity.email_subject
-    body = email_body(charity, donation)
-    filename = charity.pdf_filename
-
-    send_email(to, bcc, from, subject, body, pdf, filename)
-  end
-
-  def email_body(charity, donation)
-    liquid(
-      charity.email_template,
-      layout: false,
-      locals: {
-        charity: charity,
-        donation: donation,
-        order: donation.order_to_liquid
-        }
-      )
-  end
-
-  def send_email(to, bcc, from, subject, body, pdf, filename)
-    Pony.mail to: to,
-              bcc: bcc,
-              from: from,
-              subject: subject,
-              attachments: {"#{filename}.pdf" => pdf},
-              body: body
-  end
 
   def mock_donation
     mock_order = JSON.parse( File.read(File.join('test', 'fixtures/order_webhook.json')) )
