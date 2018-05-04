@@ -21,6 +21,11 @@ ShopifyApp.ready(function(){
 <p>You can edit the templates for the email and receipt pdf that gets sent out for a donation. The templates are written in liquid just like your Shopify theme and other shop emails.</p>
 <p>The following objects are available in the templates:</p>
 
+<strong>shop</strong>
+<p>
+  <a href="https://help.shopify.com/api/reference/shop">shop fields</a>
+</p>
+
 <strong>charity</strong>
 <pre>
 name
@@ -42,9 +47,9 @@ created_at
 donation_amount
 </pre>
 
-<strong>shop</strong>
+<strong>order</strong>
 <p>
-  <a href="https://help.shopify.com/api/reference/shop">shop fields</a>
+  <a href="https://help.shopify.com/api/reference/order">order fields</a>
 </p>
 
 <p>Object fields can be accessed via dot syntax `charity.name` or hash syntax `charity['name']`. Remember to always check your templates with preview and test email buttons after editing.</p>
