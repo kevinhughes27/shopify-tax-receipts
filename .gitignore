@@ -4,3 +4,4 @@
 *.mp4
 ngrok
 test.pdf
+test/fixtures/templates.csv
