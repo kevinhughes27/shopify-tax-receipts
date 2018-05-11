@@ -3,6 +3,7 @@
     <tbody>
       <tr>
         <th>Order ID</th>
+        <th>Order Number</th>
         <th>Date</th>
         <th>Amount</th>
         <th></th>
@@ -13,6 +14,7 @@
           <td>
             <a href=<%="#{current_shop_url}/admin/orders/#{donation.order_id}"%> target="_blank"> <%= donation.order_id %></a>
           </td>
+          <td><%= donation.order_number%></td>
           <td><%= donation.created_at %></td>
           <td><%= donation.donation_amount %></td>
 
