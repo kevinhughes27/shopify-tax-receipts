@@ -4,7 +4,7 @@ Playbook
 Sinatra console on production:
 
 ```
-heroku run irb --app taxreceipts
+heroku run bundle exec irb --app taxreceipts
 
 require_relative 'src/app.rb'
 ```
