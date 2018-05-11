@@ -8,5 +8,7 @@ class BackfillOrderNumber < ActiveRecord::Migration[5.1]
     ShopifyAPI::Session.temp(shop.name, shop.token) do
       donation.update_columns(order_number: donation.order.name)
     end
+  rescue => e
+    puts "donation #{donation.order_id} failed to backfill"
   end
 end
