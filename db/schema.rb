@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180329135133) do
+ActiveRecord::Schema.define(version: 20180511143155) do
 
   create_table "charities", force: :cascade do |t|
     t.string "name", limit: 255
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20180329135133) do
     t.integer "order_id", limit: 8, null: false
     t.decimal "donation_amount", precision: 8, scale: 2, null: false
     t.datetime "created_at", null: false
+    t.string "order_number"
     t.index ["shop"], name: "index_donations_on_shop"
   end
 

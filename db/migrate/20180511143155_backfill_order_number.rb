@@ -1,0 +1,12 @@
+class BackfillOrderNumber < ActiveRecord::Migration[5.1]
+  def change
+    Donation.find_each { |donation| backfill(donation) }
+  end
+
+  def backfill(donation)
+    shop = Shop.find_by(name: donation.shop)
+    ShopifyAPI::Session.temp(shop.name, shop.token) do
+      donation.update_columns(order_number: donation.order.name)
+    end
+  end
+end
