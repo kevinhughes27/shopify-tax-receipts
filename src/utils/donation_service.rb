@@ -14,8 +14,15 @@ def donations_from_order(shop_name, order)
 end
 
 def build_donation(shop_name, order, donation_amount)
-  donation = Donation.new(shop: shop_name, order_id: order['id'], donation_amount: donation_amount)
+  donation = Donation.new(
+    shop: shop_name,
+    order_id: order['id'],
+    order_number: order['name'],
+    donation_amount: donation_amount
+  )
+
   donation.order = ShopifyAPI::Order.new(order)
+
   donation
 end
 

@@ -1,6 +1,6 @@
 class BackfillOrderNumber < ActiveRecord::Migration[5.1]
   def change
-    Donation.find_each { |donation| backfill(donation) }
+    Donation.where(order_number: nil).find_each { |donation| backfill(donation) }
   end
 
   def backfill(donation)
