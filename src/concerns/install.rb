@@ -26,7 +26,7 @@ class SinatraApp < Sinatra::Base
     return if ENV['DEVELOPMENT']
 
     order_webhook = ShopifyAPI::Webhook.new({
-      topic: "orders/create",
+      topic: "orders/paid",
       address: "#{base_url}/order.json",
       format: "json"
     })
