@@ -1,6 +1,8 @@
 Playbook
 ========
 
+### Debug Production
+
 Sinatra console on production:
 
 ```
@@ -25,7 +27,7 @@ ShopifyAPI::Webhook.all
 Re-create the webhook (after checking using the above):
 
 ```
-order_webhook = ShopifyAPI::Webhook.new({topic: 'orders/create', address: 'https://taxreceipts.herokuapp.com/order.json', format: 'json'})
+order_webhook = ShopifyAPI::Webhook.new({topic: 'orders/paid', address: 'https://taxreceipts.herokuapp.com/order.json', format: 'json'})
 order_webhook.save
 ```
 
@@ -42,4 +44,12 @@ require 'json'
 file = File.read('order.json')
 json = JSON.parse(file)
 ids = json['order']['line_items'].map{ |l| l['product_id'] }
+```
+
+### Migrations locally
+
+If you are backfilling and need encrypted shop tokens use:
+
+```
+foreman run bundle exec rake db:migrate
 ```
