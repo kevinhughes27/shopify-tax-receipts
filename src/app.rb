@@ -42,7 +42,7 @@ class SinatraApp < Sinatra::Base
     erb :help
   end
 
-  # order/create webhook receiver
+  # order/paid webhook receiver
   post '/order.json' do
     webhook_session do |order|
       return unless order['customer']
