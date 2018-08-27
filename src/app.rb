@@ -13,6 +13,7 @@ require_relative 'models/donation'
 require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/webhooks'
+require_relative 'routes/gdpr'
 
 require_relative 'utils/donation_service'
 require_relative 'utils/email_service'
