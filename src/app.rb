@@ -64,6 +64,19 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # view a donation receipt pdf
+  get '/view' do
+    shopify_session do
+      donation = Donation.find_by(shop: current_shop_name, id: params['id'])
+      charity = Charity.find_by(shop: current_shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+
+      receipt_pdf = render_pdf(shopify_shop, charity, donation)
+      content_type 'application/pdf'
+      receipt_pdf
+    end
+  end
+
   # resend a donation receipt
   post '/resend' do
     shopify_session do
@@ -112,9 +125,9 @@ class SinatraApp < Sinatra::Base
   # render a preview of the user edited pdf template
   get '/preview_pdf' do
     shopify_session do
+      donation = mock_donation
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
-      donation = mock_donation
 
       receipt_pdf = render_pdf(shopify_shop, charity, donation)
       content_type 'application/pdf'
@@ -125,9 +138,9 @@ class SinatraApp < Sinatra::Base
   # send a test email to the user
   get '/test_email' do
     shopify_session do
+      donation = mock_donation
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
-      donation = mock_donation
 
       receipt_pdf = render_pdf(shopify_shop, charity, donation)
       deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf, params['to'])

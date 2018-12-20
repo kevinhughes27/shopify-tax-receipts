@@ -112,6 +112,18 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
+  test "view" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
+
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order_webhook.json')
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    get "/view?id=#{donation.id}", {}, 'rack.session' => session
+
+    assert last_response.ok?
+  end
+
   test "resend" do
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)

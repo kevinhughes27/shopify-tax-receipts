@@ -17,6 +17,14 @@ The development app is configured for https://shopify-kevinhughes27.fwd.wf
 
 Then run `foreman start` or `foreman foreman run bundle exec rackup config.ru`
 
+### Testing
+
+To run a single test file:
+
+```
+bundle exec rake test TEST=test/app_test.rb
+```
+
 ### Debug Production
 
 Sinatra console on production:

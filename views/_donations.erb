@@ -8,6 +8,7 @@
         <th>Amount</th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
 
       <% donations.each do |donation| %>
@@ -29,6 +30,12 @@
             <% else %>
               </span>
             <% end %>
+          </td>
+
+          <td style="width:1px;">
+            <a href="/view?id=<%= donation.id %>" target="_blank" class="btn btn-default">
+              View
+            </a>
           </td>
 
           <td style="width:1px;">
