@@ -67,7 +67,7 @@ class SinatraApp < Sinatra::Base
   # resend a donation receipt
   post '/resend' do
     shopify_session do
-      donation = Donation.find_by(id: params['id'])
+      donation = Donation.find_by(shop: current_shop_name, id: params['id'])
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
