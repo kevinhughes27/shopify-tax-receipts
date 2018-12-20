@@ -7,6 +7,7 @@
         <th>Date</th>
         <th>Amount</th>
         <th></th>
+        <th></th>
       </tr>
 
       <% donations.each do |donation| %>
@@ -16,14 +17,33 @@
           </td>
           <td><%= donation.order_number%></td>
           <td><%= donation.created_at %></td>
-          <td><%= donation.donation_amount %></td>
+          <td>
+            <% if donation.void %>
+              <del>
+            <% else %>
+              <span>
+            <% end %>
+              <%= donation.donation_amount %>
+            <% if donation.void %>
+              </del>
+            <% else %>
+              </span>
+            <% end %>
+          </td>
 
-          <form method="POST" action="/resend">
-            <td style="width:1px;">
+          <td style="width:1px;">
+            <form method="POST" action="/resend">
               <input type="hidden" name="id" value="<%= donation.id %>" />
-              <input type="submit" class="btn btn-default align-right" value="resend">
-            </td>
-          </form>
+              <input type="submit" class="btn btn-primary align-right" <%= 'disabled' if donation.void %> value="resend">
+            </form>
+          </td>
+
+          <td style="width:1px;">
+            <form method="POST" action="/void">
+              <input type="hidden" name="id" value="<%= donation.id %>" />
+              <input type="submit" class="btn btn-danger align-right" <%= 'disabled' if donation.void %> value="void">
+            </form>
+          </td>
         </tr>
       <% end %>
     </tbody>

@@ -91,6 +91,7 @@ class SinatraApp < Sinatra::Base
 
       donation.update({void: true})
 
+      @tab = params[:tab] || 'donations'
       flash[:notice] = "Donation voided"
       redirect '/'
     end
