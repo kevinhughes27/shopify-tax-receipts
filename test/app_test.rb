@@ -128,6 +128,17 @@ class AppTest < ActiveSupport::TestCase
     assert_equal 'Email resent!', last_request.env['x-rack.flash'][:notice]
   end
 
+  test "cant resend void" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10, void: true)
+
+    params = {id: donation.id}
+    post '/resend', params, 'rack.session' => session
+
+    assert last_response.redirect?
+    assert_equal 'Donation is void', last_request.env['x-rack.flash'][:error]
+  end
+
   test "test_email" do
     charity = Charity.find_by(shop: @shop)
     charity.update_attribute(:email_template, nil)

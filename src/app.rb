@@ -71,10 +71,27 @@ class SinatraApp < Sinatra::Base
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
-      receipt_pdf = render_pdf(shopify_shop, charity, donation)
-      deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
+      unless donation.void
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
+        flash[:notice] = "Email resent!"
+      else
+        flash[:error] = "Donation is void"
+      end
 
-      flash[:notice] = "Email resent!"
+      redirect '/'
+    end
+  end
+
+  post '/void' do
+    shopify_session do
+      donation = Donation.find_by(shop: current_shop_name, id: params['id'])
+      charity = Charity.find_by(shop: current_shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+
+      donation.update({void: true})
+
+      flash[:notice] = "Donation voided"
       redirect '/'
     end
   end

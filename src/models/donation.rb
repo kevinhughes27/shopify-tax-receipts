@@ -1,6 +1,6 @@
 class Donation < ActiveRecord::Base
   validates_presence_of :shop, :order_id, :donation_amount
-  validates_uniqueness_of :order_id, scope: :shop
+  validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where(void: false) }
 
   delegate :address1,
            :city,
