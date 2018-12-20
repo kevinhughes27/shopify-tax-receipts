@@ -35,3 +35,8 @@ body {
 .modal-backdrop, .modal-backdrop.fade.in {
   background-color: rgba(0,0,0,0);
 }
+
+.action-btn {
+  min-width: 152px;
+  text-align: left;
+}
