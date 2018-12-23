@@ -142,13 +142,24 @@ class AppTest < ActiveSupport::TestCase
 
   test "cant resend void" do
     order_id = 1234
-    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10, void: true)
+    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10, status: 'void')
 
     params = {id: donation.id}
     post '/resend', params, 'rack.session' => session
 
     assert last_response.redirect?
     assert_equal 'Donation is void', last_request.env['x-rack.flash'][:error]
+  end
+
+  test "cant resend refunded" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10, status: 'refunded')
+
+    params = {id: donation.id}
+    post '/resend', params, 'rack.session' => session
+
+    assert last_response.redirect?
+    assert_equal 'Donation is refunded', last_request.env['x-rack.flash'][:error]
   end
 
   test "test_email" do

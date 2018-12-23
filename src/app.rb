@@ -84,12 +84,14 @@ class SinatraApp < Sinatra::Base
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
-      unless donation.void
+      if donation.void
+        flash[:error] = "Donation is void"
+      elsif donation.refunded
+        flash[:error] = "Donation is refunded"
+      else
         receipt_pdf = render_pdf(shopify_shop, charity, donation)
         deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
         flash[:notice] = "Email resent!"
-      else
-        flash[:error] = "Donation is void"
       end
 
       redirect '/'
@@ -102,7 +104,7 @@ class SinatraApp < Sinatra::Base
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
-      donation.update({void: true})
+      donation.void!
 
       @tab = params[:tab] || 'donations'
       flash[:notice] = "Donation voided"

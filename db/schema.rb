@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2018_12_20_044821) do
     t.decimal "donation_amount", precision: 8, scale: 2, null: false
     t.datetime "created_at", null: false
     t.string "order_number"
-    t.boolean "void", default: false, null: false
+    t.string "status"
     t.index ["shop"], name: "index_donations_on_shop"
   end
 

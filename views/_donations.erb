@@ -12,6 +12,8 @@
       </tr>
 
       <% donations.each do |donation| %>
+        <% disabled = donation.void || donation.refunded %>
+
         <tr>
           <td>
             <a href=<%="#{current_shop_url}/admin/orders/#{donation.order_id}"%> target="_blank"> <%= donation.order_id %></a>
@@ -19,13 +21,13 @@
           <td><%= donation.order_number%></td>
           <td><%= donation.created_at %></td>
           <td>
-            <% if donation.void %>
+            <% if disabled %>
               <del>
             <% else %>
               <span>
             <% end %>
               <%= donation.donation_amount %>
-            <% if donation.void %>
+            <% if disabled %>
               </del>
             <% else %>
               </span>
@@ -41,14 +43,14 @@
           <td style="width:1px;">
             <form method="POST" action="/resend">
               <input type="hidden" name="id" value="<%= donation.id %>" />
-              <input type="submit" class="btn btn-primary align-right" <%= 'disabled' if donation.void %> value="resend">
+              <input type="submit" class="btn btn-primary align-right" <%= 'disabled' if disabled %> value="resend">
             </form>
           </td>
 
           <td style="width:1px;">
             <form method="POST" action="/void">
               <input type="hidden" name="id" value="<%= donation.id %>" />
-              <input type="submit" class="btn btn-danger align-right" <%= 'disabled' if donation.void %> value="void">
+              <input type="submit" class="btn btn-danger align-right" <%= 'disabled' if disabled %> value="void">
             </form>
           </td>
         </tr>

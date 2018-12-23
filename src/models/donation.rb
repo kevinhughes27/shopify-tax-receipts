@@ -1,12 +1,23 @@
 class Donation < ActiveRecord::Base
   validates_presence_of :shop, :order_id, :donation_amount
-  validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where(void: false) }
+  validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where(status: nil) }
+  validates :status, inclusion: { in: %w(void refunded) }, allow_nil: true
 
-  delegate :address1,
-           :city,
-           :country,
-           :zip,
-           to: :address
+  def void!
+    update!({status: 'void'})
+  end
+
+  def void
+    status == 'void'
+  end
+
+  def refunded!
+    update!({status: 'refunded'})
+  end
+
+  def refunded
+    status == 'refunded'
+  end
 
   def order=(shopify_order)
     @order = shopify_order
@@ -19,6 +30,12 @@ class Donation < ActiveRecord::Base
   def address
     order.billing_address || order.attributes.dig('default_address')
   end
+
+  delegate :address1,
+           :city,
+           :country,
+           :zip,
+           to: :address
 
   def email
     order.customer.email

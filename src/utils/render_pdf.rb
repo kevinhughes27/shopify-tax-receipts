@@ -37,7 +37,8 @@ def render_pdf(shop, charity, donation)
     Tilt::ERBTemplate.new('views/receipt/pdf.erb').render(
       Object.new,
       pdf_content: pdf_content,
-      void: donation.void
+      void: donation.void,
+      refunded: donation.refunded
     )
   )
 end
