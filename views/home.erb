@@ -11,7 +11,30 @@
 
   <div class="col-md-4">
     <% if @charity.present? %>
-      <%= partial 'components/email_modals', locals: {shop: @shop, charity: @charity} %>
+      <%= partial 'components/email_modals',
+        locals: {
+          shop: @shop,
+          charity: @charity,
+          subject: 'email_subject',
+          template: 'email_template',
+          title_copy: 'Edit Email Template',
+          preview_copy: 'Email Preview',
+          button_copy: 'Edit receipt email',
+          modal_id: 0
+        }
+      %>
+      <%= partial 'components/email_modals',
+        locals: {
+          shop: @shop,
+          charity: @charity,
+          subject: 'void_email_subject',
+          template: 'void_email_template',
+          title_copy: 'Edit Email Template',
+          preview_copy: 'Void Email Preview',
+          button_copy: 'Edit void receipt email',
+          modal_id: 1
+        }
+      %>
       <%= partial 'components/pdf_modal', locals: {charity: @charity} %>
       <%= partial 'components/test_email', locals: {shop: @shop} %>
     <% end %>
