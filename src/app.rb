@@ -1,6 +1,7 @@
 require 'sinatra/shopify-sinatra-app'
 
 require_relative '../config/pony'
+require_relative '../config/sidekiq'
 require_relative '../config/pdf_engine'
 require_relative '../config/exception_tracker'
 require_relative '../config/pagination'
@@ -14,6 +15,8 @@ require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/webhooks'
 require_relative 'routes/gdpr'
+
+require_relative 'jobs/order_webhook_job'
 
 require_relative 'utils/donation_service'
 require_relative 'utils/email_service'
@@ -48,23 +51,8 @@ class SinatraApp < Sinatra::Base
     shopify_webhook do |order|
       return unless order['customer']
       return unless order['customer']['email']
-
-      shop = Shop.find_by(name: current_shop_name)
-      api_session = ShopifyAPI::Session.new(shop.name, shop.token)
-      ShopifyAPI::Base.activate_session(api_session)
-
-      donations = donations_from_order(current_shop_name, order)
-
-      unless donations.empty?
-        charity = Charity.find_by(shop: current_shop_name)
-        shopify_shop = ShopifyAPI::Shop.current
-        donation_amount = sprintf( "%0.02f", donations.sum)
-
-        if donation = save_donation(current_shop_name, order, donation_amount)
-          receipt_pdf = render_pdf(shopify_shop, charity, donation)
-          deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
-        end
-      end
+      OrderWebhookJob.perform_async(current_shop_name, order)
+      status 200
     end
   end
 

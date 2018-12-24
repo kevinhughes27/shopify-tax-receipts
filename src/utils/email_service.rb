@@ -1,3 +1,5 @@
+require 'tilt/liquid'
+
 def deliver_donation_receipt(shop, charity, donation, pdf, to = nil)
   to ||= donation.email
   bcc = charity.email_bcc
@@ -22,16 +24,14 @@ def deliver_void_receipt(shop, charity, donation, pdf, to = nil)
   send_email(to, bcc, from, subject, body, pdf, filename)
 end
 
-def email_body(template, charity, donation)
-  liquid(
-    template,
-    layout: false,
-    locals: {
-      charity: charity,
-      donation: donation,
-      order: donation.order_to_liquid
-      }
-    )
+def email_body(email_template, charity, donation)
+  template = Tilt::LiquidTemplate.new { |t| email_template }
+
+  template.render(
+    charity: charity,
+    donation: donation,
+    order: donation.order_to_liquid
+  )
 end
 
 def send_email(to, bcc, from, subject, body, pdf, filename)

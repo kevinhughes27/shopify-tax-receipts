@@ -74,7 +74,7 @@ class AppTest < ActiveSupport::TestCase
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
 
-    SinatraApp.any_instance.expects(:render_pdf).with do |shop, charity, donation|
+    OrderWebhookJob.any_instance.expects(:render_pdf).with do |shop, charity, donation|
       assert_equal '477.60', donation.to_liquid['donation_amount']
     end
 
