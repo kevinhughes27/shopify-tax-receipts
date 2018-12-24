@@ -1,17 +1,13 @@
 <script>
   window.previewEmail<%= modal_id %> = function() {
-    var subject = $('#editEmailModal<%= modal_id %>').find('#subject').val();
     var template = $('#editEmailModal<%= modal_id %>').find('#template').val();
 
     var url = '/preview_email'
-    url += '?subject=' + encodeURIComponent(subject)
-    url += '&template=' + encodeURIComponent(template)
+    url += '?template=' + encodeURIComponent(template)
 
     $.ajax({url: url, dataType: 'json'}).done(function(response) {
-      $('#previewEmailModal<%= modal_id %> #<%= subject %>')[0].value = response.subject;
-      $('#previewEmailModal<%= modal_id %> #<%= subject %>')[1].value = response.subject;
-      $('#previewEmailModal<%= modal_id %> #<%= template %>')[0].value = response.template;
-      $('#previewEmailModal<%= modal_id %> #body')[0].innerHTML = response.body;
+      $('#previewEmailModal<%= modal_id %> #template')[0].value = response.template;
+      $('#previewEmailModal<%= modal_id %> #email_body')[0].innerHTML = response.body;
       $('#editEmailModal<%= modal_id %>').modal('hide')
       $('#previewEmailModal<%= modal_id %>').modal('show')
     });
@@ -44,8 +40,7 @@
 
       <form method="POST" action="/charity" role="form">
         <input type="hidden" name="_method" value="put" />
-        <input type="hidden" name="<%= subject %>" id="<%= subject %>"/>
-        <input type="hidden" name="<%= template %>" id="<%= template %>"/>
+        <input type="hidden" name="<%= template %>" id="template"/>
 
         <div class="modal-body">
           <div class="form-group">
@@ -55,7 +50,7 @@
               class="form-control"
               style="width: 97%"
               name="email_to"
-              id="to"
+              bind="email_to<%= modal_id %>"
               value="<%= shop.email %>"
             />
           </div>
@@ -67,7 +62,7 @@
               class="form-control"
               style="width: 97%"
               name="email_bcc"
-              id="bcc"
+              bind="email_bcc<%= modal_id %>"
               value="<%= charity.email_bcc %>"
             />
           </div>
@@ -79,7 +74,7 @@
               class="form-control"
               style="width: 97%"
               name="email_from"
-              id="from"
+              bind="email_from<%= modal_id %>"
               value="<%= charity.email_from || shop.email %>"
             />
           </div>
@@ -90,8 +85,8 @@
               type="text"
               class="form-control"
               style="width: 97%"
-              id="<%= subject %>"
-              disabled="true"
+              name="<%= subject %>"
+              bind="<%= subject %><%= modal_id %>"
             />
           </div>
 
@@ -102,6 +97,7 @@
               class="form-control"
               style="width: 97%"
               name="pdf_filename"
+              bind="pdf_filename<%= modal_id %>"
               value="<%= charity.pdf_filename %>"
             />
           </div>
@@ -109,7 +105,7 @@
           <hr>
 
           <textarea
-            id="body"
+            id="email_body"
             class="form-control"
             style="width: 97%"
             rows="12"
@@ -161,7 +157,7 @@
               class="form-control"
               style="width: 97%"
               name="email_to"
-              id="to"
+              bind="email_to<%= modal_id %>"
               value="<%= shop.email %>"
             />
           </div>
@@ -173,7 +169,7 @@
               class="form-control"
               style="width: 97%"
               name="email_bcc"
-              id="bcc"
+              bind="email_bcc<%= modal_id %>"
               value="<%= charity.email_bcc %>"
             />
           </div>
@@ -185,7 +181,7 @@
               class="form-control"
               style="width: 97%"
               name="email_from"
-              id="from"
+              bind="email_from<%= modal_id %>"
               value="<%= charity.email_from || shop.email %>"
             />
           </div>
@@ -197,7 +193,7 @@
               class="form-control"
               style="width: 97%"
               name="<%= subject %>"
-              id="subject"
+              bind="<%= subject %><%= modal_id %>"
               value="<%= charity.send(subject) %>"
             />
           </div>
@@ -209,7 +205,7 @@
               class="form-control"
               style="width: 97%"
               name="pdf_filename"
-              id="filename"
+              bind="pdf_filename<%= modal_id %>"
               value="<%= charity.pdf_filename %>"
             />
           </div>
@@ -217,11 +213,11 @@
           <hr>
 
           <textarea
+            id="template"
+            name="<%= template %>"
             class="form-control"
             style="width: 97%"
-            rows="12"
-            name="<%= template %>"
-            id="template"><%= charity.send(template) %></textarea>
+            rows="12"><%= charity.send(template) %></textarea>
         </div>
 
         <div class="modal-footer">
