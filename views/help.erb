@@ -10,15 +10,27 @@ ShopifyApp.ready(function(){
 <hr>
 
 <h3>Adding Donations to Products</h3>
-<p>To select which products should recieve tax receipts on purchase add products using the 'Add a product' button on the home page or go to your <a href=<%="#{current_shop_url}/admin/products"%> target="_blank">products</a> page and use the bulk dropdown</p>
+<p>
+  To select which products should recieve tax receipts on purchase add products using the 'Add a product' button on the
+  <a href="/">home page</a>
+   or go to your
+  <a href=<%="#{current_shop_url}/admin/products"%> target="_blank">products</a>
+  page and use the bulk dropdown
+</p>
 <img src='<%="#{base_url}/add_products.gif"%>' alt="Add Products using the bulk app link">
 <p>A product can also be added from the product edit page by using the app link in the top right corner</p>
 <img src='<%="#{base_url}/add_product.png"%>' alt="Add Product using the app link">
 
 <hr>
 
-<h3>Editing the Email Template</h3>
-<p>You can edit the templates for the email and receipt pdf that gets sent out for a donation. The templates are written in liquid just like your Shopify theme and other shop emails.</p>
+<h3>Managing Donations</h3>
+<p>After an order with a donation is received the app saves a copy of the donation. You can view and export donations from inside the app. You can also view the pdf, resend the receipt or void the receipt.</p>
+<p>Voiding a receipt marks it as void and sends an email with the voided document to the customer. The customer still has the original document and could still miss represent when filing their taxes but you'll have a record in case of an audit.</p>
+
+<hr>
+
+<h3>Editing the Email Templates</h3>
+<p>You can edit the templates for the emails and receipt pdf that get sent out. The templates are written in liquid just like your Shopify theme and other shop emails.</p>
 <p>The following objects are available in the templates:</p>
 
 <strong>shop</strong>
