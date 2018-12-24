@@ -141,8 +141,14 @@ class SinatraApp < Sinatra::Base
 
       charity.assign_attributes(charity_params(params))
 
-      receipt_pdf = render_pdf(shopify_shop, charity, donation)
-      deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf, params['email_to'])
+      if params['email_template'].present?
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf, params['email_to'])
+      elsif params['void_email_template'].present?
+        donation.assign_attributes({status: 'void'})
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_void_receipt(shopify_shop, charity, donation, receipt_pdf, params['email_to'])
+      end
 
       status 200
     end
