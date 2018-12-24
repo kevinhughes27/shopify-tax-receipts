@@ -6,24 +6,51 @@
         <th>Order Number</th>
         <th>Date</th>
         <th>Amount</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
         <th></th>
       </tr>
 
       <% donations.each do |donation| %>
+        <% disabled = donation.void || donation.refunded %>
+
         <tr>
           <td>
             <a href=<%="#{current_shop_url}/admin/orders/#{donation.order_id}"%> target="_blank"> <%= donation.order_id %></a>
           </td>
           <td><%= donation.order_number%></td>
           <td><%= donation.created_at %></td>
-          <td><%= donation.donation_amount %></td>
 
-          <form method="POST" action="/resend">
-            <td style="width:1px;">
+          <td>
+            <% if disabled %>
+              <del><%= donation.donation_amount %></del>
+            <% else %>
+              <span><%= donation.donation_amount %></span>
+            <% end %>
+          </td>
+
+          <td><%= donation.status %></td>
+
+          <td style="width:1px;">
+            <a href="/view?id=<%= donation.id %>" target="_blank" class="btn btn-default">
+              View
+            </a>
+          </td>
+
+          <td style="width:1px;">
+            <form method="POST" action="/resend">
               <input type="hidden" name="id" value="<%= donation.id %>" />
-              <input type="submit" class="btn btn-default align-right" value="resend">
-            </td>
-          </form>
+              <input type="submit" class="btn btn-primary align-right" <%= 'disabled' if disabled %> value="resend">
+            </form>
+          </td>
+
+          <td style="width:1px;">
+            <form method="POST" action="/void">
+              <input type="hidden" name="id" value="<%= donation.id %>" />
+              <input type="submit" class="btn btn-danger align-right" <%= 'disabled' if disabled %> value="void">
+            </form>
+          </td>
         </tr>
       <% end %>
     </tbody>

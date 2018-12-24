@@ -1,6 +1,4 @@
 *.env
 *.sqlite3
-*.sublime*
-*.mp4
-ngrok
+tmp
 test.pdf

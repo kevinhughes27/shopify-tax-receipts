@@ -34,6 +34,11 @@ def render_pdf(shop, charity, donation)
   )
 
   WickedPdf.new.pdf_from_string(
-    Tilt::ERBTemplate.new('views/receipt/pdf.erb').render(Object.new, pdf_content: pdf_content)
+    Tilt::ERBTemplate.new('views/receipt/pdf.erb').render(
+      Object.new,
+      pdf_content: pdf_content,
+      void: donation.void,
+      refunded: donation.refunded
+    )
   )
 end

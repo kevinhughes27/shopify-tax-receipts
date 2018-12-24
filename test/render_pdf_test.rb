@@ -48,6 +48,22 @@ class RenderPdfTest < ActiveSupport::TestCase
     pdf = render_pdf(@shop, @charity, donation)
   end
 
+  test "void" do
+    order = JSON.parse(load_fixture('order_webhook.json'))
+    donation = build_donation(@shop_domain, order, 20)
+    donation.void!
+
+    pdf = render_pdf(@shop, @charity, donation)
+  end
+
+  test "refunded" do
+    order = JSON.parse(load_fixture('order_webhook.json'))
+    donation = build_donation(@shop_domain, order, 20)
+    donation.refunded!
+
+    pdf = render_pdf(@shop, @charity, donation)
+  end
+
   private
 
   def write_pdf(pdf_string)

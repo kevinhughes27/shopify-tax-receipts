@@ -112,6 +112,18 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
+  test "view" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
+
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order_webhook.json')
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    get "/view?id=#{donation.id}", {}, 'rack.session' => session
+
+    assert last_response.ok?
+  end
+
   test "resend" do
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
@@ -128,14 +140,54 @@ class AppTest < ActiveSupport::TestCase
     assert_equal 'Email resent!', last_request.env['x-rack.flash'][:notice]
   end
 
+  test "cant resend void" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10, status: 'void')
+
+    params = {id: donation.id}
+    post '/resend', params, 'rack.session' => session
+
+    assert last_response.redirect?
+    assert_equal 'Donation is void', last_request.env['x-rack.flash'][:error]
+  end
+
+  test "cant resend refunded" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10, status: 'refunded')
+
+    params = {id: donation.id}
+    post '/resend', params, 'rack.session' => session
+
+    assert last_response.redirect?
+    assert_equal 'Donation is refunded', last_request.env['x-rack.flash'][:error]
+  end
+
+  test "preview_email" do
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    get '/preview_email', {template: 'order {{ order.name }}'}, 'rack.session' => session
+
+    assert last_response.ok?
+    assert_equal "order #1001", JSON.parse(last_response.body)['email_body']
+  end
+
   test "test_email" do
     charity = Charity.find_by(shop: @shop)
-    charity.update_attribute(:email_template, nil)
 
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
-    Pony.expects(:mail).with(has_entry(body: "Dear Bob Norman,\n\nOn behalf of Amnesty, we would like to thank you from the bottom of our hearts for your contribution to our cause. It may seem like a small gesture to you, but to us, it’s what we thrive on. Feel free to share the word to your friends and family as well!\n\nYou’ll find a copy of your tax receipt as an attachment in this email.\n\nAgain, thank you. We wouldn't be here without you.\n\nAmnesty\n"))
+    Pony.expects(:mail).with(has_entry(body: "hello #{charity.name}"))
 
-    get '/test_email', {}, 'rack.session' => session
+    get '/test_email', {email_template: 'hello {{ charity.name }}'}, 'rack.session' => session
+    assert last_response.ok?
+  end
+
+  test "test_void_email" do
+    charity = Charity.find_by(shop: @shop)
+
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    Pony.expects(:mail).with(has_entry(body: "goodbye #{charity.name}"))
+
+    get '/test_email', {void_email_template: 'goodbye {{ charity.name }}'}, 'rack.session' => session
     assert last_response.ok?
   end
 

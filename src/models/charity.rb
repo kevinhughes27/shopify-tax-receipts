@@ -22,6 +22,22 @@ class Charity < ActiveRecord::Base
     end
   end
 
+  def void_email_subject
+    if read_attribute(:void__email_subject).present?
+      read_attribute(:void_email_subject)
+    else
+      "Void Donation receipt for #{name}"
+    end
+  end
+
+  def void_email_template
+    if read_attribute(:void_email_template).present?
+      read_attribute(:void_email_template)
+    else
+      File.read(File.join('views', 'receipt/void_email.liquid'))
+    end
+  end
+
   def pdf_template
     if read_attribute(:pdf_template).present?
       read_attribute(:pdf_template)

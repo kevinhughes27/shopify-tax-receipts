@@ -2,9 +2,34 @@
 <html>
   <head>
     <meta charset='utf-8' />
+    <style type='text/css'>
+      #watermark {
+        color: #d0d0d0;
+        font-size: 240pt;
+        -webkit-transform: rotate(-35deg);
+        -moz-transform: rotate(-35deg);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        z-index: -1;
+        left: 400px;
+        top: 0px;
+      }
+    </style>
   </head>
 
   <body>
     <%= pdf_content %>
+
+    <% if void %>
+      <div id='watermark'>
+        <p>VOID</p>
+      </div>
+    <% elsif refunded %>
+      <div id='watermark'>
+        <p>REFUNDED</p>
+      </div>
+    <% end %>
   </body>
 </html>

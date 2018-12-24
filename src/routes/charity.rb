@@ -42,6 +42,8 @@ class SinatraApp < Sinatra::Base
       "email_bcc",
       "email_subject",
       "email_template",
+      "void_email_subject",
+      "void_email_template",
       "pdf_template",
       "pdf_filename"
     )

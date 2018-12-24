@@ -3,12 +3,14 @@ language: ruby
 rvm:
 - "2.5.3"
 
+env:
+  - RAILS_ENV=test
+
 gemfile:
   - Gemfile
 
 script:
   - bundle exec rake db:schema:load
-  - bundle exec rake test:prepare
   - bundle exec rake test
 
 notifications:

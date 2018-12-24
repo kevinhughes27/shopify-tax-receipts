@@ -6,22 +6,46 @@
 
 <div class="row" style="padding-top: 15px;">
   <div class="col-md-4">
-    <%= partial 'charity', locals: {charity: @charity} %>
+    <%= partial 'charity', locals: { charity: @charity } %>
   </div>
 
   <div class="col-md-4">
     <% if @charity.present? %>
-      <%= partial 'components/email_modals', locals: {shop: @shop, charity: @charity} %>
-      <%= partial 'components/pdf_modal', locals: {charity: @charity} %>
-      <%= partial 'components/test_email', locals: {shop: @shop} %>
-      <%= partial 'components/product_picker' %>
-      <%= partial 'components/export_donations' %>
+      <%= partial 'components/email_modals',
+        locals: {
+          shop: @shop,
+          charity: @charity,
+          subject: 'email_subject',
+          template: 'email_template',
+          title_copy: 'Edit Email Template',
+          preview_copy: 'Email Preview',
+          button_copy: 'Edit receipt email',
+          modal_id: 0
+        }
+      %>
+      <%= partial 'components/email_modals',
+        locals: {
+          shop: @shop,
+          charity: @charity,
+          subject: 'void_email_subject',
+          template: 'void_email_template',
+          title_copy: 'Edit Email Template',
+          preview_copy: 'Void Email Preview',
+          button_copy: 'Edit void receipt email',
+          modal_id: 1
+        }
+      %>
+      <%= partial 'components/pdf_modal',
+        locals: {
+          charity: @charity
+        }
+      %>
     <% end %>
   </div>
 </div>
 
 <% if @charity.present? %>
-  <%= partial 'tabs', locals: {tab: @tab, products: @products, donations: @donations} %>
+  <%= partial 'tabs', locals: { tab: @tab, products: @products, donations: @donations } %>
 <% end %>
 
 <% content_for :footer do %>

@@ -64,6 +64,19 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # view a donation receipt pdf
+  get '/view' do
+    shopify_session do
+      donation = Donation.find_by(shop: current_shop_name, id: params['id'])
+      charity = Charity.find_by(shop: current_shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+
+      receipt_pdf = render_pdf(shopify_shop, charity, donation)
+      content_type 'application/pdf'
+      receipt_pdf
+    end
+  end
+
   # resend a donation receipt
   post '/resend' do
     shopify_session do
@@ -71,10 +84,40 @@ class SinatraApp < Sinatra::Base
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
-      receipt_pdf = render_pdf(shopify_shop, charity, donation)
-      deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
+      if donation.void
+        flash[:error] = "Donation is void"
+      elsif donation.refunded
+        flash[:error] = "Donation is refunded"
+      else
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
+        flash[:notice] = "Email resent!"
+      end
 
-      flash[:notice] = "Email resent!"
+      @tab = 'donations'
+      redirect '/'
+    end
+  end
+
+  # void a donation receipt
+  post '/void' do
+    shopify_session do
+      donation = Donation.find_by(shop: current_shop_name, id: params['id'])
+      charity = Charity.find_by(shop: current_shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+
+      if donation.void
+        flash[:error] = "Donation is void"
+      elsif donation.refunded
+        flash[:error] = "Donation is refunded"
+      else
+        donation.void!
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_void_receipt(shopify_shop, charity, donation, receipt_pdf)
+        flash[:notice] = "Donation voided"
+      end
+
+      @tab = 'donations'
       redirect '/'
     end
   end
@@ -83,38 +126,45 @@ class SinatraApp < Sinatra::Base
   get '/preview_email' do
     shopify_session do
       charity = Charity.find_by(shop: current_shop_name)
-      subject = params['subject']
       template = params['template']
-      body = email_body(charity, mock_donation)
+      body = email_body(template, charity, mock_donation)
 
-      {email_subject: subject, email_body: body, email_template: template}.to_json
-    end
-  end
-
-  # render a preview of the user edited pdf template
-  get '/preview_pdf' do
-    shopify_session do
-      charity = Charity.find_by(shop: current_shop_name)
-      shopify_shop = ShopifyAPI::Shop.current
-      donation = mock_donation
-
-      receipt_pdf = render_pdf(shopify_shop, charity, donation)
-      content_type 'application/pdf'
-      receipt_pdf
+      {email_body: body}.to_json
     end
   end
 
   # send a test email to the user
   get '/test_email' do
     shopify_session do
+      donation = mock_donation
       charity = Charity.find_by(shop: current_shop_name)
       shopify_shop = ShopifyAPI::Shop.current
-      donation = mock_donation
 
-      receipt_pdf = render_pdf(shopify_shop, charity, donation)
-      deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf, params['to'])
+      charity.assign_attributes(charity_params(params))
+
+      if params['email_template'].present?
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf, params['email_to'])
+      elsif params['void_email_template'].present?
+        donation.assign_attributes({status: 'void'})
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_void_receipt(shopify_shop, charity, donation, receipt_pdf, params['email_to'])
+      end
 
       status 200
+    end
+  end
+
+  # render a preview of the user edited pdf template
+  get '/preview_pdf' do
+    shopify_session do
+      donation = mock_donation
+      charity = Charity.find_by(shop: current_shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+
+      receipt_pdf = render_pdf(shopify_shop, charity, donation)
+      content_type 'application/pdf'
+      receipt_pdf
     end
   end
 

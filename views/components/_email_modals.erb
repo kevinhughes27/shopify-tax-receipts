@@ -1,66 +1,131 @@
 <script>
-  window.previewEmail = function() {
-    var subject = $('#subject').val();
-    var template = $('#template').val();
+  window.previewEmail<%= modal_id %> = function() {
+    var template = $('#editEmailModal<%= modal_id %>').find('#template').val();
 
-    var url = '/preview_email'
-    url += '?subject=' + encodeURIComponent(subject)
-    url += '&template=' + encodeURIComponent(template)
+    var url = '/preview_email';
+    url += '?template=' + encodeURIComponent(template);
 
     $.ajax({url: url, dataType: 'json'}).done(function(response) {
-      $('#previewEmailModal #email_subject')[0].value = response.email_subject;
-      $('#previewEmailModal #email_subject')[1].value = response.email_subject;
-      $('#previewEmailModal #email_template')[0].value = response.email_template;
-      $('#previewEmailModal #email_body')[0].innerHTML = response.email_body;
-      $('#editEmailModal').modal('hide')
-      $('#previewEmailModal').modal('show')
+      $('#previewEmailModal<%= modal_id %> #email_body')[0].innerHTML = response.email_body;
+      $('#editEmailModal<%= modal_id %>').modal('hide');
+      $('#previewEmailModal<%= modal_id %>').modal('show');
+    });
+  }
+
+  window.sendTestEmail<%= modal_id %> = function() {
+    var params = $('#editEmailModal<%= modal_id %>').find('form').serialize();
+    params = params.replace('_method=put&', '?');
+
+    var url = '/test_email' + params;
+
+    $.ajax({url: url})
+    .done(function() {
+      ShopifyApp.flashNotice("Test email sent");
+    })
+    .error(function() {
+      ShopifyApp.flashNotice("Error!");
     });
   }
 </script>
 
-<div class="modal fade" id="previewEmailModal">
+<div class="modal fade" id="previewEmailModal<%= modal_id %>">
   <div class="modal-dialog">
     <div class="modal-content">
 
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Email Template Preview</h4>
+        <h4 class="modal-title"><%= preview_copy %></h4>
       </div>
 
       <form method="POST" action="/charity" role="form">
         <input type="hidden" name="_method" value="put" />
-        <input type="hidden" name="email_subject" id="email_subject"/>
-        <input type="hidden" name="email_template" id="email_template"/>
+        <input type="hidden" name="<%= template %>" bind="<%= template %><%= modal_id %>"/>
 
         <div class="modal-body">
           <div class="form-group">
+            <label for="email_to">To</label>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="email_to"
+              bind="email_to<%= modal_id %>"
+              value="<%= shop.email %>"
+            />
+          </div>
+
+          <div class="form-group">
             <label for="email_bcc">Bcc</label>
-            <input type="text" class="form-control" name="email_bcc" id="bcc" value="<%= charity.email_bcc %>" style="width: 97%"/>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="email_bcc"
+              bind="email_bcc<%= modal_id %>"
+              value="<%= charity.email_bcc %>"
+            />
           </div>
 
           <div class="form-group">
             <label for="email_from">From</label>
-            <input type="text" class="form-control" name="email_from" id="from" value="<%= charity.email_from || shop.email %>" style="width: 97%"/>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="email_from"
+              bind="email_from<%= modal_id %>"
+              value="<%= charity.email_from || shop.email %>"
+            />
           </div>
 
           <div class="form-group">
-            <label for="email_subject">Email subject</label>
-            <input type="text" class="form-control" id="email_subject" disabled="true" style="width: 97%"/>
+            <label for="<%= subject %>">Email subject</label>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="<%= subject %>"
+              bind="<%= subject %><%= modal_id %>"
+            />
           </div>
 
           <div class="form-group">
             <label for="pdf_filename">Attachment filename (.pdf)</label>
-            <input type="text" class="form-control" name="pdf_filename" value="<%= charity.pdf_filename %>" style="width: 97%"/>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="pdf_filename"
+              bind="pdf_filename<%= modal_id %>"
+              value="<%= charity.pdf_filename %>"
+            />
           </div>
 
           <hr>
 
-          <textarea id="email_body" rows="12" class="form-control" disabled="true" style="width: 97%"></textarea>
+          <textarea
+            id="email_body"
+            class="form-control"
+            style="width: 97%"
+            rows="12"
+            disabled="true">
+          </textarea>
         </div>
 
         <div class="modal-footer">
           <div class="pull-left">
-            <button type="button" class="btn btn-default" onclick="$('#previewEmailModal').modal('hide'); $('#editEmailModal').modal('show')">Back to edit</button>
+            <button
+              type="button"
+              class="btn btn-default"
+              onclick="$('#previewEmailModal<%= modal_id %>').modal('hide'); $('#editEmailModal<%= modal_id %>').modal('show')">
+              <i class="fa fa-undo-alt"></i> Back to edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-default"
+              onclick="sendTestEmail<%=modal_id%>()">
+                <i class="fa fa-paper-plane"></i> Send test email
+            </button>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save</button>
@@ -71,47 +136,104 @@
   </div>
 </div>
 
-<div class="modal fade" id="editEmailModal">
+<div class="modal fade" id="editEmailModal<%= modal_id %>">
   <div class="modal-dialog">
     <div class="modal-content">
 
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Edit "Donation Receipt" Email Template</h4>
+        <h4 class="modal-title"><%= title_copy%> </h4>
       </div>
 
       <form method="POST" action="/charity" role="form">
         <input type="hidden" name="_method" value="put" />
+
         <div class="modal-body">
+          <div class="form-group">
+            <label for="email_to">To</label>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="email_to"
+              bind="email_to<%= modal_id %>"
+              value="<%= shop.email %>"
+            />
+          </div>
 
           <div class="form-group">
             <label for="email_bcc">Bcc</label>
-            <input type="text" class="form-control" name="email_bcc" id="bcc" value="<%= charity.email_bcc %>" style="width: 97%"/>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="email_bcc"
+              bind="email_bcc<%= modal_id %>"
+              value="<%= charity.email_bcc %>"
+            />
           </div>
 
           <div class="form-group">
             <label for="email_from">From</label>
-            <input type="text" class="form-control" name="email_from" id="from" value="<%= charity.email_from || shop.email %>" style="width: 97%"/>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="email_from"
+              bind="email_from<%= modal_id %>"
+              value="<%= charity.email_from || shop.email %>"
+            />
           </div>
 
           <div class="form-group">
-            <label for="email_subject">Subject</label>
-            <input type="text" class="form-control" name="email_subject" id="subject" value="<%= charity.email_subject %>" style="width: 97%"/>
+            <label for="<%= subject %>">Subject</label>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="<%= subject %>"
+              bind="<%= subject %><%= modal_id %>"
+              value="<%= charity.send(subject) %>"
+            />
           </div>
 
           <div class="form-group">
             <label for="pdf_filename">Attachment filename (.pdf)</label>
-            <input type="text" class="form-control" name="pdf_filename" id="filename" value="<%= charity.pdf_filename %>" style="width: 97%"/>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="pdf_filename"
+              bind="pdf_filename<%= modal_id %>"
+              value="<%= charity.pdf_filename %>"
+            />
           </div>
 
           <hr>
 
-          <textarea class="form-control" name="email_template" id="template" rows="12" style="width: 97%"><%= charity.email_template %></textarea>
+          <textarea
+            id="template"
+            name="<%= template %>"
+            bind="<%= template %><%= modal_id %>"
+            class="form-control"
+            style="width: 97%"
+            rows="12"><%= charity.send(template) %></textarea>
         </div>
 
         <div class="modal-footer">
           <div class="pull-left">
-            <button type="button" class="btn btn-default" onclick="previewEmail()">Preview</button>
+            <button
+              type="button"
+              class="btn btn-default"
+              onclick="previewEmail<%= modal_id %>()">
+              <i class="fa fa-file-signature"></i> Preview
+            </button>
+            <button
+              type="button"
+              class="btn btn-default"
+              onclick="sendTestEmail<%=modal_id%>()">
+                <i class="fa fa-paper-plane"></i> Send test email
+            </button>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save</button>
@@ -123,5 +245,9 @@
 </div>
 
 <p>
-  <a href="#" class="btn btn-default" onclick="$('#editEmailModal').modal('toggle'); return false;">Edit receipt email</a>
+  <a href="#"
+    class="btn btn-default action-btn"
+    onclick="$('#editEmailModal<%= modal_id %>').modal('toggle'); return false;">
+    <i class="fa fa-edit"></i> <%= button_copy %>
+  </a>
 </p>
