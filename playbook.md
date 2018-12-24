@@ -15,7 +15,7 @@ DEVELOPMENT=1
 Make sure the tunnel is started `forward 5000 shopify`
 The development app is configured for https://shopify-kevinhughes27.fwd.wf
 
-Then run `foreman start` or `PORT=5000 foreman run bundle exec rackup config.ru` if you need byebug
+Then run `foreman start -m all=1,release=0 ` or `PORT=5000 foreman run bundle exec rackup config.ru` if you need byebug
 
 ### Testing
 

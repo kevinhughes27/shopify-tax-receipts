@@ -94,8 +94,7 @@ class SinatraApp < Sinatra::Base
         flash[:notice] = "Email resent!"
       end
 
-      @tab = 'donations'
-      redirect '/'
+      redirect '/?tab=donations'
     end
   end
 
@@ -117,8 +116,7 @@ class SinatraApp < Sinatra::Base
         flash[:notice] = "Donation voided"
       end
 
-      @tab = 'donations'
-      redirect '/'
+      redirect '/?tab=donations'
     end
   end
 
