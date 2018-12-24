@@ -11,7 +11,6 @@ gemfile:
 
 script:
   - bundle exec rake db:schema:load
-  - bundle exec rake test:prepare
   - bundle exec rake test
 
 notifications:
