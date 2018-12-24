@@ -23,8 +23,6 @@ class SinatraApp < Sinatra::Base
   end
 
   def create_order_webhook
-    return if ENV['DEVELOPMENT']
-
     order_webhook = ShopifyAPI::Webhook.new({
       topic: "orders/paid",
       address: "#{base_url}/order.json",
@@ -37,8 +35,6 @@ class SinatraApp < Sinatra::Base
   end
 
   def create_uninstall_webhook
-    return if ENV['DEVELOPMENT']
-
     uninstall_webhook = ShopifyAPI::Webhook.new({
       topic: "app/uninstalled",
       address: "#{base_url}/uninstall",

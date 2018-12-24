@@ -94,10 +94,12 @@ class SinatraApp < Sinatra::Base
         flash[:notice] = "Email resent!"
       end
 
+      @tab = 'donations'
       redirect '/'
     end
   end
 
+  # void a donation receipt
   post '/void' do
     shopify_session do
       donation = Donation.find_by(shop: current_shop_name, id: params['id'])
@@ -115,7 +117,7 @@ class SinatraApp < Sinatra::Base
         flash[:notice] = "Donation voided"
       end
 
-      @tab = params[:tab] || 'donations'
+      @tab = 'donations'
       redirect '/'
     end
   end
