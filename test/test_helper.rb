@@ -10,6 +10,7 @@ require 'active_support/test_case'
 require 'rack/test'
 require 'mocha/setup'
 require 'fakeweb'
+require 'json'
 
 require "./src/app"
 

@@ -162,6 +162,15 @@ class AppTest < ActiveSupport::TestCase
     assert_equal 'Donation is refunded', last_request.env['x-rack.flash'][:error]
   end
 
+  test "preview_email" do
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    get '/preview_email', {template: 'order {{ order.name }}'}, 'rack.session' => session
+
+    assert last_response.ok?
+    assert_equal "order #1001", JSON.parse(last_response.body)['email_body']
+  end
+
   test "test_email" do
     charity = Charity.find_by(shop: @shop)
 
