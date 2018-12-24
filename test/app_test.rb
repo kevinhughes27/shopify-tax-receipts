@@ -164,12 +164,21 @@ class AppTest < ActiveSupport::TestCase
 
   test "test_email" do
     charity = Charity.find_by(shop: @shop)
-    charity.update_attribute(:email_template, nil)
 
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
-    Pony.expects(:mail).with(has_entry(body: "Dear Bob Norman,\n\nOn behalf of Amnesty, we would like to thank you from the bottom of our hearts for your contribution to our cause. It may seem like a small gesture to you, but to us, it’s what we thrive on. Feel free to share the word to your friends and family as well!\n\nYou’ll find a copy of your tax receipt as an attachment in this email.\n\nAgain, thank you. We wouldn't be here without you.\n\nAmnesty\n"))
+    Pony.expects(:mail).with(has_entry(body: "hello #{charity.name}"))
 
-    get '/test_email', {}, 'rack.session' => session
+    get '/test_email', {email_template: 'hello {{ charity.name }}'}, 'rack.session' => session
+    assert last_response.ok?
+  end
+
+  test "test_void_email" do
+    charity = Charity.find_by(shop: @shop)
+
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    Pony.expects(:mail).with(has_entry(body: "goodbye #{charity.name}"))
+
+    get '/test_email', {void_email_template: 'goodbye {{ charity.name }}'}, 'rack.session' => session
     assert last_response.ok?
   end
 
