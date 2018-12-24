@@ -6,6 +6,7 @@
         <th>Order Number</th>
         <th>Date</th>
         <th>Amount</th>
+        <th>Status</th>
         <th></th>
         <th></th>
         <th></th>
@@ -20,19 +21,16 @@
           </td>
           <td><%= donation.order_number%></td>
           <td><%= donation.created_at %></td>
+
           <td>
             <% if disabled %>
-              <del>
+              <del><%= donation.donation_amount %></del>
             <% else %>
-              <span>
-            <% end %>
-              <%= donation.donation_amount %>
-            <% if disabled %>
-              </del>
-            <% else %>
-              </span>
+              <span><%= donation.donation_amount %></span>
             <% end %>
           </td>
+
+          <td><%= donation.status %></td>
 
           <td style="width:1px;">
             <a href="/view?id=<%= donation.id %>" target="_blank" class="btn btn-default">
