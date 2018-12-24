@@ -4,7 +4,7 @@ ruby '2.5.3'
 gem 'rake'
 gem 'foreman'
 
-gem 'shopify-sinatra-app', '~> 0.4.1'
+gem 'shopify-sinatra-app', git: 'https://github.com/kevinhughes27/shopify-sinatra-app', ref: '8b8ae4dfa0760ecb67a5d42746840aaf79ecf53e'
 gem 'sinatra-contrib'
 
 gem 'kaminari-sinatra', git: 'https://github.com/kevinhughes27/kaminari-sinatra', ref: '2e7eb2771f921eaf75aab9dd21bf465876be3404'

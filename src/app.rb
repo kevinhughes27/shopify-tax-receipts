@@ -45,9 +45,13 @@ class SinatraApp < Sinatra::Base
 
   # order/paid webhook receiver
   post '/order.json' do
-    webhook_session do |order|
+    shopify_webhook do |order|
       return unless order['customer']
       return unless order['customer']['email']
+
+      shop = Shop.find_by(name: current_shop_name)
+      api_session = ShopifyAPI::Session.new(shop.name, shop.token)
+      ShopifyAPI::Base.activate_session(api_session)
 
       donations = donations_from_order(current_shop_name, order)
 
