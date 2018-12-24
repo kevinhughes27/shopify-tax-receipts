@@ -144,6 +144,8 @@ class AppTest < ActiveSupport::TestCase
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10, status: 'void')
 
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
     params = {id: donation.id}
     post '/resend', params, 'rack.session' => session
 
@@ -154,6 +156,8 @@ class AppTest < ActiveSupport::TestCase
   test "cant resend refunded" do
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10, status: 'refunded')
+
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
 
     params = {id: donation.id}
     post '/resend', params, 'rack.session' => session
