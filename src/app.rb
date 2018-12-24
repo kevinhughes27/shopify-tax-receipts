@@ -132,6 +132,22 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # send a test email to the user
+  get '/test_email' do
+    shopify_session do
+      donation = mock_donation
+      charity = Charity.find_by(shop: current_shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+
+      charity.assign_attributes(charity_params(params))
+
+      receipt_pdf = render_pdf(shopify_shop, charity, donation)
+      deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf, params['email_to'])
+
+      status 200
+    end
+  end
+
   # render a preview of the user edited pdf template
   get '/preview_pdf' do
     shopify_session do
@@ -142,20 +158,6 @@ class SinatraApp < Sinatra::Base
       receipt_pdf = render_pdf(shopify_shop, charity, donation)
       content_type 'application/pdf'
       receipt_pdf
-    end
-  end
-
-  # send a test email to the user
-  get '/test_email' do
-    shopify_session do
-      donation = mock_donation
-      charity = Charity.find_by(shop: current_shop_name)
-      shopify_shop = ShopifyAPI::Shop.current
-
-      receipt_pdf = render_pdf(shopify_shop, charity, donation)
-      deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf, params['to'])
-
-      status 200
     end
   end
 

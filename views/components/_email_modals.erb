@@ -16,6 +16,21 @@
       $('#previewEmailModal<%= modal_id %>').modal('show')
     });
   }
+
+  window.sendTestEmail<%= modal_id %> = function() {
+    var params = $('#editEmailModal<%= modal_id %>').find('form').serialize();
+    params = params.replace('_method=put&', '?');
+
+    var url = '/test_email' + params;
+
+    $.ajax({url: url})
+    .done(function() {
+      ShopifyApp.flashNotice("Test email sent");
+    })
+    .error(function() {
+      ShopifyApp.flashNotice("Error!");
+    });
+  }
 </script>
 
 <div class="modal fade" id="previewEmailModal<%= modal_id %>">
@@ -33,6 +48,18 @@
         <input type="hidden" name="<%= template %>" id="<%= template %>"/>
 
         <div class="modal-body">
+          <div class="form-group">
+            <label for="email_to">To</label>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="email_to"
+              id="to"
+              value="<%= shop.email %>"
+            />
+          </div>
+
           <div class="form-group">
             <label for="email_bcc">Bcc</label>
             <input
@@ -96,7 +123,13 @@
               type="button"
               class="btn btn-default"
               onclick="$('#previewEmailModal<%= modal_id %>').modal('hide'); $('#editEmailModal<%= modal_id %>').modal('show')">
-              Back to edit
+              <i class="fa fa-undo-alt"></i> Back to edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-default"
+              onclick="sendTestEmail<%=modal_id%>()">
+                <i class="fa fa-paper-plane"></i> Send test email
             </button>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -119,7 +152,19 @@
 
       <form method="POST" action="/charity" role="form">
         <input type="hidden" name="_method" value="put" />
+
         <div class="modal-body">
+          <div class="form-group">
+            <label for="email_to">To</label>
+            <input
+              type="text"
+              class="form-control"
+              style="width: 97%"
+              name="email_to"
+              id="to"
+              value="<%= shop.email %>"
+            />
+          </div>
 
           <div class="form-group">
             <label for="email_bcc">Bcc</label>
@@ -181,7 +226,18 @@
 
         <div class="modal-footer">
           <div class="pull-left">
-            <button type="button" class="btn btn-default" onclick="previewEmail<%= modal_id %>()">Preview</button>
+            <button
+              type="button"
+              class="btn btn-default"
+              onclick="previewEmail<%= modal_id %>()">
+              <i class="fa fa-file-signature"></i> Preview
+            </button>
+            <button
+              type="button"
+              class="btn btn-default"
+              onclick="sendTestEmail<%=modal_id%>()">
+                <i class="fa fa-paper-plane"></i> Send test email
+            </button>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save</button>
