@@ -35,6 +35,7 @@
   </div>
 
   <script>
+    // two way data binding
     $("*[bind]").on('change keyup', function (e) {
       var to_bind = $(this).attr('bind');
       $("*[bind='"+to_bind+"']").val($(this).val());

@@ -124,11 +124,10 @@ class SinatraApp < Sinatra::Base
   get '/preview_email' do
     shopify_session do
       charity = Charity.find_by(shop: current_shop_name)
-      subject = params['subject']
       template = params['template']
       body = email_body(template, charity, mock_donation)
 
-      {subject: subject, template: template, body: body}.to_json
+      {email_body: body}.to_json
     end
   end
 

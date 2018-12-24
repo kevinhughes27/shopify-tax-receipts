@@ -2,14 +2,13 @@
   window.previewEmail<%= modal_id %> = function() {
     var template = $('#editEmailModal<%= modal_id %>').find('#template').val();
 
-    var url = '/preview_email'
-    url += '?template=' + encodeURIComponent(template)
+    var url = '/preview_email';
+    url += '?template=' + encodeURIComponent(template);
 
     $.ajax({url: url, dataType: 'json'}).done(function(response) {
-      $('#previewEmailModal<%= modal_id %> #template')[0].value = response.template;
-      $('#previewEmailModal<%= modal_id %> #email_body')[0].innerHTML = response.body;
-      $('#editEmailModal<%= modal_id %>').modal('hide')
-      $('#previewEmailModal<%= modal_id %>').modal('show')
+      $('#previewEmailModal<%= modal_id %> #email_body')[0].innerHTML = response.email_body;
+      $('#editEmailModal<%= modal_id %>').modal('hide');
+      $('#previewEmailModal<%= modal_id %>').modal('show');
     });
   }
 
@@ -40,7 +39,7 @@
 
       <form method="POST" action="/charity" role="form">
         <input type="hidden" name="_method" value="put" />
-        <input type="hidden" name="<%= template %>" id="template"/>
+        <input type="hidden" name="<%= template %>" bind="<%= template %><%= modal_id %>"/>
 
         <div class="modal-body">
           <div class="form-group">
@@ -215,6 +214,7 @@
           <textarea
             id="template"
             name="<%= template %>"
+            bind="<%= template %><%= modal_id %>"
             class="form-control"
             style="width: 97%"
             rows="12"><%= charity.send(template) %></textarea>
