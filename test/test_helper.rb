@@ -10,9 +10,12 @@ require 'active_support/test_case'
 require 'rack/test'
 require 'mocha/setup'
 require 'fakeweb'
+require 'sidekiq/testing'
 require 'json'
 
 require "./src/app"
+
+Sidekiq::Testing.inline!
 
 FakeWeb.allow_net_connect = false
 

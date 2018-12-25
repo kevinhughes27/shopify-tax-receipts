@@ -6,10 +6,10 @@ class SinatraApp < Sinatra::Base
 
   # receive uninstall webhook
   post '/uninstall' do
-    webhook_session do |params|
-      Charity.where(shop: current_shop_name).destroy_all
+    shopify_webhook do |params|
+      Shop.find_by(name: current_shop_name).destroy
+      Charity.find_by(shop: current_shop_name).destroy
       Product.where(shop: current_shop_name).destroy_all
-      current_shop.destroy
     end
   end
 

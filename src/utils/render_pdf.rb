@@ -1,5 +1,6 @@
 require 'tilt/liquid'
 
+# mock rails classes for wicked_pdf
 module Rails
   def self.env
     'production'
