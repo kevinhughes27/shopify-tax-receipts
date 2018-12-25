@@ -11,9 +11,9 @@ class SinatraApp < Sinatra::Base
       )
 
       if charity.save
-        flash[:notice] = "Charity Information Saved"
+        flash[:notice] = 'Charity Information Saved'
       else
-        flash[:error] = "Error Saving Charity Information"
+        flash[:error] = 'Error Saving Charity Information'
       end
 
       redirect '/'
@@ -25,9 +25,9 @@ class SinatraApp < Sinatra::Base
       charity = Charity.find_by(shop: current_shop_name)
 
       if charity.update_attributes(charity_params(params))
-        flash[:notice] = "Saved"
+        flash[:notice] = 'Saved'
       else
-        flash[:error] = "Error Saving"
+        flash[:error] = 'Error Saving'
       end
 
       redirect '/'
@@ -36,16 +36,17 @@ class SinatraApp < Sinatra::Base
 
   def charity_params(params)
     params.slice(
-      "name",
-      "charity_id",
-      "email_from",
-      "email_bcc",
-      "email_subject",
-      "email_template",
-      "void_email_subject",
-      "void_email_template",
-      "pdf_template",
-      "pdf_filename"
+      'name',
+      'charity_id',
+      'receipt_threshold',
+      'email_from',
+      'email_bcc',
+      'email_subject',
+      'email_template',
+      'void_email_subject',
+      'void_email_template',
+      'pdf_template',
+      'pdf_filename'
     )
   end
 end

@@ -4,8 +4,8 @@ require './src/app'
 
 namespace :test do
   task :prepare do
-    `RACK_ENV=test rake db:setup`
-    `RACK_ENV=test rake db:migrate`
+    `DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RACK_ENV=test rake db:setup`
+    `DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RACK_ENV=test rake db:migrate`
   end
 end
 
