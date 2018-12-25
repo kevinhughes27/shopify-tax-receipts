@@ -10,12 +10,13 @@ require_relative '../config/development' if ENV['DEVELOPMENT']
 require_relative 'models/charity'
 require_relative 'models/product'
 require_relative 'models/donation'
+
 require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/webhooks'
 require_relative 'routes/gdpr'
-require_relative 'concerns/install'
 
+require_relative 'jobs/after_install_job'
 require_relative 'jobs/order_webhook_job'
 
 require_relative 'utils/donation_service'
@@ -28,6 +29,12 @@ class SinatraApp < Sinatra::Base
   set :scope, 'read_products, read_orders'
 
   register Kaminari::Helpers::SinatraHelpers
+
+  def after_shopify_auth
+    shopify_session do |shop_name|
+      AfterInstallJob.perform_async(shop_name)
+    end
+  end
 
   # Home page
   get '/' do
@@ -46,6 +53,15 @@ class SinatraApp < Sinatra::Base
     shopify_session do |shop_name|
       @shop = ShopifyAPI::Shop.current
       erb :help
+    end
+  end
+
+  # receive uninstall webhook
+  post '/uninstall' do
+    shopify_webhook do |shop_name, params|
+      Shop.where(name: shop_name).destroy_all
+      Charity.where(shop: shop_name).destroy_all
+      Product.where(shop: shop_name).destroy_all
     end
   end
 

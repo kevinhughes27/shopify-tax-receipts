@@ -1,21 +1,13 @@
-class SinatraApp < Sinatra::Base
+class AfterInstallJob
+  include Sidekiq::Worker
 
-  # receive uninstall webhook
-  post '/uninstall' do
-    shopify_webhook do |shop_name, params|
-      Shop.where(name: shop_name).destroy_all
-      Charity.where(shop: shop_name).destroy_all
-      Product.where(shop: shop_name).destroy_all
-    end
-  end
+  def perform(shop_name)
+    shop = Shop.find_by(name: shop_name)
+    api_session = ShopifyAPI::Session.new(shop.name, shop.token)
+    ShopifyAPI::Base.activate_session(api_session)
 
-  private
-
-  def after_shopify_auth
-    shopify_session do
-      create_order_webhook
-      create_uninstall_webhook
-    end
+    create_order_webhook
+    create_uninstall_webhook
   end
 
   def create_order_webhook
