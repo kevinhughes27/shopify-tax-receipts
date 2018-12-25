@@ -1,7 +1,3 @@
-require 'sinatra/shopify-sinatra-app'
-require_relative '../models/charity'
-require_relative '../models/product'
-
 class SinatraApp < Sinatra::Base
 
   # receive uninstall webhook

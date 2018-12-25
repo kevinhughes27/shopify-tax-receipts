@@ -1,6 +1,3 @@
-require 'sinatra/shopify-sinatra-app'
-require_relative '../models/product'
-
 class SinatraApp < Sinatra::Base
   # product index app link receiver
   get '/products' do

@@ -1,5 +1,3 @@
-require 'sinatra/shopify-sinatra-app'
-
 class SinatraApp < Sinatra::Base
   # {
   #   "shop_id": "<ID>",
