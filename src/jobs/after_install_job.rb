@@ -1,7 +1,6 @@
 class AfterInstallJob < Job
   def perform(shop_name)
     activate_shopify_api(shop_name)
-    create_webhook(topic: 'orders/paid', address: "#{base_url}/order.json")
     create_webhook(topic: 'orders/updated', address: "#{base_url}/order")
     create_webhook(topic: 'app/uninstalled', address: "#{base_url}/uninstall")
   end

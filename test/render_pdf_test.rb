@@ -11,7 +11,7 @@ class RenderPdfTest < ActiveSupport::TestCase
   end
 
   test "regular_order" do
-    order = JSON.parse(load_fixture('order_webhook.json'))
+    order = JSON.parse(load_fixture('order.json'))
     donation = build_donation(@shop_domain, order, 20)
 
     pdf = render_pdf(@shop, @charity, donation)
@@ -41,14 +41,14 @@ class RenderPdfTest < ActiveSupport::TestCase
 
   test "utf8" do
     @charity.name += 'Ş'
-    order = JSON.parse(load_fixture('order_webhook.json'))
+    order = JSON.parse(load_fixture('order.json'))
     donation = build_donation(@shop_domain, order, 20)
 
     pdf = render_pdf(@shop, @charity, donation)
   end
 
   test "void" do
-    order = JSON.parse(load_fixture('order_webhook.json'))
+    order = JSON.parse(load_fixture('order.json'))
     donation = build_donation(@shop_domain, order, 20)
     donation.void!
 

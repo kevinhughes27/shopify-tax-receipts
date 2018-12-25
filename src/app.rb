@@ -65,15 +65,15 @@ class SinatraApp < Sinatra::Base
 
   # orders/updated webhook receiver
   post '/order' do
-    shopify_webhook do |shop_name, params|
-      puts "order update noop"
+    shopify_webhook do |shop_name, order|
+      OrderWebhookJob.perform_async(shop_name, order)
     end
   end
 
   # order/paid webhook receiver
   post '/order.json' do
     shopify_webhook do |shop_name, order|
-      OrderWebhookJob.perform_async(shop_name, order)
+      puts "order paid noop"
     end
   end
 
@@ -222,6 +222,6 @@ class SinatraApp < Sinatra::Base
   end
 
   def mock_order
-    @mock_order ||= JSON.parse( File.read(File.join('test', 'fixtures/order_webhook.json')) )
+    @mock_order ||= JSON.parse( File.read(File.join('test', 'fixtures/order.json')) )
   end
 end

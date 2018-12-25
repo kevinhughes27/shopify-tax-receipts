@@ -20,7 +20,7 @@ class AppTest < ActiveSupport::TestCase
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
 
-    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order_webhook.json')
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order.json')
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
 
     get "/view?id=#{donation.id}", {}, 'rack.session' => session
@@ -32,7 +32,7 @@ class AppTest < ActiveSupport::TestCase
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
 
-    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order_webhook.json')
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order.json')
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
 
     Pony.expects(:mail).once
