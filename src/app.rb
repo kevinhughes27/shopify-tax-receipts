@@ -16,6 +16,7 @@ require_relative 'routes/products'
 require_relative 'routes/webhooks'
 require_relative 'routes/gdpr'
 
+require_relative 'jobs/job'
 require_relative 'jobs/after_install_job'
 require_relative 'jobs/order_webhook_job'
 

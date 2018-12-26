@@ -1,11 +1,6 @@
-class AfterInstallJob
-  include Sidekiq::Worker
-
+class AfterInstallJob < Job
   def perform(shop_name)
-    shop = Shop.find_by(name: shop_name)
-    api_session = ShopifyAPI::Session.new(shop.name, shop.token)
-    ShopifyAPI::Base.activate_session(api_session)
-
+    activate_shopify_api(shop_name)
     create_order_webhook
     create_uninstall_webhook
   end
@@ -32,6 +27,14 @@ class AfterInstallJob
     uninstall_webhook.save!
   rescue => e
     raise unless webhook_already_created?(uninstall_webhook)
+  end
+
+  def base_url
+    if ENV['DEVELOPMENT']
+      'https://shopify-kevinhughes27.fwd.wf'
+    else
+      'https://taxreceipts.herokuapp.com'
+    end
   end
 
   def webhook_already_created?(webhook)

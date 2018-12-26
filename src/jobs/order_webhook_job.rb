@@ -1,25 +1,20 @@
-class OrderWebhookJob
-  include Sidekiq::Worker
-
+class OrderWebhookJob < Job
   def perform(shop_name, order)
-    shop = Shop.find_by(name: shop_name)
-    api_session = ShopifyAPI::Session.new(shop.name, shop.token)
-    ShopifyAPI::Base.activate_session(api_session)
+    activate_shopify_api(shop_name)
 
     donations = donations_from_order(shop_name, order)
+    return if donations.empty?
 
-    unless donations.empty?
-      charity = Charity.find_by(shop: shop_name)
-      shopify_shop = ShopifyAPI::Shop.current
-      donation_amount = donations.sum
+    charity = Charity.find_by(shop: shop_name)
+    shopify_shop = ShopifyAPI::Shop.current
+    donation_amount = donations.sum
 
-      return if charity.receipt_threshold.present? &&
-        donation_amount < charity.receipt_threshold
+    return if charity.receipt_threshold.present? &&
+      donation_amount < charity.receipt_threshold
 
-      if donation = save_donation(shop_name, order, donation_amount)
-        receipt_pdf = render_pdf(shopify_shop, charity, donation)
-        deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
-      end
+    if donation = save_donation(shop_name, order, donation_amount)
+      receipt_pdf = render_pdf(shopify_shop, charity, donation)
+      deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
     end
   end
 end
