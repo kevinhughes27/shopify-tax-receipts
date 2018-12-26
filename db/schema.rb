@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_23_032113) do
+ActiveRecord::Schema.define(version: 2018_12_25_132047) do
 
   create_table "charities", force: :cascade do |t|
     t.string "name", limit: 255
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2018_12_23_032113) do
     t.string "pdf_filename", default: "donation_receipt"
     t.string "void_email_template"
     t.string "void_email_subject"
+    t.decimal "receipt_threshold", precision: 8, scale: 2
     t.index ["shop"], name: "index_charities_on_shop"
   end
 

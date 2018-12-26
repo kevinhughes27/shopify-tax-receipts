@@ -7,7 +7,9 @@
 
     <div class="form-group">
       <div class="input-group">
-        <div class="input-group-addon"><i class="fa fa-university"></i></i></div>
+        <div class="input-group-addon">
+          <i class="fa fa-university" style="width: 20px;"></i>
+        </div>
         <input type="text"
                class="form-control"
                name="name"
@@ -18,13 +20,29 @@
 
     <div class="form-group">
       <div class="input-group">
-        <div class="input-group-addon"><i class="fa fa-hashtag"></i></i></div>
+        <div class="input-group-addon">
+          <i class="fa fa-hashtag" style="width: 20px;"></i>
+        </div>
         <input type="text"
                class="form-control"
                name="charity_id"
                placeholder="Tax ID # eg. 804"
                <%= "value=#{charity.charity_id}" if charity.present? %>>
       </div>
+    </div>
+
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-thermometer-half" style="width: 20px;"></i>
+        </div>
+        <input type="text"
+               class="form-control"
+               name="receipt_threshold"
+               placeholder="Receipt threshold"
+               <%= "value=#{charity.receipt_threshold}" if charity.present? %>>
+      </div>
+      <span class="help-block">Only send receipts for donations greater than a certain amount</span>
     </div>
 
     <div class="form-group">

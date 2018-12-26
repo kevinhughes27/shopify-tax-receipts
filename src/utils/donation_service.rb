@@ -18,7 +18,7 @@ def build_donation(shop_name, order, donation_amount)
     shop: shop_name,
     order_id: order['id'],
     order_number: order['name'],
-    donation_amount: donation_amount
+    donation_amount: sprintf( "%0.02f", donation_amount)
   )
 
   donation.order = ShopifyAPI::Order.new(order)

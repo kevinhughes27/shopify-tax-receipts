@@ -11,7 +11,10 @@ class OrderWebhookJob
     unless donations.empty?
       charity = Charity.find_by(shop: shop_name)
       shopify_shop = ShopifyAPI::Shop.current
-      donation_amount = sprintf( "%0.02f", donations.sum)
+      donation_amount = donations.sum
+
+      return if charity.receipt_threshold.present? &&
+        donation_amount < charity.receipt_threshold
 
       if donation = save_donation(shop_name, order, donation_amount)
         receipt_pdf = render_pdf(shopify_shop, charity, donation)
