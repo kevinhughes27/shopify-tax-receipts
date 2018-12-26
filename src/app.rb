@@ -124,6 +124,9 @@ class SinatraApp < Sinatra::Base
       body = email_body(template, charity, donation)
 
       {email_body: body}.to_json
+
+    rescue Liquid::SyntaxError => e
+      {email_body: e.message}.to_json
     end
   end
 
@@ -146,6 +149,9 @@ class SinatraApp < Sinatra::Base
       end
 
       status 200
+
+    rescue Liquid::SyntaxError => e
+      status 500
     end
   end
 
@@ -159,6 +165,10 @@ class SinatraApp < Sinatra::Base
       receipt_pdf = render_pdf(shopify_shop, charity, donation)
       content_type 'application/pdf'
       receipt_pdf
+
+    rescue Liquid::SyntaxError => e
+      content_type 'application/text'
+      e.message
     end
   end
 
