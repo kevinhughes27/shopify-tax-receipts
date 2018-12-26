@@ -2,8 +2,8 @@ require 'sinatra/shopify-sinatra-app'
 
 require_relative '../config/pony'
 require_relative '../config/sidekiq'
+require_relative '../config/exception_tracker' unless ENV['DEVELOPMENT']
 require_relative '../config/pdf_engine'
-require_relative '../config/exception_tracker'
 require_relative '../config/pagination'
 require_relative '../config/development' if ENV['DEVELOPMENT']
 
