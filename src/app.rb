@@ -72,7 +72,6 @@ class SinatraApp < Sinatra::Base
       return unless order['customer']
       return unless order['customer']['email']
       OrderWebhookJob.perform_async(shop_name, order)
-      status 200
     end
   end
 
