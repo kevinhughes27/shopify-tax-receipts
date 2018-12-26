@@ -7,7 +7,6 @@ require_relative '../config/exception_tracker'
 require_relative '../config/pagination'
 require_relative '../config/development' if ENV['DEVELOPMENT']
 
-require_relative 'concerns/install'
 require_relative 'models/charity'
 require_relative 'models/product'
 require_relative 'models/donation'
@@ -15,6 +14,7 @@ require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/webhooks'
 require_relative 'routes/gdpr'
+require_relative 'concerns/install'
 
 require_relative 'jobs/order_webhook_job'
 

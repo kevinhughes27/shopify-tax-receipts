@@ -1,7 +1,6 @@
 $VERBOSE = nil
 
 ENV['RACK_ENV'] = 'test'
-ENV['SHOPIFY_REDIRECT_URI'] = 'http://localhost:4567'
 ENV['SECRET'] = 'secret'
 ENV['DEVELOPMENT'] = '1'
 

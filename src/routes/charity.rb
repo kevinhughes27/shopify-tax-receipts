@@ -1,6 +1,3 @@
-require 'sinatra/shopify-sinatra-app'
-require_relative '../models/charity'
-
 class SinatraApp < Sinatra::Base
   post '/charity' do
     shopify_session do |shop_name|

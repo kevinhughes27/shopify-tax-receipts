@@ -1,5 +1,3 @@
-require 'sinatra/shopify-sinatra-app'
-
 class SinatraApp < Sinatra::Base
   get '/webhooks' do
     shopify_session do |shop_name|
