@@ -4,8 +4,8 @@ require_relative '../models/product'
 class SinatraApp < Sinatra::Base
   # product index app link receiver
   get '/products' do
-    shopify_session do
-      add_products(Array.wrap(params["ids"]))
+    shopify_session do |shop_name|
+      add_products(shop_name, Array.wrap(params["ids"]))
       flash[:notice] = "Product(s) added!"
       redirect '/'
     end
@@ -13,8 +13,8 @@ class SinatraApp < Sinatra::Base
 
   # product index app link receiver
   get '/product' do
-    shopify_session do
-      add_products(Array.wrap(params["id"]))
+    shopify_session do |shop_name|
+      add_products(shop_name, Array.wrap(params["id"]))
       flash[:notice] = "Product added!"
       redirect '/'
     end
@@ -22,31 +22,35 @@ class SinatraApp < Sinatra::Base
 
   # update product
   put '/products' do
-    product = Product.find_by(id: params["id"])
-    product_params = params.slice('percentage')
+    shopify_session do |shop_name|
+      product = Product.find_by(shop: shop_name, id: params["id"])
+      product_params = params.slice('percentage')
 
-    if product.update_attributes(product_params)
-      flash[:notice] = "Product Updated"
-    else
-      flash[:error] = "Error!"
+      if product.update_attributes(product_params)
+        flash[:notice] = "Product Updated"
+      else
+        flash[:error] = "Error!"
+      end
+
+      redirect '/'
     end
-
-    redirect '/'
   end
 
   # delete product (stops getting a donation receipt)
   delete '/products' do
-    Product.find_by(id: params["id"]).destroy
-    flash[:notice] = "Product Removed"
-    redirect '/'
+    shopify_session do |shop_name|
+      Product.find_by(shop: shop_name, id: params["id"]).destroy
+      flash[:notice] = "Product Removed"
+      redirect '/'
+    end
   end
 
   private
 
-  def add_products(product_ids)
+  def add_products(shop_name, product_ids)
     product_ids.each do |id|
       begin
-        Product.create!(shop: current_shop_name, product_id: id)
+        Product.create!(shop: shop_name, product_id: id)
       rescue ActiveRecord::RecordInvalid => e
         raise unless e.message.include? "Product has already been taken"
       end

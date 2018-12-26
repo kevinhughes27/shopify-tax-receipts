@@ -17,7 +17,7 @@
 
         <tr>
           <td>
-            <a href=<%="#{current_shop_url}/admin/orders/#{donation.order_id}"%> target="_blank"> <%= donation.order_id %></a>
+            <a href=<%="https://#{@shop.myshopify_domain}/admin/orders/#{donation.order_id}"%> target="_blank"> <%= donation.order_id %></a>
           </td>
           <td><%= donation.order_number%></td>
           <td><%= donation.created_at %></td>

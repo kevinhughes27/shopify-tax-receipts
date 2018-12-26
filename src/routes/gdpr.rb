@@ -22,8 +22,7 @@ class SinatraApp < Sinatra::Base
   #   "shop_domain": "<domain>"
   # }
   get '/shop/redacted' do
-    webhook_session do |params|
-      shop_name = params[:shop_domain]
+    webhook_session do |shop_name, params|
       Shop.where(name: shop_name).destroy_all
       Charity.where(shop: shop_name).destroy_all
       Product.where(shop: shop_name).destroy_all
@@ -42,7 +41,7 @@ class SinatraApp < Sinatra::Base
   #   "orders_requested": ["<order ID>", "<order ID>", "<order ID>"]
   # }
   get '/customers/data_request' do
-    webhook_session do |params|
+    webhook_session do |shop_name, params|
       Pony.mail to: 'kevinhughes27@gmail.com',
                 subject: 'Shopify Tax Receipts GDPR Data Request',
                 body: JSON.pretty_generate(params)

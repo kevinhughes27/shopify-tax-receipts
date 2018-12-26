@@ -3,11 +3,11 @@ require_relative '../models/charity'
 
 class SinatraApp < Sinatra::Base
   post '/charity' do
-    shopify_session do
+    shopify_session do |shop_name|
       charity = Charity.new(
         name: params['name'],
         charity_id: params['charity_id'],
-        shop: current_shop_name
+        shop: shop_name
       )
 
       if charity.save
@@ -21,8 +21,8 @@ class SinatraApp < Sinatra::Base
   end
 
   put '/charity' do
-    shopify_session do
-      charity = Charity.find_by(shop: current_shop_name)
+    shopify_session do |shop_name|
+      charity = Charity.find_by(shop: shop_name)
 
       if charity.update_attributes(charity_params(params))
         flash[:notice] = 'Saved'

@@ -31,11 +31,11 @@ class SinatraApp < Sinatra::Base
 
   # Home page
   get '/' do
-    shopify_session do
+    shopify_session do |shop_name|
       @shop = ShopifyAPI::Shop.current
-      @charity = Charity.find_by(shop: current_shop_name)
-      @products = Product.where(shop: current_shop_name).page(params[:products_page])
-      @donations = Donation.where(shop: current_shop_name).order('created_at DESC').page(params[:donations_page])
+      @charity = Charity.find_by(shop: shop_name)
+      @products = Product.where(shop: shop_name).page(params[:products_page])
+      @donations = Donation.where(shop: shop_name).order('created_at DESC').page(params[:donations_page])
       @tab = params[:tab] || 'products'
       erb :home
     end
@@ -43,24 +43,27 @@ class SinatraApp < Sinatra::Base
 
   # Help page
   get '/help' do
-    erb :help
+    shopify_session do |shop_name|
+      @shop = ShopifyAPI::Shop.current
+      erb :help
+    end
   end
 
   # order/paid webhook receiver
   post '/order.json' do
-    shopify_webhook do |order|
+    shopify_webhook do |shop_name, order|
       return unless order['customer']
       return unless order['customer']['email']
-      OrderWebhookJob.perform_async(current_shop_name, order)
+      OrderWebhookJob.perform_async(shop_name, order)
       status 200
     end
   end
 
   # view a donation receipt pdf
   get '/view' do
-    shopify_session do
-      donation = Donation.find_by(shop: current_shop_name, id: params['id'])
-      charity = Charity.find_by(shop: current_shop_name)
+    shopify_session do |shop_name|
+      donation = Donation.find_by(shop: shop_name, id: params['id'])
+      charity = Charity.find_by(shop: shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
       receipt_pdf = render_pdf(shopify_shop, charity, donation)
@@ -71,9 +74,9 @@ class SinatraApp < Sinatra::Base
 
   # resend a donation receipt
   post '/resend' do
-    shopify_session do
-      donation = Donation.find_by(shop: current_shop_name, id: params['id'])
-      charity = Charity.find_by(shop: current_shop_name)
+    shopify_session do |shop_name|
+      donation = Donation.find_by(shop: shop_name, id: params['id'])
+      charity = Charity.find_by(shop: shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
       if donation.void
@@ -92,9 +95,9 @@ class SinatraApp < Sinatra::Base
 
   # void a donation receipt
   post '/void' do
-    shopify_session do
-      donation = Donation.find_by(shop: current_shop_name, id: params['id'])
-      charity = Charity.find_by(shop: current_shop_name)
+    shopify_session do |shop_name|
+      donation = Donation.find_by(shop: shop_name, id: params['id'])
+      charity = Charity.find_by(shop: shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
       if donation.void
@@ -114,10 +117,11 @@ class SinatraApp < Sinatra::Base
 
   # render a preview of user edited email template
   get '/preview_email' do
-    shopify_session do
-      charity = Charity.find_by(shop: current_shop_name)
+    shopify_session do |shop_name|
+      donation = mock_donation(shop_name)
+      charity = Charity.find_by(shop: shop_name)
       template = params['template']
-      body = email_body(template, charity, mock_donation)
+      body = email_body(template, charity, donation)
 
       {email_body: body}.to_json
     end
@@ -125,9 +129,9 @@ class SinatraApp < Sinatra::Base
 
   # send a test email to the user
   get '/test_email' do
-    shopify_session do
-      donation = mock_donation
-      charity = Charity.find_by(shop: current_shop_name)
+    shopify_session do |shop_name|
+      donation = mock_donation(shop_name)
+      charity = Charity.find_by(shop: shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
       charity.assign_attributes(charity_params(params))
@@ -147,9 +151,9 @@ class SinatraApp < Sinatra::Base
 
   # render a preview of the user edited pdf template
   get '/preview_pdf' do
-    shopify_session do
-      donation = mock_donation
-      charity = Charity.find_by(shop: current_shop_name)
+    shopify_session do |shop_name|
+      donation = mock_donation(shop_name)
+      charity = Charity.find_by(shop: shop_name)
       shopify_shop = ShopifyAPI::Shop.current
 
       receipt_pdf = render_pdf(shopify_shop, charity, donation)
@@ -160,11 +164,11 @@ class SinatraApp < Sinatra::Base
 
   # export donations
   post '/export' do
-    shopify_session do
+    shopify_session do |shop_name|
       start_date = Date.parse(params['start_date'])
       end_date = Date.parse(params['end_date'])
 
-      csv = export_csv(current_shop_name, start_date, end_date)
+      csv = export_csv(shop_name, start_date, end_date)
       attachment   'donations.csv'
       content_type 'application/csv'
       csv
@@ -173,8 +177,8 @@ class SinatraApp < Sinatra::Base
 
   private
 
-  def mock_donation
+  def mock_donation(shop_name)
     mock_order = JSON.parse( File.read(File.join('test', 'fixtures/order_webhook.json')) )
-    build_donation(current_shop_name, mock_order, 20.00)
+    build_donation(shop_name, mock_order, 20.00)
   end
 end

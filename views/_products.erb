@@ -11,7 +11,7 @@
       <% products.each do |product| %>
         <tr>
           <td>
-            <a href=<%="#{current_shop_url}/admin/products/#{product.product_id}"%> target="_blank"> <%= product.product_id %></a>
+            <a href=<%="https://#{@shop.myshopify_domain}/admin/products/#{product.product_id}"%> target="_blank"> <%= product.product_id %></a>
           </td>
 
           <form method="POST" action="/products">

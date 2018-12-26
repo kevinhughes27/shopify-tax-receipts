@@ -14,7 +14,7 @@ ShopifyApp.ready(function(){
   To select which products should recieve tax receipts on purchase add products using the 'Add a product' button on the
   <a href="/">home page</a>
    or go to your
-  <a href=<%="#{current_shop_url}/admin/products"%> target="_blank">products</a>
+  <a href=<%="https://#{@shop.myshopify_domain}/admin/products"%> target="_blank">products</a>
   page and use the bulk dropdown
 </p>
 <img src='<%="#{base_url}/add_products.gif"%>' alt="Add Products using the bulk app link">
