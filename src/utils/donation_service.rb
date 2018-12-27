@@ -25,12 +25,3 @@ def build_donation(shop_name, order, donation_amount)
 
   donation
 end
-
-def save_donation(shop_name, order, donation_amount)
-  donation = build_donation(shop_name, order, donation_amount)
-  donation.save!
-  donation
-rescue ActiveRecord::RecordInvalid => e
-  raise unless e.message == 'Validation failed: Order has already been taken'
-  false
-end

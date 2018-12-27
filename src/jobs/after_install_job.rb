@@ -1,32 +1,20 @@
 class AfterInstallJob < Job
   def perform(shop_name)
     activate_shopify_api(shop_name)
-    create_order_webhook
-    create_uninstall_webhook
+    create_webhook(topic: 'orders/paid', address: "#{base_url}/order.json")
+    create_webhook(topic: 'app/uninstalled', address: "#{base_url}/uninstall")
   end
 
-  def create_order_webhook
-    order_webhook = ShopifyAPI::Webhook.new({
-      topic: "orders/paid",
-      address: "#{base_url}/order.json",
-      format: "json"
+  def create_webhook(topic:, address:)
+    webhook = ShopifyAPI::Webhook.new({
+      topic: topic,
+      address: address,
+      format: 'json'
     })
 
-    order_webhook.save!
+    webhook.save!
   rescue => e
-    raise unless webhook_already_created?(order_webhook)
-  end
-
-  def create_uninstall_webhook
-    uninstall_webhook = ShopifyAPI::Webhook.new({
-      topic: "app/uninstalled",
-      address: "#{base_url}/uninstall",
-      format: "json"
-    })
-
-    uninstall_webhook.save!
-  rescue => e
-    raise unless webhook_already_created?(uninstall_webhook)
+    raise unless webhook_already_created?(webhook)
   end
 
   def base_url
