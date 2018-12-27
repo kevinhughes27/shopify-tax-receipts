@@ -31,6 +31,7 @@ module Helpers
   end
 
   def reset_db
+    Shop.delete_all
     Charity.delete_all
     Product.delete_all
     Donation.delete_all
