@@ -10,13 +10,15 @@ require_relative '../config/development' if ENV['DEVELOPMENT']
 require_relative 'models/charity'
 require_relative 'models/product'
 require_relative 'models/donation'
+
 require_relative 'routes/charity'
 require_relative 'routes/products'
-require_relative 'routes/webhooks'
 require_relative 'routes/gdpr'
-require_relative 'concerns/install'
 
+require_relative 'jobs/job'
+require_relative 'jobs/after_install_job'
 require_relative 'jobs/order_webhook_job'
+require_relative 'jobs/uninstall_job'
 
 require_relative 'utils/donation_service'
 require_relative 'utils/email_service'
@@ -28,6 +30,12 @@ class SinatraApp < Sinatra::Base
   set :scope, 'read_products, read_orders'
 
   register Kaminari::Helpers::SinatraHelpers
+
+  def after_shopify_auth
+    shopify_session do |shop_name|
+      AfterInstallJob.perform_async(shop_name)
+    end
+  end
 
   # Home page
   get '/' do
@@ -49,13 +57,17 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # receive uninstall webhook
+  post '/uninstall' do
+    shopify_webhook do |shop_name, params|
+      UninstallJob.perform_async(shop_name)
+    end
+  end
+
   # order/paid webhook receiver
   post '/order.json' do
     shopify_webhook do |shop_name, order|
-      return unless order['customer']
-      return unless order['customer']['email']
       OrderWebhookJob.perform_async(shop_name, order)
-      status 200
     end
   end
 
