@@ -20,6 +20,9 @@ class Charity < ActiveRecord::Base
   attr_or_default :email_subject, "Donation receipt for #{name}"
   attr_or_default :email_template, File.read(File.join('views', 'receipt/email.liquid'))
 
+  attr_or_default :update_email_subject, "Donation receipt for #{name}"
+  attr_or_default :update_email_template, File.read(File.join('views', 'receipt/update_email.liquid'))
+
   attr_or_default :void_email_subject, "Void Donation receipt for #{name}"
   attr_or_default :void_email_template, File.read(File.join('views', 'receipt/void_email.liquid'))
 

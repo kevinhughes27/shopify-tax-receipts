@@ -1,7 +1,7 @@
 class Donation < ActiveRecord::Base
   validates_presence_of :shop, :order_id, :donation_amount
   validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where("status != 'void' or status is null") }
-  validates :status, inclusion: { in: %w(resent void) }, allow_nil: true
+  validates :status, inclusion: { in: %w(resent update void) }, allow_nil: true
 
   def resent!
     update!({status: 'resent'})
@@ -45,6 +45,20 @@ class Donation < ActiveRecord::Base
     address.last_name
   end
 
+  def original_donation=(donation)
+    @original_donation = donation
+  end
+
+  def original_donation
+    return nil if void
+    return @original_donation if defined?(@original_donation)
+
+    @original_donation = Donation
+      .where(shop: shop, order_id: order_id, status: 'void')
+      .order(id: :desc)
+      .first
+  end
+
   def order_to_liquid
     drop = JSON.parse(order.to_json)
     drop['created_at'] = Time.parse(drop['created_at']).strftime("%B %d, %Y")
@@ -65,7 +79,8 @@ class Donation < ActiveRecord::Base
       'country' => country,
       'zip' => zip,
       'created_at' => (created_at || Time.now).strftime("%B %d, %Y"),
-      'donation_amount' => sprintf( "%0.02f", donation_amount)
+      'donation_amount' => sprintf( "%0.02f", donation_amount),
+      'original_donation' => original_donation && original_donation.to_liquid
     }
   end
 
