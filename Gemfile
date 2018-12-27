@@ -28,6 +28,7 @@ group :development do
   gem 'wkhtmltopdf-binary'
   gem 'letter_opener'
   gem 'rack-test'
+  gem 'database_cleaner'
   gem 'fakeweb'
   gem 'mocha', require: false
   gem 'pry'

@@ -16,32 +16,6 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
-  test "uninstall" do
-    webhook = load_fixture 'shop.json'
-    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-
-    assert_difference 'Shop.count', -1 do
-      assert_difference 'Charity.count', -1 do
-        assert_difference 'Product.count', -1 do
-          post '/uninstall', webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-        end
-      end
-    end
-  end
-
-  test "uninstall no products" do
-    webhook = load_fixture 'shop.json'
-    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-
-    assert_difference 'Shop.count', -1 do
-      assert_difference 'Charity.count', -1 do
-        assert_no_difference 'Product.count' do
-          post '/uninstall', webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @noop_shop
-        end
-      end
-    end
-  end
-
   test "view" do
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)

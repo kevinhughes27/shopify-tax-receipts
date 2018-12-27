@@ -7,62 +7,34 @@ ENV['DEVELOPMENT'] = '1'
 require 'minitest/autorun'
 require 'active_support/test_case'
 require 'rack/test'
+
+require 'database_cleaner'
+require 'sidekiq/testing'
 require 'mocha/setup'
 require 'fakeweb'
-require 'sidekiq/testing'
 require 'json'
 
-require "./src/app"
+require_relative './support/helpers'
+require_relative './support/seed'
+
+require './src/app'
 
 Sidekiq::Testing.inline!
 
 FakeWeb.allow_net_connect = false
 
-module Helpers
-  include Rack::Test::Methods
+DatabaseCleaner.strategy = :transaction
 
-  def init_db
-    apple = Shop.create!(name: 'apple.myshopify.com', token: 'token')
-    Charity.create!(shop: apple.name, name: 'Amnesty', charity_id: 12345)
-    Product.create(shop: apple.name, product_id: 632910392)
-
-    banana = Shop.create!(name: 'banana.myshopify.com', token: 'token')
-    Charity.create(shop: banana.name, name: 'Amnesty', charity_id: 56789)
-  end
-
-  def reset_db
-    Shop.delete_all
-    Charity.delete_all
-    Product.delete_all
-    Donation.delete_all
-  end
-
-  def load_fixture(name)
-    File.read("./test/fixtures/#{name}")
-  end
-
-  def fake(url, options={})
-    method = options.delete(:method) || :get
-    body = options.delete(:body) || '{}'
-    format = options.delete(:format) || :json
-
-    FakeWeb.register_uri(method, url, {:body => body, :status => 200, :content_type => "application/#{format}"}.merge(options))
-  end
-
-  def activate_shopify_session(shop, token)
-    session = ShopifyAPI::Session.new(shop, token)
-    ShopifyAPI::Base.activate_session session
-  end
-end
+seed_db
 
 class ActiveSupport::TestCase
   include Helpers
 
   setup do
-    init_db
+    DatabaseCleaner.start
   end
 
   teardown do
-    reset_db
+    DatabaseCleaner.clean
   end
 end
