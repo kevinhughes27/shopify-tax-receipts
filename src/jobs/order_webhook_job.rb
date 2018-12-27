@@ -1,5 +1,8 @@
 class OrderWebhookJob < Job
   def perform(shop_name, order)
+    return unless order['customer']
+    return unless order['customer']['email']
+
     activate_shopify_api(shop_name)
 
     donations = donations_from_order(shop_name, order)

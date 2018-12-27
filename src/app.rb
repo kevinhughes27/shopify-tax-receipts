@@ -19,6 +19,7 @@ require_relative 'routes/gdpr'
 require_relative 'jobs/job'
 require_relative 'jobs/after_install_job'
 require_relative 'jobs/order_webhook_job'
+require_relative 'jobs/uninstall_job'
 
 require_relative 'utils/donation_service'
 require_relative 'utils/email_service'
@@ -60,17 +61,13 @@ class SinatraApp < Sinatra::Base
   # receive uninstall webhook
   post '/uninstall' do
     shopify_webhook do |shop_name, params|
-      Shop.where(name: shop_name).destroy_all
-      Charity.where(shop: shop_name).destroy_all
-      Product.where(shop: shop_name).destroy_all
+      UninstallJob.perform_async(shop_name)
     end
   end
 
   # order/paid webhook receiver
   post '/order.json' do
     shopify_webhook do |shop_name, order|
-      return unless order['customer']
-      return unless order['customer']['email']
       OrderWebhookJob.perform_async(shop_name, order)
     end
   end
