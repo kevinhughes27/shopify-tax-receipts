@@ -93,9 +93,8 @@ class SinatraApp < Sinatra::Base
 
       if donation.void
         flash[:error] = "Donation is void"
-      elsif donation.refunded
-        flash[:error] = "Donation is refunded"
       else
+        donation.resent!
         receipt_pdf = render_pdf(shopify_shop, charity, donation)
         deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
         flash[:notice] = "Email resent!"
@@ -114,8 +113,6 @@ class SinatraApp < Sinatra::Base
 
       if donation.void
         flash[:error] = "Donation is void"
-      elsif donation.refunded
-        flash[:error] = "Donation is refunded"
       else
         donation.void!
         receipt_pdf = render_pdf(shopify_shop, charity, donation)
@@ -176,7 +173,9 @@ class SinatraApp < Sinatra::Base
 
       charity.assign_attributes({pdf_template: params['template']})
 
-      if params['status'] == 'void'
+      if params['status'] == 'resent'
+        donation.assign_attributes({status: 'resent'})
+      elsif params['status'] == 'void'
         donation.assign_attributes({status: 'void'})
       end
 
@@ -207,6 +206,8 @@ class SinatraApp < Sinatra::Base
 
   def mock_donation(shop_name)
     mock_order = JSON.parse( File.read(File.join('test', 'fixtures/order_webhook.json')) )
-    build_donation(shop_name, mock_order, 20.00)
+    donation = build_donation(shop_name, mock_order, 20.00)
+    donation.id = rand(1000)
+    donation
   end
 end

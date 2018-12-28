@@ -7,7 +7,6 @@
 </div>
 <div style="clear: both;">
 
-
 <div style="font-size: 10pt; margin-top: 180px; margin-left: 100px;">
   <strong>
     {{ donation.first_name }} {{ donation.last_name }}
@@ -25,7 +24,12 @@
     Donation Details:
   </strong>
   <br>
-  Receipt Number: #{{ donation.order_number }}<br>
+  Order Number: {{ donation.order_number }}<br>
+  {% if donation.status == 'resent' %}
+    Replacement for Receipt Number: #{{ donation.id }}<br>
+  {% else %}
+    Receipt Number: #{{ donation.id }}<br>
+  {% endif %}
   Donation Received: {{ donation.created_at }}<br>
   Amount: ${{ donation.donation_amount }}<br>
   Date Issued: {{ donation.created_at }}<br>
