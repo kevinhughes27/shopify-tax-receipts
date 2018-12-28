@@ -26,7 +26,7 @@
   <br>
   Order Number: {{ donation.order_number }}<br>
   {% if donation.status == 'resent' %}
-    Replacement for Receipt Number: #{{ donation.id }}<br>
+    Receipt Number: #{{ donation.id }} (Duplicate)<br>
   {% else %}
     Receipt Number: #{{ donation.id }}<br>
   {% endif %}
