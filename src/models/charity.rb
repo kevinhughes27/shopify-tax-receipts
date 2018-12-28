@@ -7,45 +7,23 @@ class Charity < ActiveRecord::Base
   validates_format_of :email_bcc, with: EMAIL_REGEX, allow_blank: true
   validates_format_of :email_from, with: EMAIL_REGEX, allow_blank: true
 
-  def email_subject
-    if read_attribute(:email_subject).present?
-      read_attribute(:email_subject)
-    else
-      "Donation receipt for #{name}"
+  def self.attr_or_default(attr, default)
+    define_method(attr) do
+      if read_attribute(attr).present?
+        read_attribute(attr)
+      else
+        default
+      end
     end
   end
 
-  def email_template
-    if read_attribute(:email_template).present?
-      read_attribute(:email_template)
-    else
-      File.read(File.join('views', 'receipt/email.liquid'))
-    end
-  end
+  attr_or_default :email_subject, "Donation receipt for #{name}"
+  attr_or_default :email_template, File.read(File.join('views', 'receipt/email.liquid'))
 
-  def void_email_subject
-    if read_attribute(:void__email_subject).present?
-      read_attribute(:void_email_subject)
-    else
-      "Void Donation receipt for #{name}"
-    end
-  end
+  attr_or_default :void_email_subject, "Void Donation receipt for #{name}"
+  attr_or_default :void_email_template, File.read(File.join('views', 'receipt/void_email.liquid'))
 
-  def void_email_template
-    if read_attribute(:void_email_template).present?
-      read_attribute(:void_email_template)
-    else
-      File.read(File.join('views', 'receipt/void_email.liquid'))
-    end
-  end
-
-  def pdf_template
-    if read_attribute(:pdf_template).present?
-      read_attribute(:pdf_template)
-    else
-      File.read(File.join('views', 'receipt/pdf.liquid'))
-    end
-  end
+  attr_or_default :pdf_template, File.read(File.join('views', 'receipt/pdf.liquid'))
 
   def to_liquid
     {
