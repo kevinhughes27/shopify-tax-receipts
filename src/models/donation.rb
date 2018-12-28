@@ -1,6 +1,6 @@
 class Donation < ActiveRecord::Base
   validates_presence_of :shop, :order_id, :donation_amount
-  validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where('status IS NOT "void"') }
+  # validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where('status IS NOT "void"') }
   validates :status, inclusion: { in: %w(resent void) }, allow_nil: true
 
   def resent!
