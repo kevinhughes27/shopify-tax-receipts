@@ -1,7 +1,15 @@
 class Donation < ActiveRecord::Base
   validates_presence_of :shop, :order_id, :donation_amount
   validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where(status: nil) }
-  validates :status, inclusion: { in: %w(void refunded) }, allow_nil: true
+  validates :status, inclusion: { in: %w(resent void) }, allow_nil: true
+
+  def resent!
+    update!({status: 'resent'})
+  end
+
+  def resent
+    status == 'resent'
+  end
 
   def void!
     update!({status: 'void'})
@@ -9,14 +17,6 @@ class Donation < ActiveRecord::Base
 
   def void
     status == 'void'
-  end
-
-  def refunded!
-    update!({status: 'refunded'})
-  end
-
-  def refunded
-    status == 'refunded'
   end
 
   def order=(shopify_order)
@@ -58,7 +58,9 @@ class Donation < ActiveRecord::Base
 
   def to_liquid
     {
+      'id' => id,
       'order_number' => order_number,
+      'status' => status,
       'email' => email,
       'first_name' => first_name,
       'last_name' => last_name,

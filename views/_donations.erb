@@ -13,7 +13,7 @@
       </tr>
 
       <% donations.each do |donation| %>
-        <% disabled = donation.void || donation.refunded %>
+        <% disabled = donation.void %>
 
         <tr>
           <td>
