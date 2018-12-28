@@ -16,7 +16,7 @@
 
   <div class="tab-pane <%= 'active' if tab == 'donations' %>" id="donations">
     <br>
-    <%= partial 'components/export_donations' %>
+    <%= partial 'components/export_donations', locals: {shop: shop} %>
     <%= partial 'donations', locals: {donations: donations} %>
   </div>
 </div>
