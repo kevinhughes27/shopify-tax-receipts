@@ -15,7 +15,7 @@ class OrderTest < ActiveSupport::TestCase
   test "order with products but no charity" do
     Charity.where(shop: @shop).destroy_all
 
-    order_webhook = load_fixture 'order_webhook.json'
+    order_webhook = load_fixture 'order.json'
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     Pony.expects(:mail).never
     post '/order.json', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop

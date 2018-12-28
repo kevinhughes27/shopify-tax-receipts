@@ -17,7 +17,7 @@ class DonationTest < ActiveSupport::TestCase
     order_id = 1234
     donation = Donation.create(shop: @shop, order_id: order_id, donation_amount: 10)
 
-    fake "https://#{@shop}/admin/orders/#{order_id}.json", :body => load_fixture('order_webhook.json')
+    fake "https://#{@shop}/admin/orders/#{order_id}.json", :body => load_fixture('order.json')
     assert donation.order
     donation.reload
     assert donation.order
