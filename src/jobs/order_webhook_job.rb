@@ -3,14 +3,15 @@ class OrderWebhookJob < Job
     return unless order['customer']
     return unless order['customer']['email']
 
-    activate_shopify_api(shop_name)
-
     donations = donations_from_order(shop_name, order)
+    donation_amount = donations.sum
     return if donations.empty?
 
     charity = Charity.find_by(shop: shop_name)
+    return if charity.nil?
+
+    activate_shopify_api(shop_name)
     shopify_shop = ShopifyAPI::Shop.current
-    donation_amount = donations.sum
 
     return if charity.receipt_threshold.present? && donation_amount < charity.receipt_threshold
 
