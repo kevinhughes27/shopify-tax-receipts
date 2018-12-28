@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_25_132047) do
+ActiveRecord::Schema.define(version: 2018_12_28_050903) do
 
   create_table "charities", force: :cascade do |t|
     t.string "name", limit: 255
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2018_12_25_132047) do
     t.datetime "created_at", null: false
     t.string "order_number"
     t.string "status"
+    t.string "order"
     t.index ["shop"], name: "index_donations_on_shop"
   end
 
