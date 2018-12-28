@@ -20,7 +20,6 @@ require_relative 'jobs/after_install_job'
 require_relative 'jobs/order_webhook_job'
 require_relative 'jobs/uninstall_job'
 
-require_relative 'utils/donation_service'
 require_relative 'utils/email_service'
 require_relative 'utils/render_pdf'
 require_relative 'utils/export_csv'
@@ -205,9 +204,16 @@ class SinatraApp < Sinatra::Base
   private
 
   def mock_donation(shop_name)
-    mock_order = JSON.parse( File.read(File.join('test', 'fixtures/order_webhook.json')) )
-    donation = build_donation(shop_name, mock_order, 20.00)
-    donation.id = rand(1000)
-    donation
+    Donation.new(
+      id: rand(1000),
+      shop: shop_name,
+      order: mock_order.to_json,
+      order_id: mock_order['id'],
+      order_number: mock_order['name']
+    )
+  end
+
+  def mock_order
+    @mock_order ||= JSON.parse( File.read(File.join('test', 'fixtures/order_webhook.json')) )
   end
 end

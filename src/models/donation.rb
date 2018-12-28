@@ -19,12 +19,8 @@ class Donation < ActiveRecord::Base
     status == 'void'
   end
 
-  def order=(shopify_order)
-    @order = shopify_order
-  end
-
   def order
-    @order ||= ShopifyAPI::Order.find(order_id)
+    @order ||= load_order
   end
 
   def address
@@ -71,5 +67,27 @@ class Donation < ActiveRecord::Base
       'created_at' => (created_at || Time.now).strftime("%B %d, %Y"),
       'donation_amount' => sprintf( "%0.02f", donation_amount)
     }
+  end
+
+  private
+
+  def load_order
+    if read_attribute(:order).present?
+      shopify_order = JSON.parse(read_attribute(:order))
+      ShopifyAPI::Order.new(shopify_order)
+    else
+      with_shopify_api do
+        shopify_order = ShopifyAPI::Order.find(order_id)
+        update_column(:order, shopify_order.to_json)
+        shopify_order
+      end
+    end
+  end
+
+  def with_shopify_api
+    shop = Shop.find_by(name: self.shop)
+    ShopifyAPI::Session.temp(shop.name, shop.token) do
+      yield
+    end
   end
 end

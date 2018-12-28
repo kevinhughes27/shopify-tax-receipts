@@ -1,5 +1,4 @@
 require 'test_helper'
-require_relative '../src/utils/donation_service'
 require_relative '../src/utils/render_pdf'
 
 class RenderPdfTest < ActiveSupport::TestCase
@@ -57,6 +56,16 @@ class RenderPdfTest < ActiveSupport::TestCase
   end
 
   private
+
+  def build_donation(shop, order, amount)
+    Donation.new(
+      shop: shop,
+      order: order.to_json,
+      order_id: order['id'],
+      order_number: order['name'],
+      donation_amount: amount
+    )
+  end
 
   def write_pdf(pdf_string)
     File.open('test.pdf', 'w') { |file| file.write(pdf_string) }
