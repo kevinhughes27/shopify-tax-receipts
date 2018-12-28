@@ -14,8 +14,6 @@ class OrderWebhookJob < Job
     elsif status == 'refunded' && existing_donation
       order_refunded(shop_name, order, existing_donation)
 
-    elsif status == 'partially_refunded' && existing_donation
-      order_partially_refunded(shop_name, order, existing_donation)
     end
   end
 
@@ -88,10 +86,14 @@ class OrderWebhookJob < Job
 
   # order_refunded
   def order_refunded(shop_name, order, existing_donation)
-  end
+    existing_donation.void!
 
-  # order_partially_refunded
-  def order_partially_refunded(shop_name, order, existing_donation)
+    activate_shopify_api(shop_name)
+    shopify_shop = ShopifyAPI::Shop.current
+    charity = Charity.find_by(shop: shop_name)
+
+    receipt_pdf = render_pdf(shopify_shop, charity, existing_donation)
+    deliver_void_receipt(shopify_shop, charity, existing_donation, receipt_pdf)
   end
 
   private
