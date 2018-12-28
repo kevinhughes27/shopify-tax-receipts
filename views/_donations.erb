@@ -17,7 +17,9 @@
 
         <tr>
           <td>
-            <a href=<%="https://#{@shop.myshopify_domain}/admin/orders/#{donation.order_id}"%> target="_blank"> <%= donation.order_id %></a>
+            <a href=<%="https://#{@shop.myshopify_domain}/admin/orders/#{donation.order_id}"%> target="_blank">
+              <%= donation.order_id %>
+            </a>
           </td>
           <td><%= donation.order_number%></td>
           <td><%= donation.created_at %></td>
@@ -41,14 +43,23 @@
           <td style="width:1px;">
             <form method="POST" action="/resend">
               <input type="hidden" name="id" value="<%= donation.id %>" />
-              <input type="submit" class="btn btn-primary align-right" <%= 'disabled' if disabled %> value="resend">
+              <input
+                type="submit"
+                class="btn btn-primary align-right"
+                <%= 'disabled' if disabled %>
+                value="resend" />
             </form>
           </td>
 
           <td style="width:1px;">
             <form method="POST" action="/void">
               <input type="hidden" name="id" value="<%= donation.id %>" />
-              <input type="submit" class="btn btn-danger align-right" <%= 'disabled' if disabled %> value="void">
+              <input
+                type="submit"
+                class="btn btn-danger align-right"
+                onclick="return confirm('This action cannot be undone. The receipt will be marked VOID and re-sent to the customer.')"
+                <%= 'disabled' if disabled %>
+                value="void" />
             </form>
           </td>
         </tr>
