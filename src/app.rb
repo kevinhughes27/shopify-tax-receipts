@@ -209,7 +209,8 @@ class SinatraApp < Sinatra::Base
       shop: shop_name,
       order: mock_order.to_json,
       order_id: mock_order['id'],
-      order_number: mock_order['name']
+      order_number: mock_order['name'],
+      donation_amount: 20.00
     )
   end
 
