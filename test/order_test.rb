@@ -18,7 +18,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order.json'
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     Pony.expects(:mail).never
-    post '/order.json', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
     assert last_response.ok?
   end
 
