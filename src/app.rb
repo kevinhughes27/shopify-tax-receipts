@@ -168,11 +168,17 @@ class SinatraApp < Sinatra::Base
   end
 
   # render a preview of the user edited pdf template
-  get '/preview_pdf' do
+  post '/preview_pdf' do
     shopify_session do |shop_name|
       donation = mock_donation(shop_name)
       charity = Charity.find_by(shop: shop_name)
       shopify_shop = ShopifyAPI::Shop.current
+
+      charity.assign_attributes({pdf_template: params['template']})
+
+      if params['status'] == 'void'
+        donation.assign_attributes({status: 'void'})
+      end
 
       receipt_pdf = render_pdf(shopify_shop, charity, donation)
       content_type 'application/pdf'

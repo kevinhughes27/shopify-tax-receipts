@@ -10,6 +10,7 @@ require 'rack/test'
 
 require 'database_cleaner'
 require 'sidekiq/testing'
+require 'pdf/inspector'
 require 'mocha/setup'
 require 'fakeweb'
 require 'json'

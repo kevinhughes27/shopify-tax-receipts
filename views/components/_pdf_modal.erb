@@ -7,31 +7,43 @@
         <h4 class="modal-title">Edit Donation Receipt Pdf</h4>
       </div>
 
-      <form method="POST" action="/charity" role="form">
-        <input type="hidden" name="_method" value="put" />
-        <div class="modal-body">
+      <div class="modal-body">
+        <label>Preview Options</label>
+        <select class="form-control" style="width: 97%" value="default" bind="previewOptions">
+          <option value="default">Default</option>
+          <option value="void">Void</option>
+        </select>
 
-          <label for="pdf_body">Pdf Template</label>
-          <textarea class="form-control" name="pdf_template" id="pdf_template" rows="18" style="width: 97%">
-            <%= charity.pdf_template %>
-          </textarea>
+        <label style="padding-top: 10px;">Pdf Template</label>
+        <textarea
+          bind="pdfTemplate"
+          class="form-control"
+          style="width: 97%"
+          rows="18"><%= charity.pdf_template %></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <div class="pull-left">
+          <form method="POST" action="/preview_pdf" target="_blank" role="form">
+            <input type="hidden" name="template" value="<%= charity.pdf_template %>" bind="pdfTemplate" />
+            <input type="hidden" name="status" value="default" bind="previewOptions" />
+            <button type="submit" class="btn btn-default">Preview</button>
+          </form>
         </div>
 
-        <div class="modal-footer">
-          <div class="pull-left">
-             <a href="/preview_pdf" target="_blank" class="btn btn-default">Preview</a>
-          </div>
+        <form method="POST" action="/charity" role="form">
+          <input type="hidden" name="_method" value="put" />
+          <input type="hidden" name="pdf_template" value="<%= charity.pdf_template %>" bind="pdfTemplate" />
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-      </form>
-
+        </form>
+      </div>
     </div>
   </div>
 </div>
 
 <p>
   <a href="#" class="btn btn-default action-btn" onclick="$('#editPdfModal').modal('toggle'); return false;">
-    <i class="fa fa-edit"></i>  Edit receipt pdf
+    <i class="fa fa-edit"></i> Edit receipt pdf
   </a>
 </p>
