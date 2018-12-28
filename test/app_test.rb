@@ -99,6 +99,30 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
+  test "preview_pdf" do
+    charity = Charity.find_by(shop: @shop)
+
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    post '/preview_pdf', {template: 'hello {{ charity.name }}', status: 'default'}, 'rack.session' => session
+    assert last_response.ok?
+
+    text = PDF::Inspector::Text.analyze(last_response.body)
+    assert_equal text.strings.join, "hello #{charity.name}"
+  end
+
+  test "preview_pdf (void)" do
+    charity = Charity.find_by(shop: @shop)
+
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    post '/preview_pdf', {template: 'hello {{ charity.name }}', status: 'void'}, 'rack.session' => session
+    assert last_response.ok?
+
+    text = PDF::Inspector::Text.analyze(last_response.body)
+    assert_equal text.strings.join, "VOIDhello #{charity.name}"
+  end
+
   test "export" do
     Donation.create!(shop: @shop, order_id: 1234, donation_amount: 10, created_at: Time.now - 5.days)
     Donation.create!(shop: @shop, order_id: 5678, donation_amount: 10)
