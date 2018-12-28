@@ -14,6 +14,9 @@ class OrderWebhookJob < Job
     elsif status == 'refunded' && existing_donation
       order_refunded(shop_name, order, existing_donation)
 
+    elsif status == 'partially_refunded' && existing_donation
+      order_partially_refunded(shop_name, order, existing_donation)
+
     end
   end
 
@@ -96,6 +99,36 @@ class OrderWebhookJob < Job
     deliver_void_receipt(shopify_shop, charity, existing_donation, receipt_pdf)
   end
 
+  # order_partially_refunded
+  def order_partially_refunded(shop_name, order, existing_donation)
+    refunded_donations = donations_from_refund(shop_name, order)
+    refunded_amount = refunded_donations.sum
+    return if refunded_donations.empty?
+
+    new_amount = existing_donation.donation_amount - refunded_amount
+
+    new_donation = Donation.new(
+      status: 'update',
+      shop: shop_name,
+      order: order.to_json,
+      order_id: order['id'],
+      order_number: order['name'],
+      donation_amount: sprintf( "%0.02f", new_amount)
+    )
+
+    Donation.transaction do
+      existing_donation.void!
+      new_donation.save!
+    end
+
+    activate_shopify_api(shop_name)
+    shopify_shop = ShopifyAPI::Shop.current
+    charity = Charity.find_by(shop: shop_name)
+
+    new_receipt_pdf = render_pdf(shopify_shop, charity, new_donation)
+    deliver_updated_receipt(shopify_shop, charity, new_donation, new_receipt_pdf)
+  end
+
   private
 
   def load_most_recent_donation(shop_name, order_id)
@@ -111,9 +144,34 @@ class OrderWebhookJob < Job
     donations = []
 
     order["line_items"].each do |item|
-      donation_product = donation_products.detect { |product| product.product_id == item["product_id"] }
+      donation_product = donation_products.detect do |product|
+        product.product_id == item["product_id"]
+      end
+
       if donation_product
         donations << item["price"].to_f * item["quantity"].to_i * (donation_product.percentage / 100.0)
+      end
+    end
+
+    donations
+  end
+
+  def donations_from_refund(shop_name, order)
+    donation_products = Product.where(shop: shop_name)
+
+    donations = []
+
+    order["refunds"].each do |refund|
+      refund["refund_line_items"].each do |refund_item|
+        line_item = refund_item["line_item"]
+
+        donation_product = donation_products.detect do |product|
+          product.product_id == line_item["product_id"]
+        end
+
+        if donation_product
+          donations << line_item["price"].to_f * refund_item["quantity"].to_i * (donation_product.percentage / 100.0)
+        end
       end
     end
 
