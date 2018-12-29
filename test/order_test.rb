@@ -18,8 +18,11 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order.json'
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     Pony.expects(:mail).never
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "order with no products" do
@@ -28,8 +31,10 @@ class OrderTest < ActiveSupport::TestCase
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     Pony.expects(:mail).never
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @noop_shop
-    assert last_response.ok?
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @noop_shop
+      assert last_response.ok?
+    end
   end
 
   test "order endpoint with products" do
@@ -39,8 +44,10 @@ class OrderTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     Pony.expects(:mail).once
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "order with no email" do
@@ -53,8 +60,10 @@ class OrderTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).never
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "order with no customer" do
@@ -67,8 +76,10 @@ class OrderTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).never
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "order endpoint with product percentage" do
@@ -86,8 +97,10 @@ class OrderTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).once
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "charity with default email template" do
@@ -100,8 +113,10 @@ class OrderTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     Pony.expects(:mail).with(has_entry(body: "Dear Bob Norman,\n\nOn behalf of Amnesty, we would like to thank you from the bottom of our hearts for your contribution to our cause. It may seem like a small gesture to you, but to us, it’s what we thrive on. Feel free to share the word to your friends and family as well!\n\nYou’ll find a copy of your tax receipt as an attachment in this email.\n\nAgain, thank you. We wouldn't be here without you.\n\nAmnesty\n"))
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "charity with custom email template" do
@@ -114,8 +129,10 @@ class OrderTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     Pony.expects(:mail).with(has_entry(body: "liquid test Amnesty"))
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "charity with receipt_threshold above order value" do
@@ -129,8 +146,10 @@ class OrderTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).never
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   private

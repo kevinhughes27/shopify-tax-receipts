@@ -14,7 +14,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order.json'
     order = JSON.parse(order_webhook)
 
-    Donation.create!(
+    donation = Donation.create!(
       shop: @shop,
       order: order.to_json,
       order_id: order['id'],
@@ -29,8 +29,11 @@ class OrderRefundTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     Pony.expects(:mail).once
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+      assert donation.reload.void
+    end
   end
 
   test "partial refund" do
@@ -42,19 +45,24 @@ class OrderRefundTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     Pony.expects(:mail).once
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
 
+    original_donation = Donation.last
     refund_webhook = load_fixture 'order_partial_refund.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     Pony.expects(:mail).once
 
-    post '/order', refund_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
-
-    assert Donation.where(shop: @shop, status: 'void').present?
-    assert Donation.where(shop: @shop, status: 'update').present?
+    assert_difference 'Donation.count', +1 do
+      post '/order', refund_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+      new_donation = Donation.last
+      assert_equal new_donation.status, 'update'
+      assert original_donation.reload.void
+    end
   end
 end

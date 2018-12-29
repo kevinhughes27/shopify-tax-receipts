@@ -26,8 +26,10 @@ class OrderUpdateTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     Pony.expects(:mail).never
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "order update with name change" do
@@ -49,8 +51,10 @@ class OrderUpdateTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     Pony.expects(:mail).once
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "order update with email change" do
@@ -72,8 +76,10 @@ class OrderUpdateTest < ActiveSupport::TestCase
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     Pony.expects(:mail).once
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 
   test "existing donation is void" do
@@ -92,7 +98,9 @@ class OrderUpdateTest < ActiveSupport::TestCase
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     Pony.expects(:mail).never
 
-    post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
-    assert last_response.ok?
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
   end
 end
