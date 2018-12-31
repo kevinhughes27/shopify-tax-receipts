@@ -27,6 +27,13 @@ To run a single test file:
 bundle exec rake test TEST=test/app_test.rb
 ```
 
+### Staging
+
+```
+git add remote staging https://git.heroku.com/taxreceipts-staging.git
+git push staging <branch_name>:master -f
+```
+
 ### Debug Production
 
 Sinatra console on production:
