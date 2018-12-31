@@ -19,27 +19,19 @@ class Donation < ActiveRecord::Base
     @order ||= load_order
   end
 
+  delegate :email, to: :order
+
   def address
     order.billing_address || order.attributes.dig('default_address')
   end
 
-  delegate :address1,
+  delegate :first_name,
+           :last_name,
+           :address1,
            :city,
            :country,
            :zip,
            to: :address
-
-  def email
-    order.customer.email
-  end
-
-  def first_name
-    address.first_name
-  end
-
-  def last_name
-    address.last_name
-  end
 
   def original_donation=(donation)
     @original_donation = donation
