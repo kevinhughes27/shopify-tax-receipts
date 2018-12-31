@@ -83,7 +83,8 @@ class OrderWebhookJob < Job
         new_donation.save!
       end
 
-      deliver_updated_receipt(shopify_shop, charity, new_donation, new_receipt_pdf)
+      update_receipt_pdf = render_pdf(shopify_shop, charity, new_donation)
+      deliver_updated_receipt(shopify_shop, charity, new_donation, update_receipt_pdf)
     end
   end
 
