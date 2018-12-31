@@ -7,10 +7,6 @@ class Donation < ActiveRecord::Base
     update!({status: 'resent'})
   end
 
-  def resent
-    status == 'resent'
-  end
-
   def void!
     update!({status: 'void'})
   end
@@ -50,7 +46,7 @@ class Donation < ActiveRecord::Base
   end
 
   def original_donation
-    return nil if void
+    return nil unless status == 'update'
     return @original_donation if defined?(@original_donation)
 
     @original_donation = Donation
