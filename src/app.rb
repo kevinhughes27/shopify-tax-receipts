@@ -26,7 +26,7 @@ require_relative 'utils/export_csv'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
-  set :scope, 'read_products, read_orders'
+  set :scope, 'read_products, read_orders, read_customers'
 
   register Kaminari::Helpers::SinatraHelpers
 
