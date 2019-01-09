@@ -123,7 +123,7 @@ class OrderRefundTest < ActiveSupport::TestCase
       post '/order', refund_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
       assert last_response.ok?
       new_donation = Donation.last
-      assert_equal 'thresholded', new_donation.status,
+      assert_equal 'thresholded', new_donation.status
       assert original_donation.reload.void
     end
   end
