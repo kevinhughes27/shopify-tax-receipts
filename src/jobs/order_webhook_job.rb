@@ -32,12 +32,7 @@ class OrderWebhookJob < Job
     charity = Charity.find_by(shop: shop_name)
     return if charity.nil?
 
-    activate_shopify_api(shop_name)
-    shopify_shop = ShopifyAPI::Shop.current
-
-    return if charity.receipt_threshold.present? && donation_amount < charity.receipt_threshold
-
-    donation = Donation.create!(
+    donation = Donation.new(
       shop: shop_name,
       order: order.to_json,
       order_id: order['id'],
@@ -45,8 +40,19 @@ class OrderWebhookJob < Job
       donation_amount: sprintf( "%0.02f", donation_amount)
     )
 
-    receipt_pdf = render_pdf(shopify_shop, charity, donation)
-    deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
+    if charity.receipt_threshold.present? && donation_amount < charity.receipt_threshold
+      donation.status = 'thresholded'
+    end
+
+    donation.save!
+
+    unless donation.thresholded
+      activate_shopify_api(shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+
+      receipt_pdf = render_pdf(shopify_shop, charity, donation)
+      deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
+    end
   end
 
   # order_updated
@@ -69,35 +75,45 @@ class OrderWebhookJob < Job
     old_receipt_pdf = render_pdf(shopify_shop, charity, existing_donation)
     new_receipt_pdf = render_pdf(shopify_shop, charity, new_donation)
 
-    send_update = false
-    send_update ||= email_changed?(existing_donation, new_donation)
-    send_update ||= pdf_changed?(old_receipt_pdf, new_receipt_pdf)
+    update_required = false
+    update_required ||= email_changed?(existing_donation, new_donation)
+    update_required ||= pdf_changed?(old_receipt_pdf, new_receipt_pdf)
 
-    if send_update
+    if update_required
       new_donation.id = nil
       new_donation.status = 'update'
       new_donation.original_donation = existing_donation
+
+      if existing_donation.thresholded && charity.receipt_threshold.present? && donation_amount < charity.receipt_threshold
+        new_donation.status = 'thresholded'
+        new_donation.original_donation = nil
+      end
 
       Donation.transaction do
         existing_donation.void!
         new_donation.save!
       end
 
-      update_receipt_pdf = render_pdf(shopify_shop, charity, new_donation)
-      deliver_updated_receipt(shopify_shop, charity, new_donation, update_receipt_pdf)
+      unless new_donation.thresholded
+        update_receipt_pdf = render_pdf(shopify_shop, charity, new_donation)
+        deliver_updated_receipt(shopify_shop, charity, new_donation, update_receipt_pdf)
+      end
     end
   end
 
   # order_refunded
   def order_refunded(shop_name, order, existing_donation)
+    was_thresholded = existing_donation.thresholded
     existing_donation.void!
 
-    activate_shopify_api(shop_name)
-    shopify_shop = ShopifyAPI::Shop.current
-    charity = Charity.find_by(shop: shop_name)
+    unless was_thresholded
+      activate_shopify_api(shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+      charity = Charity.find_by(shop: shop_name)
 
-    receipt_pdf = render_pdf(shopify_shop, charity, existing_donation)
-    deliver_void_receipt(shopify_shop, charity, existing_donation, receipt_pdf)
+      receipt_pdf = render_pdf(shopify_shop, charity, existing_donation)
+      deliver_void_receipt(shopify_shop, charity, existing_donation, receipt_pdf)
+    end
   end
 
   # order_partially_refunded
@@ -117,17 +133,23 @@ class OrderWebhookJob < Job
       donation_amount: sprintf( "%0.02f", new_amount)
     )
 
+    if existing_donation.thresholded
+      new_donation.status = 'thresholded'
+    end
+
     Donation.transaction do
       existing_donation.void!
       new_donation.save!
     end
 
-    activate_shopify_api(shop_name)
-    shopify_shop = ShopifyAPI::Shop.current
-    charity = Charity.find_by(shop: shop_name)
+    unless new_donation.thresholded
+      activate_shopify_api(shop_name)
+      shopify_shop = ShopifyAPI::Shop.current
+      charity = Charity.find_by(shop: shop_name)
 
-    new_receipt_pdf = render_pdf(shopify_shop, charity, new_donation)
-    deliver_updated_receipt(shopify_shop, charity, new_donation, new_receipt_pdf)
+      new_receipt_pdf = render_pdf(shopify_shop, charity, new_donation)
+      deliver_updated_receipt(shopify_shop, charity, new_donation, new_receipt_pdf)
+    end
   end
 
   private

@@ -135,7 +135,7 @@ class OrderTest < ActiveSupport::TestCase
     end
   end
 
-  test "charity with receipt_threshold above order value" do
+  test "charity with order below above receipt_threshold" do
     charity = Charity.find_by(shop: @shop)
     charity.update_attribute(:receipt_threshold, 600)
 
@@ -146,10 +146,33 @@ class OrderTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).never
 
-    assert_no_difference 'Donation.count' do
+    assert_difference 'Donation.count', +1 do
       post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
       assert last_response.ok?
     end
+
+    donation = Donation.last
+    assert donation.thresholded
+  end
+
+  test "charity with order value above receipt_threshold" do
+    charity = Charity.find_by(shop: @shop)
+    charity.update_attribute(:receipt_threshold, 500)
+
+    order_webhook = load_fixture 'order.json'
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    Pony.expects(:mail).once
+
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
+
+    donation = Donation.last
+    refute donation.thresholded
   end
 
   private

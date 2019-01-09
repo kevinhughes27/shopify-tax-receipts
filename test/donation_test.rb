@@ -11,6 +11,7 @@ class DonationTest < ActiveSupport::TestCase
     assert Donation.create(shop: @shop, order_id: 1234, donation_amount: 10, status: nil).persisted?
     refute Donation.create(shop: @shop, order_id: 1234, donation_amount: 10, status: nil).persisted?
     refute Donation.create(shop: @shop, order_id: 1234, donation_amount: 10, status: 'resent').persisted?
+    refute Donation.create(shop: @shop, order_id: 1234, donation_amount: 10, status: 'thresholded').persisted?
   end
 
   test "donation without order saved loads from Shopify and saves the order" do

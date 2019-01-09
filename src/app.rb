@@ -99,6 +99,11 @@ class SinatraApp < Sinatra::Base
 
       if donation.void
         flash[:error] = "Donation is void"
+      elsif donation.thresholded
+        donation.update!({status: nil})
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
+        flash[:notice] = "Email sent!"
       else
         donation.resent!
         receipt_pdf = render_pdf(shopify_shop, charity, donation)
@@ -119,6 +124,9 @@ class SinatraApp < Sinatra::Base
 
       if donation.void
         flash[:error] = "Donation is void"
+      elsif donation.thresholded
+        donation.void!
+        flash[:notice] = "Donation voided"
       else
         donation.void!
         receipt_pdf = render_pdf(shopify_shop, charity, donation)

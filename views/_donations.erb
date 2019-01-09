@@ -47,7 +47,7 @@
                 type="submit"
                 class="btn btn-primary align-right"
                 <%= 'disabled' if disabled %>
-                value="resend" />
+                value="<%= donation.thresholded ? 'send' : 'resend' %>" />
             </form>
           </td>
 
