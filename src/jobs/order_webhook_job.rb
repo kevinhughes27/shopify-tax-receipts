@@ -87,6 +87,9 @@ class OrderWebhookJob < Job
       if existing_donation.thresholded && charity.receipt_threshold.present? && donation_amount < charity.receipt_threshold
         new_donation.status = 'thresholded'
         new_donation.original_donation = nil
+      elsif existing_donation.thresholded
+        new_donation.status = nil
+        new_donation.original_donation = nil
       end
 
       Donation.transaction do

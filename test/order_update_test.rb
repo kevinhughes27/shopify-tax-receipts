@@ -161,7 +161,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
 
     assert original_donation.reload.void
     new_donation = Donation.last
-    assert_equal 'update', new_donation.status
+    assert_nil new_donation.status
   end
 
   test "existing donation is thresholded, updated dontation thresholded with email change" do
