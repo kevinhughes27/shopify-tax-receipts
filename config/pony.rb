@@ -2,7 +2,11 @@ require 'pony'
 require 'letter_opener' if ENV['DEVELOPMENT']
 
 class SinatraApp < Sinatra::Base
-  if ENV['DEVELOPMENT']
+  if ENV['RACK_ENV']
+    Pony.options = {
+      :via => :test
+    }
+  elsif ENV['DEVELOPMENT']
     Pony.options = {
       :via => LetterOpener::DeliveryMethod,
       :via_options => {:location => File.expand_path('../../tmp/letter_opener', __FILE__)}
