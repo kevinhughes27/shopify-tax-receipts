@@ -6,7 +6,7 @@ I wanted to let you know about several features that will be launching soon that
 
   2. Update and Refund handling. The app now automatically handles updates and refunds. If an update or partial refund changes the donation receipt then an updated document will be sent to the customer. If an order is fully refunded the donation is marked void.
 
-  3. Several new fields have been added to the Donation liquid object to work with these new features. The default template has been updated to use include this snippet:
+  3. Several new fields have been added to the Donation liquid object to work with these new features. The default template has been updated to include this snippet:
 
   - Receipt Number: {{ donation.order_number }}
   + Order Number: {{ donation.order_number }}<br>
