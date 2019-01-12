@@ -2,6 +2,7 @@ class AfterInstallJob < Job
   def perform(shop_name)
     activate_shopify_api(shop_name)
     create_webhook(topic: 'orders/paid', address: "#{base_url}/order.json")
+    create_webhook(topic: 'orders/updated', address: "#{base_url}/order")
     create_webhook(topic: 'app/uninstalled', address: "#{base_url}/uninstall")
   end
 
@@ -20,6 +21,8 @@ class AfterInstallJob < Job
   def base_url
     if ENV['DEVELOPMENT']
       'https://shopify-kevinhughes27.fwd.wf'
+    elsif ENV['STAGING']
+      'https://taxreceipts-staging.herokuapp.com'
     else
       'https://taxreceipts.herokuapp.com'
     end
