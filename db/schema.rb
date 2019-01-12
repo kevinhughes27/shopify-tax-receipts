@@ -25,8 +25,6 @@ ActiveRecord::Schema.define(version: 2018_12_28_050903) do
     t.string "void_email_template"
     t.string "void_email_subject"
     t.decimal "receipt_threshold", precision: 8, scale: 2
-    t.string "update_email_template"
-    t.string "update_email_subject"
     t.index ["shop"], name: "index_charities_on_shop"
   end
 
