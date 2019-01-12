@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_28_050904) do
+ActiveRecord::Schema.define(version: 2018_12_28_050905) do
 
   create_table "charities", force: :cascade do |t|
     t.string "name", limit: 255
