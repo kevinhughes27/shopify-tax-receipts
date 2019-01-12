@@ -63,6 +63,13 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # orders/updated webhook receiver
+  post '/order' do
+    shopify_webhook do |shop_name, params|
+      puts "order update noop"
+    end
+  end
+
   # order/paid webhook receiver
   post '/order.json' do
     shopify_webhook do |shop_name, order|
