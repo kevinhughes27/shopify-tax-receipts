@@ -1,0 +1,30 @@
+Dear Tax Receipts User,
+
+I wanted to let you know about several features that will be launching soon that might affect your workflow (hopefully for the better!).
+
+  1. Void receipts. You can mark a receipt as void in the App and it will update the customer with a void document.
+
+  2. Update and Refund handling. The app now automatically handles updates and refunds. If an update or partial refund changes the donation receipt then an updated document will be sent to the customer. If an order is fully refunded the donation is marked void.
+
+  3. Several new fields have been added to the Donation liquid object to work with these new features. The default template has been updated to include this snippet:
+
+  - Receipt Number: {{ donation.order_number }}
+  + Order Number: {{ donation.order_number }}<br>
+  + {% if donation.status == 'resent' %}
+  +   Receipt Number: #{{ donation.id }} (Duplicate)<br>
+  + {% else %}
+  +   Receipt Number: #{{ donation.id }}<br>
+  + {% endif %}
+  + {% if donation.status == 'update' %}
+  +   Replacement for Receipt Number: #{{ donation.original_donation.id }}<br>
+  + {% end %}
+
+  If you've modified your templates you may want to add a similar bit to your template.
+
+  4. Receipt threshold. You are now able to set a threshold and if an order does not meet the threshold then a tax receipt is not sent to the customer. A donation is still saved which allows you to manually resend the receipt later if required for example if you change the threshold or the customer requests the receipt. Thresholded receipts still function with updates and refunds but don't email the customer unless the receipt has been sent.
+
+  5. Donation export has more fields, run an export to check them out!
+
+Expect to see these new features in the next few weeks. If you have any questions hit me up!
+
+- Kevin
