@@ -39,7 +39,6 @@
 
       <form method="POST" action="/charity" role="form">
         <input type="hidden" name="_method" value="put" />
-        <input type="hidden" name="<%= template %>" bind="<%= template %><%= modal_id %>"/>
 
         <div class="modal-body">
           <div class="form-group">
@@ -86,6 +85,7 @@
               style="width: 97%"
               name="<%= subject %>"
               bind="<%= subject %><%= modal_id %>"
+              value="<%= charity.send(subject) %>"
             />
           </div>
 
@@ -103,6 +103,12 @@
 
           <hr>
 
+          <input
+            type="hidden"
+            name="<%= template %>"
+            bind="<%= template %><%= modal_id %>"
+            value="<%= charity.send(template) %>"
+          />
           <textarea
             id="email_body"
             class="form-control"
