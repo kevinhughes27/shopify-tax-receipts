@@ -183,12 +183,19 @@ class AppTest < ActiveSupport::TestCase
     Donation.create!(shop: @shop, order_id: 1234, donation_amount: 10, created_at: Time.now - 5.days)
     Donation.create!(shop: @shop, order_id: 5678, donation_amount: 10)
 
-    params = {start_date: Time.now - 3.days, end_date: Time.now + 2.days}
+    fake "https://apple.myshopify.com/admin/orders/1234.json", :body => load_fixture('order.json')
+    fake "https://apple.myshopify.com/admin/orders/5678.json", :body => load_fixture('order.json')
+
+    params = {email_to: 'kevin@example.com', start_date: Time.now - 3.days, end_date: Time.now + 2.days}
     post '/export', params, 'rack.session' => session
 
-    assert last_response.ok?
-    refute_match "1234", last_response.body
-    assert_match "5678", last_response.body
+    assert last_response.redirect?
+
+    mail = Mail::TestMailer.deliveries.last
+    csv = mail.attachments[0].read
+
+    refute_match "1234", csv
+    assert_match "5678", csv
   end
 
   private

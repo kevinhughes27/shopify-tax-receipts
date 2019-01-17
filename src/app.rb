@@ -18,11 +18,11 @@ require_relative 'routes/gdpr'
 require_relative 'jobs/job'
 require_relative 'jobs/after_install_job'
 require_relative 'jobs/order_webhook_job'
+require_relative 'jobs/export_csv_job'
 require_relative 'jobs/uninstall_job'
 
 require_relative 'utils/email_service'
 require_relative 'utils/render_pdf'
-require_relative 'utils/export_csv'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
@@ -218,13 +218,14 @@ class SinatraApp < Sinatra::Base
   # export donations
   post '/export' do
     shopify_session do |shop_name|
+      email_to = params['email_to']
       start_date = Date.parse(params['start_date'])
       end_date = Date.parse(params['end_date'])
 
-      csv = export_csv(shop_name, start_date, end_date)
-      attachment   'donations.csv'
-      content_type 'application/csv'
-      csv
+      ExportCsvJob.perform_async(shop_name, email_to, start_date, end_date)
+
+      flash[:notice] = "CSV will be emailed to #{email_to}"
+      redirect '/?tab=donations'
     end
   end
 
