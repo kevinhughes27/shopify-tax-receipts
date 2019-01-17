@@ -26,7 +26,8 @@ require_relative 'utils/render_pdf'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
-  set :scope, 'read_products, read_orders'
+  set :scope, 'read_products, read_orders' if ENV['DEVELOPMENT']
+  set :scope, 'read_products, read_orders, read_all_orders' if ENV['RACK_ENV'] == 'production'
 
   register Kaminari::Helpers::SinatraHelpers
 
