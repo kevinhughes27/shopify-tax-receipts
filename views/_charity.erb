@@ -1,11 +1,11 @@
 <div class="well" style="padding-bottom: 50px;">
-  <h4>Charity</h4>
   <form method="POST" action="/charity" role="form" style="max-width: 320px;">
     <% if charity.present? %>
       <input type="hidden" name="_method" value="put" />
     <% end %>
 
     <div class="form-group">
+      <label for="name">Charity Name</label>
       <div class="input-group">
         <div class="input-group-addon">
           <i class="fa fa-university" style="width: 20px;"></i>
@@ -19,6 +19,7 @@
     </div>
 
     <div class="form-group">
+      <label for="charity_id">Charity ID</label>
       <div class="input-group">
         <div class="input-group-addon">
           <i class="fa fa-hashtag" style="width: 20px;"></i>
@@ -32,6 +33,21 @@
     </div>
 
     <div class="form-group">
+      <label for="donation_id_prefix">Donation ID Prefix</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-tag" style="width: 20px;"></i>
+        </div>
+        <input type="text"
+               class="form-control"
+               name="donation_id_prefix"
+               placeholder="Donation ID Prefix eg. #"
+               <%= "value=#{charity.donation_id_prefix}" if charity.present? %>>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="receipt_threshold">Receipt Threshold</label>
       <div class="input-group">
         <div class="input-group-addon">
           <i class="fa fa-thermometer-half" style="width: 20px;"></i>

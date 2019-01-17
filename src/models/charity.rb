@@ -17,6 +17,8 @@ class Charity < ActiveRecord::Base
     end
   end
 
+  attr_or_default :donation_id_prefix, '#'
+
   attr_or_default :email_subject, "Donation receipt for #{name}"
   attr_or_default :email_template, File.read(File.join('views', 'receipt/email.liquid'))
 
@@ -31,7 +33,8 @@ class Charity < ActiveRecord::Base
   def to_liquid
     {
       'name' => name,
-      'charity_id' => charity_id
+      'charity_id' => charity_id,
+      'donation_id_prefix' => donation_id_prefix
     }
   end
 end

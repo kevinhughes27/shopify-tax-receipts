@@ -26,9 +26,9 @@
   <br>
   Order Number: {{ donation.order_number }}<br>
   {% if donation.status == 'resent' %}
-    Receipt Number: #{{ donation.id }} (Duplicate)<br>
+    Receipt Number: {{ charity.donation_id_prefix }}{{ donation.id }} (Duplicate)<br>
   {% else %}
-    Receipt Number: #{{ donation.id }}<br>
+    Receipt Number: {{ charity.donation_id_prefix }}{{ donation.id }}<br>
   {% endif %}
   {% if donation.status == 'update' %}
     Replacement for Receipt Number: #{{ donation.original_donation.id }}<br>
