@@ -4,6 +4,7 @@ class ExportCsvJob < Job
   def perform(shop_name, email_to, start_date, end_date)
     activate_shopify_api(shop_name)
 
+    shop = ShopifyAPI::Shop.current
     charity = Charity.find_by(shop: shop_name)
     donations = Donation.where(shop: shop_name, created_at: start_date..end_date)
 
@@ -58,6 +59,7 @@ class ExportCsvJob < Job
     end
 
     Pony.mail to: email_to,
+              from: charity.email_from || shop.email,
               subject: "Donations from #{start_date} to #{end_date}",
               attachments: {"donations.csv" => csv},
               body: "Exported donations attached."
