@@ -12,6 +12,18 @@ def deliver_donation_receipt(shop, charity, donation, pdf, to = nil)
   send_email(to, bcc, from, subject, body, pdf, filename)
 end
 
+def deliver_updated_receipt(shop, charity, donation, pdf, to = nil)
+  to ||= donation.email
+  bcc = charity.email_bcc
+  from = charity.email_from || shop.email
+
+  subject = charity.update_email_subject
+  body = email_body(charity.update_email_template, charity, donation)
+  filename = charity.pdf_filename
+
+  send_email(to, bcc, from, subject, body, pdf, filename)
+end
+
 def deliver_void_receipt(shop, charity, donation, pdf, to = nil)
   to ||= donation.email
   bcc = charity.email_bcc

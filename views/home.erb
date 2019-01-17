@@ -27,12 +27,24 @@
         locals: {
           shop: @shop,
           charity: @charity,
+          subject: 'update_email_subject',
+          template: 'update_email_template',
+          title_copy: 'Edit Update Template',
+          preview_copy: 'Update Email Preview',
+          button_copy: 'Edit update receipt email',
+          modal_id: 1
+        }
+      %>
+      <%= partial 'components/email_modals',
+        locals: {
+          shop: @shop,
+          charity: @charity,
           subject: 'void_email_subject',
           template: 'void_email_template',
-          title_copy: 'Edit Email Template',
+          title_copy: 'Edit Void Template',
           preview_copy: 'Void Email Preview',
           button_copy: 'Edit void receipt email',
-          modal_id: 1
+          modal_id: 2
         }
       %>
       <%= partial 'components/pdf_modal',

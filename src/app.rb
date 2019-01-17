@@ -65,15 +65,15 @@ class SinatraApp < Sinatra::Base
 
   # orders/updated webhook receiver
   post '/order' do
-    shopify_webhook do |shop_name, params|
-      puts "order update noop"
+    shopify_webhook do |shop_name, order|
+      OrderWebhookJob.perform_async(shop_name, order)
     end
   end
 
   # order/paid webhook receiver
   post '/order.json' do
     shopify_webhook do |shop_name, order|
-      OrderWebhookJob.perform_async(shop_name, order)
+      puts "order paid noop"
     end
   end
 
@@ -99,6 +99,11 @@ class SinatraApp < Sinatra::Base
 
       if donation.void
         flash[:error] = "Donation is void"
+      elsif donation.thresholded
+        donation.update!({status: nil})
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf)
+        flash[:notice] = "Email sent!"
       else
         donation.resent!
         receipt_pdf = render_pdf(shopify_shop, charity, donation)
@@ -119,6 +124,9 @@ class SinatraApp < Sinatra::Base
 
       if donation.void
         flash[:error] = "Donation is void"
+      elsif donation.thresholded
+        donation.void!
+        flash[:notice] = "Donation voided"
       else
         donation.void!
         receipt_pdf = render_pdf(shopify_shop, charity, donation)
@@ -157,6 +165,13 @@ class SinatraApp < Sinatra::Base
       if params['email_template'].present?
         receipt_pdf = render_pdf(shopify_shop, charity, donation)
         deliver_donation_receipt(shopify_shop, charity, donation, receipt_pdf, params['email_to'])
+      elsif params['update_email_template'].present?
+        original_donation = mock_donation(shop_name)
+        original_donation.assign_attributes({status: 'void'})
+        donation.original_donation = original_donation
+        donation.status = 'update'
+        receipt_pdf = render_pdf(shopify_shop, charity, donation)
+        deliver_updated_receipt(shopify_shop, charity, donation, receipt_pdf, params['email_to'])
       elsif params['void_email_template'].present?
         donation.assign_attributes({status: 'void'})
         receipt_pdf = render_pdf(shopify_shop, charity, donation)
@@ -181,6 +196,11 @@ class SinatraApp < Sinatra::Base
 
       if params['status'] == 'resent'
         donation.assign_attributes({status: 'resent'})
+      elsif params['status'] == 'update'
+        donation.assign_attributes({status: 'update'})
+        original_donation = mock_donation(shop_name)
+        original_donation.assign_attributes({status: 'void'})
+        donation.original_donation = original_donation
       elsif params['status'] == 'void'
         donation.assign_attributes({status: 'void'})
       end
@@ -222,6 +242,6 @@ class SinatraApp < Sinatra::Base
   end
 
   def mock_order
-    @mock_order ||= JSON.parse( File.read(File.join('test', 'fixtures/order_webhook.json')) )
+    @mock_order ||= JSON.parse( File.read(File.join('test', 'fixtures/order.json')) )
   end
 end

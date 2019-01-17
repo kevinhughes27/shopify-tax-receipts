@@ -20,7 +20,7 @@ class AppTest < ActiveSupport::TestCase
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
 
-    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order_webhook.json')
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order.json')
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
 
     get "/view?id=#{donation.id}", {}, 'rack.session' => session
@@ -32,7 +32,7 @@ class AppTest < ActiveSupport::TestCase
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
 
-    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order_webhook.json')
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order.json')
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
 
     Pony.expects(:mail).once
@@ -42,6 +42,24 @@ class AppTest < ActiveSupport::TestCase
 
     assert last_response.redirect?
     assert_equal 'Email resent!', last_request.env['x-rack.flash'][:notice]
+    assert_equal 'resent', donation.reload.status
+  end
+
+  test "send thresholded" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, status: 'thresholded', order_id: order_id, donation_amount: 10)
+
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order.json')
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    Pony.expects(:mail).once
+
+    params = {id: donation.id}
+    post '/resend', params, 'rack.session' => session
+
+    assert last_response.redirect?
+    assert_equal 'Email sent!', last_request.env['x-rack.flash'][:notice]
+    assert_nil donation.reload.status
   end
 
   test "cant resend void" do
@@ -55,6 +73,57 @@ class AppTest < ActiveSupport::TestCase
 
     assert last_response.redirect?
     assert_equal 'Donation is void', last_request.env['x-rack.flash'][:error]
+  end
+
+  test "void" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
+
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order.json')
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    Pony.expects(:mail).once
+
+    params = {id: donation.id}
+    post '/void', params, 'rack.session' => session
+
+    assert last_response.redirect?
+    assert_equal 'Donation voided', last_request.env['x-rack.flash'][:notice]
+    assert donation.reload.void
+  end
+
+  test "can't void void" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, status: 'void', order_id: order_id, donation_amount: 10)
+
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order.json')
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    Pony.expects(:mail).never
+
+    params = {id: donation.id}
+    post '/void', params, 'rack.session' => session
+
+    assert last_response.redirect?
+    assert_equal 'Donation is void', last_request.env['x-rack.flash'][:error]
+    assert donation.reload.void
+  end
+
+  test "void thresholded doesn't email" do
+    order_id = 1234
+    donation = Donation.create!(shop: @shop, status: 'thresholded', order_id: order_id, donation_amount: 10)
+
+    fake "https://apple.myshopify.com/admin/orders/#{order_id}.json", :body => load_fixture('order.json')
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    Pony.expects(:mail).never
+
+    params = {id: donation.id}
+    post '/void', params, 'rack.session' => session
+
+    assert last_response.redirect?
+    assert_equal 'Donation voided', last_request.env['x-rack.flash'][:notice]
+    assert donation.reload.void
   end
 
   test "preview_email" do
