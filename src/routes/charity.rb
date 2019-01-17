@@ -35,6 +35,7 @@ class SinatraApp < Sinatra::Base
     params.slice(
       'name',
       'charity_id',
+      'donation_id_prefix',
       'receipt_threshold',
       'email_from',
       'email_bcc',
