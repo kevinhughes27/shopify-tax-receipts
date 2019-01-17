@@ -271,6 +271,7 @@
     "total_spent": "0.00",
     "updated_at": "2014-03-07T16:14:08-05:00",
     "verified_email": true,
+    "phone": null,
     "tags": "",
     "last_order_name": null,
     "default_address": {
