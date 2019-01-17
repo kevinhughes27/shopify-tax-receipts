@@ -2,7 +2,7 @@ require 'pony'
 require 'letter_opener' if ENV['DEVELOPMENT']
 
 class SinatraApp < Sinatra::Base
-  if ENV['RACK_ENV']
+  if ENV['RACK_ENV'] == 'test'
     Pony.options = {
       :via => :test
     }

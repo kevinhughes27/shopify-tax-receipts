@@ -31,8 +31,11 @@ class Donation < ActiveRecord::Base
 
   delegate :first_name,
            :last_name,
+           :company,
            :address1,
+           :address2,
            :city,
+           :province,
            :country,
            :zip,
            to: :address
