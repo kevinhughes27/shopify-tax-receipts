@@ -26,7 +26,7 @@ class Donation < ActiveRecord::Base
   delegate :email, to: :order
 
   def address
-    order.billing_address || order.attributes.dig('default_address')
+    order.try(:billing_address) || order.attributes.dig('default_address')
   end
 
   delegate :first_name,
