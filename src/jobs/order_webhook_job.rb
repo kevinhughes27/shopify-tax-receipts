@@ -22,8 +22,9 @@ class OrderWebhookJob < Job
 
   # order_paid
   def order_paid(shop_name, order)
+    return unless order['email']
     return unless order['customer']
-    return unless order['customer']['email']
+    return unless order['billing_address']
 
     donations = donations_from_order(shop_name, order)
     donation_amount = donations.sum

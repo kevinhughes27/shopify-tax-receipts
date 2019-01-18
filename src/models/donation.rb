@@ -24,10 +24,7 @@ class Donation < ActiveRecord::Base
   end
 
   delegate :email, to: :order
-
-  def address
-    order.try(:billing_address) || order.attributes.dig('default_address')
-  end
+  delegate :billing_address, to: :order
 
   delegate :first_name,
            :last_name,
@@ -38,7 +35,7 @@ class Donation < ActiveRecord::Base
            :province,
            :country,
            :zip,
-           to: :address
+           to: :billing_address
 
   def original_donation=(donation)
     @original_donation = donation
@@ -57,7 +54,6 @@ class Donation < ActiveRecord::Base
   def order_to_liquid
     drop = JSON.parse(order.to_json)
     drop['created_at'] = Time.parse(drop['created_at']).strftime("%B %d, %Y")
-    drop['billing_address'] ||= drop.dig('default_address')
     drop
   end
 
