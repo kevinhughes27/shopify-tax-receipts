@@ -52,7 +52,7 @@ class OrderTest < ActiveSupport::TestCase
 
   test "order with no email" do
     order_webhook = JSON.parse(load_fixture('order.json'))
-    order_webhook['customer'].delete('email')
+    order_webhook.delete('email')
     order_webhook = order_webhook.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
@@ -69,6 +69,22 @@ class OrderTest < ActiveSupport::TestCase
   test "order with no customer" do
     order_webhook = JSON.parse(load_fixture('order.json'))
     order_webhook.delete('customer')
+    order_webhook = order_webhook.to_json
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    Pony.expects(:mail).never
+
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
+  end
+
+  test "order with no billing_address" do
+    order_webhook = JSON.parse(load_fixture('order.json'))
+    order_webhook.delete('billing_address')
     order_webhook = order_webhook.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
