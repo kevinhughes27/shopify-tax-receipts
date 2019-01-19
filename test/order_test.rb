@@ -52,7 +52,7 @@ class OrderTest < ActiveSupport::TestCase
 
   test "order with no email" do
     order_webhook = JSON.parse(load_fixture('order.json'))
-    order_webhook.delete('email')
+    order_webhook['email'] = ""
     order_webhook = order_webhook.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)

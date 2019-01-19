@@ -22,7 +22,7 @@ class OrderWebhookJob < Job
 
   # order_paid
   def order_paid(shop_name, order)
-    return unless order['email']
+    return unless order['email'].present?
     return unless order['customer']
     return unless order['billing_address']
 
