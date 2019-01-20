@@ -70,13 +70,6 @@ class SinatraApp < Sinatra::Base
     end
   end
 
-  # order/paid webhook receiver
-  post '/order.json' do
-    shopify_webhook do |shop_name, order|
-      puts "order paid noop"
-    end
-  end
-
   # view a donation receipt pdf
   get '/view' do
     shopify_session do |shop_name|
