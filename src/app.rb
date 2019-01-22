@@ -237,5 +237,7 @@ class SinatraApp < Sinatra::Base
 
   def mock_order
     @mock_order ||= JSON.parse( File.read(File.join('test', 'fixtures/order.json')) )
+    @mock_order['created_at'] = Time.now
+    @mock_order
   end
 end

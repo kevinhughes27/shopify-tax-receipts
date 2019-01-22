@@ -23,6 +23,10 @@ class Donation < ActiveRecord::Base
     @order ||= load_order
   end
 
+  def received_at
+    Time.parse(order.created_at).strftime("%B %d, %Y")
+  end
+
   delegate :email, to: :order
   delegate :billing_address, to: :order
 
@@ -69,6 +73,7 @@ class Donation < ActiveRecord::Base
       'city' => city,
       'country' => country,
       'zip' => zip,
+      'received_at' => received_at,
       'created_at' => (created_at || Time.now).strftime("%B %d, %Y"),
       'donation_amount' => sprintf( "%0.02f", donation_amount),
       'original_donation' => original_donation && original_donation.to_liquid
