@@ -33,7 +33,7 @@
   {% if donation.status == 'update' %}
     Replacement for Receipt Number: #{{ donation.original_donation.id }}<br>
   {% endif %}
-  Donation Received: {{ donation.created_at }}<br>
+  Donation Received: {{ donation.received_at }}<br>
   Amount: ${{ donation.donation_amount }}<br>
   Date Issued: {{ donation.created_at }}<br>
   Place Issued: {{ shop['city'] }}
