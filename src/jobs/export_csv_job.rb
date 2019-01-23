@@ -12,7 +12,8 @@ class ExportCsvJob < Job
       csv << [
         'Order ID',
         'Order Number',
-        'Date',
+        'Received At',
+        'Created At',
         'Donation Amount',
         'Order Amount',
         'Receipt ID',
@@ -36,6 +37,7 @@ class ExportCsvJob < Job
         csv << [
           d.order_id,
           d.order_number,
+          d.received_at,
           d.created_at,
           d.donation_amount,
           d.order.total_price,
