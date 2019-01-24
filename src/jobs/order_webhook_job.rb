@@ -18,6 +18,13 @@ class OrderWebhookJob < Job
       order_partially_refunded(shop_name, order, existing_donation)
 
     end
+
+  rescue ActiveResource::ResourceNotFound => e
+    if Time.parse(order['created_at'] ) <= 60.days.ago
+      puts "Order older than 60 days and user has not re-authed"
+    else
+      raise e
+    end
   end
 
   # order_paid
