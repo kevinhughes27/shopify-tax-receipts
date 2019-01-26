@@ -40,3 +40,8 @@ body {
   min-width: 200px;
   text-align: left;
 }
+
+.blank-list {
+  text-align: center;
+  padding-top: 20px;
+}

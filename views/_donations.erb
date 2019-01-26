@@ -70,7 +70,7 @@
     <%= paginate donations, param_name: :donations_page, params: {tab: 'donations'} %>
   </div>
 <% elsif @order_ids.present? %>
-  <p>No donations for orders</p>
+  <p class="blank-list">No donations for orders</p>
 <% else %>
-  <p>No donations have been sent yet</p>
+  <p class="blank-list">No donations have been sent yet</p>
 <% end %>
