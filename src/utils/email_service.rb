@@ -47,10 +47,19 @@ def email_body(email_template, charity, donation)
 end
 
 def send_email(to, bcc, from, subject, body, pdf, filename)
-  Pony.mail to: to,
-            bcc: bcc,
-            from: from,
-            subject: subject,
-            attachments: {"#{filename}.pdf" => pdf},
-            body: body
+  options = {
+    to: to,
+    bcc: bcc,
+    from: from,
+    subject: subject,
+    attachments: {"#{filename}.pdf" => pdf}
+  }
+
+  if body.include?("</html>")
+    options[:html_body] = body
+  else
+    options[:body] = body
+  end
+
+  Pony.mail(options)
 end
