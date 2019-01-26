@@ -45,7 +45,13 @@ class SinatraApp < Sinatra::Base
       @products = Product.where(shop: shop_name).page(params[:products_page])
       @donations = Donation.where(shop: shop_name).order('created_at DESC').page(params[:donations_page])
 
-      @tab = if @donations.present?
+      # order app actions
+      @order_ids = []
+      @order_ids << params[:id] if params[:id]
+      @order_ids.concat(params[:ids]) if params[:ids]
+      @donations = @donations.where(order_id: @order_ids) if @order_ids.present?
+
+      @tab = if @donations.present? || @order_ids.present?
         'donations'
       else
         'products'
