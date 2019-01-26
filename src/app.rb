@@ -43,7 +43,13 @@ class SinatraApp < Sinatra::Base
       @charity = Charity.find_by(shop: shop_name)
       @products = Product.where(shop: shop_name).page(params[:products_page])
       @donations = Donation.where(shop: shop_name).order('created_at DESC').page(params[:donations_page])
-      @tab = params[:tab] || 'products'
+
+      @tab = if @donations.present?
+        'donations'
+      else
+        'products'
+      end
+
       erb :home
     end
   end

@@ -11,8 +11,14 @@ class AppTest < ActiveSupport::TestCase
     @noop_shop = "banana.myshopify.com"
   end
 
-  test "get_install" do
+  test "install" do
     get '/install'
+    assert last_response.ok?
+  end
+
+  test "home" do
+    get '/', {}, 'rack.session' => session
+    Donation.create!(shop: @shop, order_id: '1234', donation_amount: 10)
     assert last_response.ok?
   end
 
