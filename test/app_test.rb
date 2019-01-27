@@ -26,6 +26,24 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
+  test "donation search" do
+    order_json = load_fixture 'order.json'
+    order = JSON.parse(order_json)
+
+    Donation.create!(shop: @shop, order_id: '4321', order: order.to_json, donation_amount: 10)
+
+    order['email'] = 'kevinhughes27@gmail.com'
+    Donation.create!(shop: @shop, order_id: '5678', order: order.to_json, donation_amount: 10)
+
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    post '/', {donation_search: 'kevin'}, 'rack.session' => session
+
+    assert last_response.ok?
+    assert_match "5678", last_response.body
+    refute_match "4321", last_response.body
+  end
+
   test "view" do
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)

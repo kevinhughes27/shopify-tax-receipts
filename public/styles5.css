@@ -41,6 +41,12 @@ body {
   text-align: left;
 }
 
+.list_actions {
+  padding-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
 .blank-list {
   text-align: center;
   padding-top: 20px;
