@@ -66,13 +66,13 @@ class SinatraApp < Sinatra::Base
       # search
       if params[:donation_search].present?
         @donation_search = params[:donation_search]
-        @donations = @donations.where("`order` LIKE :query", query: "%#{@donation_search}%")
+        @donations = @donations.where('"order" LIKE :query', query: "%#{@donation_search}%")
         @tab = 'donations'
       end
 
       if params[:product_search].present?
         @product_search = params[:product_search]
-        @products = @products.where("shopify_product LIKE :query", query: "%#{@product_search}%")
+        @products = @products.where('shopify_product LIKE :query', query: "%#{@product_search}%")
         @tab = 'products'
       end
 
