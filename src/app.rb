@@ -11,18 +11,19 @@ require_relative 'models/charity'
 require_relative 'models/product'
 require_relative 'models/donation'
 
-require_relative 'routes/charity'
-require_relative 'routes/products'
-require_relative 'routes/gdpr'
-
 require_relative 'jobs/job'
 require_relative 'jobs/after_install_job'
 require_relative 'jobs/order_webhook_job'
+require_relative 'jobs/product_webhook_job'
 require_relative 'jobs/export_csv_job'
 require_relative 'jobs/uninstall_job'
 
 require_relative 'utils/email_service'
 require_relative 'utils/render_pdf'
+
+require_relative 'routes/charity'
+require_relative 'routes/products'
+require_relative 'routes/gdpr'
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify

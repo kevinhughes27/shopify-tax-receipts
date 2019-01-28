@@ -33,6 +33,13 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # products/update webhook receiver
+  post '/product_update' do
+    shopify_webhook do |shop_name, product|
+      ProductWebhookJob.perform_async(shop_name, product)
+    end
+  end
+
   # delete product (stops getting a donation receipt)
   delete '/products' do
     shopify_session do |shop_name|
