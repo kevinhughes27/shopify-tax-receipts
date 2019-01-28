@@ -1,5 +1,4 @@
 require 'sinatra/shopify-sinatra-app'
-require 'sinatra/multi_route'
 
 require_relative '../config/pony'
 require_relative '../config/sidekiq'
@@ -31,7 +30,6 @@ class SinatraApp < Sinatra::Base
   set :scope, 'read_products, read_orders, read_all_orders'
 
   register Kaminari::Helpers::SinatraHelpers
-  register Sinatra::MultiRoute
 
   def after_shopify_auth
     shopify_session do |shop_name|
@@ -40,7 +38,7 @@ class SinatraApp < Sinatra::Base
   end
 
   # Home page
-  route :get, :post, '/' do
+  get '/' do
     shopify_session do |shop_name|
       @shop = ShopifyAPI::Shop.current
       @charity = Charity.find_by(shop: shop_name)

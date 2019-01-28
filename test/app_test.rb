@@ -37,7 +37,7 @@ class AppTest < ActiveSupport::TestCase
 
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
 
-    post '/', {donation_search: 'kevin'}, 'rack.session' => session
+    get '/', {donation_search: 'kevin'}, 'rack.session' => session
 
     assert last_response.ok?
     assert_match "5678", last_response.body
