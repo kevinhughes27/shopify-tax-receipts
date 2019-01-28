@@ -4,16 +4,16 @@ class SinatraApp < Sinatra::Base
     shopify_session do |shop_name|
       add_products(shop_name, Array.wrap(params["ids"]))
       flash[:notice] = "Product(s) added!"
-      redirect '/'
+      redirect '/?tab=products'
     end
   end
 
-  # product index app link receiver
+  # product detail app link receiver
   get '/product' do
     shopify_session do |shop_name|
       add_products(shop_name, Array.wrap(params["id"]))
       flash[:notice] = "Product added!"
-      redirect '/'
+      redirect '/?tab=products'
     end
   end
 
@@ -29,7 +29,14 @@ class SinatraApp < Sinatra::Base
         flash[:error] = "Error!"
       end
 
-      redirect '/'
+      redirect '/?tab=products'
+    end
+  end
+
+  # products/update webhook receiver
+  post '/product_update' do
+    shopify_webhook do |shop_name, product|
+      ProductWebhookJob.perform_async(shop_name, product)
     end
   end
 
@@ -38,19 +45,26 @@ class SinatraApp < Sinatra::Base
     shopify_session do |shop_name|
       Product.find_by(shop: shop_name, id: params["id"]).destroy
       flash[:notice] = "Product Removed"
-      redirect '/'
+      redirect '/?tab=products'
     end
   end
 
   private
 
   def add_products(shop_name, product_ids)
-    product_ids.each do |id|
-      begin
-        Product.create!(shop: shop_name, product_id: id)
-      rescue ActiveRecord::RecordInvalid => e
-        raise unless e.message.include? "Product has already been taken"
-      end
-    end
+    product_ids.each { |product_id| add_product(shop_name, product_id) }
+  end
+
+  def add_product(shop_name, product_id)
+    shopify_product = ShopifyAPI::Product.find(product_id)
+
+    Product.create!(
+      shop: shop_name,
+      product_id: product_id,
+      shopify_product: shopify_product.to_json
+    )
+
+  rescue ActiveRecord::RecordInvalid => e
+    raise unless e.message.include? "Product has already been taken"
   end
 end
