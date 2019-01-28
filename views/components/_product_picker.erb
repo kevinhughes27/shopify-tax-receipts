@@ -1,11 +1,14 @@
 <script>
   window.productPicker = function() {
-    ShopifyApp.Modal.productPicker({message: "Choose a product"}, function(success, result){
-      if(!success){ return; }
-      product = result.products[0]
-      ShopifyApp.Bar.loadingOn()
-      window.location = "/product?id=" + product.id
-    });
+    ShopifyApp.Modal.productPicker({selectMultiple: true},
+      function(success, result) {
+        if(!success){ return; }
+        product_ids = result.products.map(function(p) { return "ids%5B%5D=" + p.id }).join("&")
+        url = "/products?" + product_ids
+        ShopifyApp.Bar.loadingOn()
+        window.location = url
+      }
+    );
   }
 </script>
 
