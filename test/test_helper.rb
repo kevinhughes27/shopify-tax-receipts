@@ -36,6 +36,7 @@ class ActiveSupport::TestCase
   end
 
   teardown do
+    FakeWeb.clean_registry
     DatabaseCleaner.clean
   end
 end
