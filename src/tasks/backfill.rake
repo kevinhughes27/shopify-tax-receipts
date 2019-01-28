@@ -1,5 +1,10 @@
 task :backfill_products do
-  Shop.where(name: ['hawker-supplies.myshopify.com', 'samadeyemi.myshopify.com']) { |shop| backfill_products(shop) }
+  #Shop.find_each { |shop| backfill_products(shop) }
+  shop = Shop.find_by(name: 'hawker-supplies.myshopify.com')
+  backfill_products(shop)
+
+  shop = Shop.find_by(name: 'samadeyemi.myshopify.com')
+  backfill_products(shop)
 end
 
 def backfill_products(shop)
