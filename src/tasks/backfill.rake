@@ -1,10 +1,5 @@
 task :backfill_products do
-  #Shop.find_each { |shop| backfill_products(shop) }
-  shop = Shop.find_by(name: 'hawker-supplies.myshopify.com')
-  backfill_products(shop)
-
-  shop = Shop.find_by(name: 'samadeyemi.myshopify.com')
-  backfill_products(shop)
+  Shop.find_each { |shop| backfill_products(shop) }
 end
 
 def backfill_products(shop)
@@ -21,7 +16,6 @@ def backfill_products(shop)
     shopify_product = ShopifyAPI::Product.find(product.product_id)
     product.shopify_product = shopify_product.to_json
     product.save!
-    sleep(0.1)
   end
 
 rescue => e
