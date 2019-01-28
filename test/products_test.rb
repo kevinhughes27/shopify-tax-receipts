@@ -30,6 +30,22 @@ class ProductsTest < ActiveSupport::TestCase
     end
   end
 
+  test "products/update" do
+    product_webhook = load_fixture 'product.json'
+    shopify_product = JSON.parse(product_webhook)
+    shopify_product['title'] = 'beans'
+
+    product = Product.find_by(product_id: shopify_product['id'])
+    product.update!({shopify_product: shopify_product.to_json})
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+
+    post '/product_update', product_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+
+    assert last_response.ok?
+    assert_equal 'IPod Nano - 8GB', product.reload.title
+  end
+
   private
 
   def session
