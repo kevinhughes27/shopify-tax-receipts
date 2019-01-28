@@ -4,7 +4,7 @@ class SinatraApp < Sinatra::Base
     shopify_session do |shop_name|
       add_products(shop_name, Array.wrap(params["ids"]))
       flash[:notice] = "Product(s) added!"
-      redirect '/'
+      redirect '/?tab=products'
     end
   end
 
@@ -13,7 +13,7 @@ class SinatraApp < Sinatra::Base
     shopify_session do |shop_name|
       add_products(shop_name, Array.wrap(params["id"]))
       flash[:notice] = "Product added!"
-      redirect '/'
+      redirect '/?tab=products'
     end
   end
 
@@ -29,7 +29,7 @@ class SinatraApp < Sinatra::Base
         flash[:error] = "Error!"
       end
 
-      redirect '/'
+      redirect '/?tab=products'
     end
   end
 
@@ -38,7 +38,7 @@ class SinatraApp < Sinatra::Base
     shopify_session do |shop_name|
       Product.find_by(shop: shop_name, id: params["id"]).destroy
       flash[:notice] = "Product Removed"
-      redirect '/'
+      redirect '/?tab=products'
     end
   end
 
