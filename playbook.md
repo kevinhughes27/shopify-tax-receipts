@@ -44,7 +44,15 @@ heroku run bundle exec irb --app taxreceipts
 require_relative 'src/app.rb'
 ```
 
-Check webhook for shop:
+Debug a shop
+
+```
+heroku run bundle exec rake debug_shop\[kevintest3.myshopify.com\] --app taxreceipts
+
+$> starts irb with the shop activated for API use
+```
+
+Check webhooks for shop:
 
 ```
 name = 'kevintest3.myshopify.com'
