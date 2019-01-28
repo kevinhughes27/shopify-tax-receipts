@@ -17,8 +17,12 @@ class AppTest < ActiveSupport::TestCase
   end
 
   test "home" do
-    get '/', {}, 'rack.session' => session
     Donation.create!(shop: @shop, order_id: '1234', donation_amount: 10)
+
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    get '/', {}, 'rack.session' => session
+
     assert last_response.ok?
   end
 
@@ -189,6 +193,7 @@ class AppTest < ActiveSupport::TestCase
     Donation.create!(shop: @shop, order_id: 1234, donation_amount: 10, created_at: Time.now - 5.days)
     Donation.create!(shop: @shop, order_id: 5678, donation_amount: 10)
 
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
     fake "https://apple.myshopify.com/admin/orders/1234.json", :body => load_fixture('order.json')
     fake "https://apple.myshopify.com/admin/orders/5678.json", :body => load_fixture('order.json')
 
