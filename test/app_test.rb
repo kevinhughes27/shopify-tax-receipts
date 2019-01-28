@@ -44,6 +44,18 @@ class AppTest < ActiveSupport::TestCase
     refute_match "4321", last_response.body
   end
 
+  test "product search" do
+    Product.create!(shop: @shop, product_id: '9999', shopify_product: {title: 'beans', body_html: 'magical fruit'}.to_json)
+
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+
+    get '/', {product_search: 'beans'}, 'rack.session' => session
+
+    assert last_response.ok?
+    assert_match "9999", last_response.body
+    refute_match "632910392", last_response.body
+  end
+
   test "view" do
     order_id = 1234
     donation = Donation.create!(shop: @shop, order_id: order_id, donation_amount: 10)
