@@ -42,14 +42,43 @@ class SinatraApp < Sinatra::Base
     shopify_session do |shop_name|
       @shop = ShopifyAPI::Shop.current
       @charity = Charity.find_by(shop: shop_name)
-      @products = Product.where(shop: shop_name).page(params[:products_page])
-      @donations = Donation.where(shop: shop_name).order('created_at DESC').page(params[:donations_page])
+      @products = Product.where(shop: shop_name)
+      @donations = Donation.where(shop: shop_name)
 
-      @tab = if @donations.present?
+      # default tab
+      @tab = params[:tab]
+      @tab ||= if @donations.present?
         'donations'
       else
         'products'
       end
+
+      # order app actions (filter by order)
+      @order_ids = []
+      @order_ids << params[:id] if params[:id]
+      @order_ids.concat(params[:ids]) if params[:ids]
+
+      if @order_ids.present?
+        @donations = @donations.where(order_id: @order_ids)
+        @tab = 'donations'
+      end
+
+      # search
+      if params[:donation_search].present?
+        @donation_search = params[:donation_search]
+        @donations = @donations.where("`order` LIKE :query", query: "%#{@donation_search}%")
+        @tab = 'donations'
+      end
+
+      if params[:product_search].present?
+        @product_search = params[:product_search]
+        @products = @products.where("shopify_product LIKE :query", query: "%#{@product_search}%")
+        @tab = 'products'
+      end
+
+      # pagination
+      @donations = @donations.order('created_at DESC').page(params[:donations_page])
+      @products = @products.page(params[:products_page])
 
       erb :home
     end
