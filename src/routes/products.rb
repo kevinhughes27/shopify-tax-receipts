@@ -8,7 +8,7 @@ class SinatraApp < Sinatra::Base
     end
   end
 
-  # product index app link receiver
+  # product detail app link receiver
   get '/product' do
     shopify_session do |shop_name|
       add_products(shop_name, Array.wrap(params["id"]))
@@ -45,12 +45,19 @@ class SinatraApp < Sinatra::Base
   private
 
   def add_products(shop_name, product_ids)
-    product_ids.each do |id|
-      begin
-        Product.create!(shop: shop_name, product_id: id)
-      rescue ActiveRecord::RecordInvalid => e
-        raise unless e.message.include? "Product has already been taken"
-      end
-    end
+    product_ids.each { |product_id| add_product(shop_name, product_id) }
+  end
+
+  def add_product(shop_name, product_id)
+    shopify_product = ShopifyAPI::Product.find(product_id)
+
+    Product.create!(
+      shop: shop_name,
+      product_id: product_id,
+      shopify_product: shopify_product.to_json
+    )
+
+  rescue ActiveRecord::RecordInvalid => e
+    raise unless e.message.include? "Product has already been taken"
   end
 end
