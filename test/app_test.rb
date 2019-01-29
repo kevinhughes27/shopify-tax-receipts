@@ -185,6 +185,16 @@ class AppTest < ActiveSupport::TestCase
     assert last_response.ok?
   end
 
+  test "test_html_email" do
+    charity = Charity.find_by(shop: @shop)
+
+    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    Pony.expects(:mail).with(has_entry(html_body: "<html>hello #{charity.name}</html>"))
+
+    get '/test_email', {email_template: '<html>hello {{ charity.name }}</html>'}, 'rack.session' => session
+    assert last_response.ok?
+  end
+
   test "test_void_email" do
     charity = Charity.find_by(shop: @shop)
 
