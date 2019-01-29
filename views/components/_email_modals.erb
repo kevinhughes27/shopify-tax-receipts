@@ -109,13 +109,11 @@
             bind="<%= template %><%= modal_id %>"
             value="<%= charity.send(template) %>"
           />
-          <textarea
+          <pre
             id="email_body"
-            class="form-control"
-            style="width: 97%"
-            rows="12"
-            disabled="true">
-          </textarea>
+            class="well"
+            style="width: 97%; height: 244px; white-space: pre-wrap; word-break: keep-all;">
+          </pre>
         </div>
 
         <div class="modal-footer">
