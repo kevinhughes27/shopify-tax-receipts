@@ -18,7 +18,7 @@
           </td>
 
           <td>
-            <%== truncate(product.description, length: 200, escape: false) %>
+            <%= truncate(strip_tags(product.description), length: 200) %>
           </td>
 
           <form method="POST" action="/products">
