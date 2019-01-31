@@ -49,6 +49,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    OrderWebhookJob.any_instance.expects(:notify_pdf_change)
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
