@@ -73,6 +73,7 @@ class OrderWebhookJob < Job
 
     new_donation = Donation.new(
       id: existing_donation.id, # needed for comparison
+      created_at: existing_donation.created_at, # needed for comparison
       shop: shop_name,
       order: order.to_json,
       order_id: order['id'],
@@ -89,6 +90,7 @@ class OrderWebhookJob < Job
 
     if update_required
       new_donation.id = nil
+      new_donation.created_at = nil
       new_donation.status = 'update'
       new_donation.original_donation = existing_donation
 

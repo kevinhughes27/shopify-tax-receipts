@@ -19,7 +19,8 @@ class OrderUpdateTest < ActiveSupport::TestCase
       order: order.to_json,
       order_id: order['id'],
       order_number: order['name'],
-      donation_amount: 597.00
+      donation_amount: 597.00,
+      created_at: 5.days.ago,
     )
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
