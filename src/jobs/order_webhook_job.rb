@@ -72,14 +72,18 @@ class OrderWebhookJob < Job
     donation_amount = donations.sum
 
     new_donation = Donation.new(
-      id: existing_donation.id, # needed for comparison
-      created_at: existing_donation.created_at, # needed for comparison
       shop: shop_name,
       order: order.to_json,
       order_id: order['id'],
       order_number: order['name'],
       donation_amount: sprintf( "%0.02f", donation_amount)
     )
+
+    # set attributes for comparison
+    new_donation.id = existing_donation.id
+    new_donation.created_at = existing_donation.created_at
+    new_donation.status = existing_donation.status
+    new_donation.original_donation = existing_donation.original_donation if existing_donation.status == 'update'
 
     old_receipt_pdf = render_pdf(shopify_shop, charity, existing_donation)
     new_receipt_pdf = render_pdf(shopify_shop, charity, new_donation)
@@ -89,6 +93,7 @@ class OrderWebhookJob < Job
     update_required ||= pdf_changed?(old_receipt_pdf, new_receipt_pdf)
 
     if update_required
+      # clear attributes for comparison
       new_donation.id = nil
       new_donation.created_at = nil
       new_donation.status = 'update'
