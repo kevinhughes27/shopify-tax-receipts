@@ -71,6 +71,7 @@ class Donation < ActiveRecord::Base
       'last_name' => last_name,
       'address1' => address1,
       'city' => city,
+      'province' => province,
       'country' => country,
       'zip' => zip,
       'received_at' => received_at,
