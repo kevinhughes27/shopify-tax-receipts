@@ -5,7 +5,6 @@ class Charity < ActiveRecord::Base
   validates_presence_of :name, :charity_id
   validates :receipt_threshold, numericality: { greater_than: 0 }, allow_nil: true
   validates_format_of :email_bcc, with: EMAIL_REGEX, allow_blank: true
-  validates_format_of :email_from, with: EMAIL_REGEX, allow_blank: true
 
   def self.attr_or_default(attr, default)
     define_method(attr) do
