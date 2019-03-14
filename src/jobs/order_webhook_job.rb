@@ -6,7 +6,7 @@ class OrderWebhookJob < Job
     status = order['financial_status']
 
     if status == 'paid' && existing_donation.nil?
-       order_paid(shop_name, order)
+      order_paid(shop_name, order)
 
     elsif status == 'paid' && existing_donation
       order_updated(shop_name, order, existing_donation)
