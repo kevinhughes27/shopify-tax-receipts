@@ -136,11 +136,14 @@ class OrderWebhookJob < Job
 
   # order_partially_refunded
   def order_partially_refunded(shop_name, order, existing_donation)
+    donations = donations_from_order(shop_name, order)
+    donation_amount = donations.sum
+
     refunded_donations = donations_from_refund(shop_name, order)
     refunded_amount = refunded_donations.sum
     return if refunded_donations.empty?
 
-    new_amount = existing_donation.donation_amount - refunded_amount
+    new_amount = donation_amount - refunded_amount
 
     new_donation = Donation.new(
       status: 'update',
