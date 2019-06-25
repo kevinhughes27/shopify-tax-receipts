@@ -199,7 +199,7 @@ GEM
     wicked_pdf (1.4.0)
       activesupport
     wkhtmltopdf-binary (0.12.4)
-    wkhtmltopdf-heroku (2.12.4.0)
+    wkhtmltopdf-heroku (2.12.5.0)
 
 PLATFORMS
   ruby
