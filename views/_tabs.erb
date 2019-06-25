@@ -1,27 +1,36 @@
-<ul class="nav nav-tabs" id="tabs">
-  <li class="<%= 'active' if tab == 'products' %>">
-    <a href="#products">Products</a>
-  </li>
-  <li class="<%= 'active' if tab == 'donations' %>">
-    <a href="#donations">Donations</a>
-  </li>
-</ul>
+<div style="padding-top: 10px;">
+  <ul class="nav nav-tabs" id="tabs">
+    <li class="<%= 'active' if tab == 'products' %>">
+      <a href="#products">Products</a>
+    </li>
+    <li class="<%= 'active' if tab == 'donations' %>">
+      <a href="#donations">Donations</a>
+    </li>
+    <li class="<%= 'active' if tab == 'settings' %>">
+      <a href="#settings">Settings</a>
+    </li>
+  </ul>
 
-<div class="tab-content">
-  <div class="tab-pane <%= 'active' if tab == 'products' %>" id="products">
-    <div class="list_actions">
-      <%= partial 'components/search', locals: { search_param_name: 'product_search', search_param: product_search } %>
-      <%= partial 'components/product_picker' %>
+  <div class="tab-content">
+    <div class="tab-pane <%= 'active' if tab == 'products' %>" id="products">
+      <div class="list_actions">
+        <%= partial 'components/search', locals: { search_param_name: 'product_search', search_param: product_search } %>
+        <%= partial 'components/product_picker' %>
+      </div>
+      <%= partial 'products', locals: { products: products, product_search: product_search } %>
     </div>
-    <%= partial 'products', locals: { products: products, product_search: product_search } %>
-  </div>
 
-  <div class="tab-pane <%= 'active' if tab == 'donations' %>" id="donations">
-    <div class="list_actions">
-      <%= partial 'components/search', locals: { search_param_name: 'donation_search', search_param: donation_search } %>
-      <%= partial 'components/export_donations', locals: { shop: shop } %>
+    <div class="tab-pane <%= 'active' if tab == 'donations' %>" id="donations">
+      <div class="list_actions">
+        <%= partial 'components/search', locals: { search_param_name: 'donation_search', search_param: donation_search } %>
+        <%= partial 'components/export_donations', locals: { shop: shop } %>
+      </div>
+      <%= partial 'donations', locals: { donations: donations, order_ids: order_ids, donation_search: donation_search } %>
     </div>
-    <%= partial 'donations', locals: { donations: donations, order_ids: order_ids, donation_search: donation_search } %>
+
+    <div class="tab-pane <%= 'active' if tab == 'settings' %>" id="settings">
+      <%= partial 'settings', locals: { shop: shop, charity: charity } %>
+    </div>
   </div>
 </div>
 

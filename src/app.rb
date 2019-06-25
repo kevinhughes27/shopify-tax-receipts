@@ -47,7 +47,9 @@ class SinatraApp < Sinatra::Base
 
       # default tab
       @tab = params[:tab]
-      @tab ||= if @donations.present?
+      @tab ||= if @charity.blank?
+        'settings'
+      elsif @donations.present?
         'donations'
       else
         'products'
