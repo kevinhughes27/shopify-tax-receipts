@@ -14,6 +14,7 @@ SIDEKIQ_USERNAME=
 SIDEKIQ_PASSWORD=
 DEVELOPMENT=1
 
+Install `forward` with `gem install forward`
 Make sure the tunnel is started `forward 5000 shopify`
 The development app is configured for https://shopify-kevinhughes27.fwd.wf
 
