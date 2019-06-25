@@ -169,8 +169,9 @@ GEM
       activeresource (>= 3.0.0)
       graphql-client
       rack
-    sidekiq (5.2.3)
+    sidekiq (5.2.7)
       connection_pool (~> 2.2, >= 2.2.2)
+      rack (>= 1.5.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
     sinatra (2.0.5)
