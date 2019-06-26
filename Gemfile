@@ -6,6 +6,7 @@ gem 'foreman'
 
 gem 'shopify-sinatra-app', '~> 0.7.0'
 gem 'sinatra-contrib'
+gem 'activerecord', '5.2.3'
 
 gem 'kaminari-sinatra', git: 'https://github.com/kevinhughes27/kaminari-sinatra', ref: '2e7eb2771f921eaf75aab9dd21bf465876be3404'
 gem 'kaminari-activerecord'
