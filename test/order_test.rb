@@ -41,7 +41,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
@@ -56,7 +56,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = order_webhook.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
 
     Pony.expects(:mail).never
 
@@ -72,7 +72,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = order_webhook.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
 
     Pony.expects(:mail).never
 
@@ -88,7 +88,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = order_webhook.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
 
     Pony.expects(:mail).never
 
@@ -105,7 +105,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
 
     OrderWebhookJob.any_instance.expects(:render_pdf).with do |shop, charity, donation|
       assert_equal '477.60', donation.to_liquid['donation_amount']
@@ -126,7 +126,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).with(has_entry(body: "Dear Bob Norman,\n\nOn behalf of Amnesty, we would like to thank you from the bottom of our hearts for your contribution to our cause. It may seem like a small gesture to you, but to us, it’s what we thrive on. Feel free to share the word to your friends and family as well!\n\nYou’ll find a copy of your tax receipt as an attachment in this email.\n\nAgain, thank you. We wouldn't be here without you.\n\nAmnesty\n"))
 
     assert_difference 'Donation.count', +1 do
@@ -142,7 +142,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).with(has_entry(body: "liquid test Amnesty"))
 
     assert_difference 'Donation.count', +1 do
@@ -158,7 +158,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
 
     Pony.expects(:mail).never
 
@@ -178,7 +178,7 @@ class OrderTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
 
     Pony.expects(:mail).once
 
