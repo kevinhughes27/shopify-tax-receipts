@@ -10,9 +10,9 @@ class ProductsTest < ActiveSupport::TestCase
   end
 
   test "products admin link / product picker" do
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
-    fake "https://apple.myshopify.com/admin/products/1.json", :body => load_fixture('product.json')
-    fake "https://apple.myshopify.com/admin/products/2.json", :body => load_fixture('product.json')
+    mock_shop_api_call
+    mock_product_api_call(1)
+    mock_product_api_call(2)
 
     assert_difference 'Product.count', +2 do
       get '/products', {ids: [1,2]}, 'rack.session' => session
@@ -21,8 +21,8 @@ class ProductsTest < ActiveSupport::TestCase
   end
 
   test "product admin link" do
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
-    fake "https://apple.myshopify.com/admin/products/1.json", :body => load_fixture('product.json')
+    mock_shop_api_call
+    mock_product_api_call(1)
 
     assert_difference 'Product.count', +1 do
       get '/product', {id: 1}, 'rack.session' => session

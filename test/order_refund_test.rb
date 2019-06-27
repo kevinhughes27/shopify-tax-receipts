@@ -26,7 +26,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     order_webhook = order.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_no_difference 'Donation.count' do
@@ -53,7 +53,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     order_webhook = order.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).never
 
     assert_no_difference 'Donation.count' do
@@ -69,7 +69,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order_before_refund.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
@@ -82,7 +82,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     refund_webhook = load_fixture 'order_partial_refund.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
@@ -104,7 +104,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order_before_refund.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).never
 
     assert_difference 'Donation.count', +1 do
@@ -118,7 +118,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     refund_webhook = load_fixture 'order_partial_refund.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).never
 
     assert_difference 'Donation.count', +1 do
@@ -136,7 +136,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     order_webhook = load_fixture 'order_before_refund.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
@@ -149,7 +149,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     refund_webhook = load_fixture 'order_partial_refund.json'
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
@@ -169,7 +169,7 @@ class OrderRefundTest < ActiveSupport::TestCase
     second_refund_webhook = second_refund_webhook.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do

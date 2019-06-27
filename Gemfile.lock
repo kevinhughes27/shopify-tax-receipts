@@ -59,7 +59,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     foreman (0.85.0)
       thor (~> 0.19.1)
-    graphql (1.8.13)
+    graphql (1.9.7)
     graphql-client (0.14.0)
       activesupport (>= 3.0, < 6.0)
       graphql (~> 1.6)
@@ -71,7 +71,7 @@ GEM
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     json (2.2.0)
-    jwt (2.1.0)
+    jwt (2.2.1)
     kaminari-activerecord (1.1.1)
       activerecord
       kaminari-core (= 1.1.1)
@@ -98,7 +98,7 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.13.1)
     multi_xml (0.6.0)
-    multipart-post (2.0.0)
+    multipart-post (2.1.1)
     mustermann (1.0.3)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
@@ -114,7 +114,7 @@ GEM
     omniauth-oauth2 (1.5.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.2)
-    omniauth-shopify-oauth2 (2.0.0)
+    omniauth-shopify-oauth2 (2.1.0)
       activesupport
       omniauth-oauth2 (~> 1.5.0)
     padrino-helpers (0.14.3)
@@ -157,16 +157,16 @@ GEM
       rack
     redis (4.1.2)
     ruby-rc4 (0.1.5)
-    shopify-sinatra-app (0.7.0)
+    shopify-sinatra-app (0.8.0)
       activesupport
       attr_encrypted (~> 3.1.0)
       omniauth-shopify-oauth2
       rack-flash3 (~> 1.0.5)
-      shopify_api
+      shopify_api (~> 7.0.1)
       sinatra (~> 2.0.2)
       sinatra-activerecord (~> 2.0.9)
-    shopify_api (5.2.3)
-      activeresource (>= 3.0.0)
+    shopify_api (7.0.1)
+      activeresource (>= 4.1.0, < 6.0.0)
       graphql-client
       rack
     sidekiq (5.2.7)
@@ -223,7 +223,7 @@ DEPENDENCIES
   rake
   raygun4ruby
   redis
-  shopify-sinatra-app (~> 0.7.0)
+  shopify-sinatra-app (~> 0.8.0)
   sidekiq
   sinatra-contrib
   sqlite3

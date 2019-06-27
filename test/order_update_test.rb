@@ -24,7 +24,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
     )
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).never
 
     assert_no_difference 'Donation.count' do
@@ -49,7 +49,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
     order_webhook = order.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     OrderWebhookJob.any_instance.expects(:notify_pdf_change)
     Pony.expects(:mail).once
 
@@ -79,7 +79,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
     order_webhook = order.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
@@ -116,7 +116,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
 
     # no change
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).never
 
     assert_no_difference 'Donation.count' do
@@ -129,7 +129,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
     order_webhook = order.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     OrderWebhookJob.any_instance.expects(:notify_pdf_change)
     Pony.expects(:mail).once
 
@@ -157,7 +157,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
     )
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).never
 
     assert_no_difference 'Donation.count' do
@@ -180,7 +180,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
     )
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).never
 
     assert_no_difference 'Donation.count' do
@@ -206,7 +206,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
     order_webhook = order.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
@@ -239,7 +239,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
     order_webhook = order.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).never
 
     assert_difference 'Donation.count', +1 do
@@ -271,7 +271,7 @@ class OrderUpdateTest < ActiveSupport::TestCase
     order_webhook = order.to_json
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
-    fake "https://apple.myshopify.com/admin/shop.json", :body => load_fixture('shop.json')
+    mock_shop_api_call
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
