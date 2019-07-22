@@ -149,7 +149,7 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
-    rake (12.3.2)
+    rake (12.3.3)
     raygun4ruby (3.2.1)
       concurrent-ruby
       httparty (> 0.13.7)
