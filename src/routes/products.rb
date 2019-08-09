@@ -21,7 +21,7 @@ class SinatraApp < Sinatra::Base
   put '/products' do
     shopify_session do |shop_name|
       product = Product.find_by(shop: shop_name, id: params["id"])
-      product_params = params.slice('percentage')
+      product_params = params.slice('email_template', 'percentage')
 
       if product.update_attributes(product_params)
         flash[:notice] = "Product Updated"
