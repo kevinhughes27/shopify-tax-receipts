@@ -50,7 +50,6 @@ class OrderUpdateTest < ActiveSupport::TestCase
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     mock_shop_api_call
-    OrderWebhookJob.any_instance.expects(:notify_pdf_change)
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do
@@ -130,7 +129,6 @@ class OrderUpdateTest < ActiveSupport::TestCase
 
     SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
     mock_shop_api_call
-    OrderWebhookJob.any_instance.expects(:notify_pdf_change)
     Pony.expects(:mail).once
 
     assert_difference 'Donation.count', +1 do

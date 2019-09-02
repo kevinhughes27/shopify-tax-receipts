@@ -236,17 +236,6 @@ class OrderWebhookJob < Job
     new_compare_string = new.slice(new_start_idx, new_end_idx)
 
     changed = old_compare_string != new_compare_string
-    notify_pdf_change(old, new) if changed
     changed
-  end
-
-  def notify_pdf_change(old, new)
-    Pony.mail to: 'kevinhughes27@gmail.com',
-              subject: 'Shopify Tax Receipts PDF Changed',
-              body: "pdf change",
-              attachments: {
-                "old.pdf" => old,
-                "new.pdf" => new
-              }
   end
 end
