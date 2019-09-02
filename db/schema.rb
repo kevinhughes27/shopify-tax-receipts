@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_27_071032) do
+ActiveRecord::Schema.define(version: 2019_08_08_233720) do
 
   create_table "charities", force: :cascade do |t|
     t.string "name", limit: 255
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 2019_01_27_071032) do
     t.string "shop", limit: 255
     t.decimal "percentage", default: "100.0"
     t.text "shopify_product"
+    t.text "email_template"
     t.index ["shop"], name: "index_products_on_shop"
   end
 

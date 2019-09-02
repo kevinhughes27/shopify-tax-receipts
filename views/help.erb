@@ -38,7 +38,21 @@ ShopifyApp.ready(function(){
 <hr>
 
 <h3>Editing Templates</h3>
-<p>You can edit the templates for the emails and receipt pdf that get sent out. The templates are written in liquid just like your Shopify theme and other shop emails. HTML is supported in email templates. If an html close tag is detected in the template the email will be sent with an html body instead of a plain text body. Please test HTML email templates carefully!</p>
+<p>
+  You can edit the templates for the emails and receipt pdf that get sent out.
+  The templates are written in liquid just like your Shopify theme and other shop emails.
+  HTML is supported in email templates. If an html close tag is detected in the template
+  the email will be sent with an html body instead of a plain text body.
+  Please test HTML email templates carefully!
+</p>
+
+<p>
+  You may also configure custom email templates per product.
+  The custom template will be used if the an order is placed for this product and this product only.
+  If an order includes multiple donations then the default template will be used. To reset a product
+  to the default template remove all the text from the template and press save.
+</p>
+
 <p>The following objects are available in the templates:</p>
 
 <strong>shop</strong>

@@ -17,7 +17,7 @@
         <%= partial 'components/search', locals: { search_param_name: 'product_search', search_param: product_search } %>
         <%= partial 'components/product_picker' %>
       </div>
-      <%= partial 'products', locals: { products: products, product_search: product_search } %>
+      <%= partial 'products', locals: { shop: shop, charity: charity, products: products, product_search: product_search } %>
     </div>
 
     <div class="tab-pane <%= 'active' if tab == 'donations' %>" id="donations">

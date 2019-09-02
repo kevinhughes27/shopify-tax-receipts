@@ -4,6 +4,7 @@
       <tr>
         <th>Product</th>
         <th>Description</th>
+        <th>Email Template</th>
         <th>Percentage eligible for tax receipt</th>
         <th></th>
         <th></th>
@@ -19,6 +20,22 @@
 
           <td>
             <%= truncate(strip_tags(product.description), length: 200) %>
+          </td>
+
+          <td>
+            <%= partial 'components/product_email_modal',
+              locals: {
+                shop: shop,
+                charity: charity,
+                product: product,
+                subject: 'email_subject',
+                template: 'email_template',
+                title_copy: 'Edit Product Email Template',
+                preview_copy: 'Product Email Preview',
+                button_copy: product.email_template ? 'custom' : 'default',
+                modal_id: product.id + 3
+              }
+            %>
           </td>
 
           <form method="POST" action="/products">

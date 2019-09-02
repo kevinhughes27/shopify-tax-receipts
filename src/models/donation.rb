@@ -3,6 +3,16 @@ class Donation < ActiveRecord::Base
   validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where("status != 'void' or status is null") }
   validates :status, inclusion: { in: %w(thresholded resent update void) }, allow_nil: true
 
+  def email_template
+    product_ids = order.line_items.map { |item| item.product_id }
+    products = Product.where(shop: shop, product_id: product_ids)
+
+    # default template for multiple products
+    return nil if products.size > 1
+
+    products.first.email_template
+  end
+
   def resent!
     update!({status: 'resent'})
   end

@@ -88,7 +88,13 @@ json = JSON.parse(file)
 ids = json['order']['line_items'].map{ |l| l['product_id'] }
 ```
 
-### Migrations locally
+### Migrations
+
+To create a migration run:
+
+```
+bundle exec rake db:create_migration NAME=_______
+```
 
 If you are backfilling and need encrypted shop tokens use:
 
