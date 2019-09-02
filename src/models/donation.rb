@@ -6,7 +6,10 @@ class Donation < ActiveRecord::Base
   def email_template
     product_ids = order.line_items.map { |item| item.product_id }
     products = Product.where(shop: shop, product_id: product_ids)
+
+    # default template for multiple products
     return nil if products.size > 1
+
     products.first.email_template
   end
 
