@@ -23,4 +23,43 @@ class DonationTest < ActiveSupport::TestCase
     donation.reload
     assert donation.order
   end
+
+  test "dontation template is product template if configured" do
+    order_id = 1234
+    mock_order_api_call(order_id)
+    donation = Donation.create(shop: @shop, order_id: order_id, donation_amount: 10)
+
+    product = Product.where(shop: @shop).first
+    product.update(email_template: 'test')
+
+    assert_equal 'test', donation.email_template
+  end
+
+  test "dontation template is nil (default to charity template) if product template is nil" do
+    order_id = 1234
+    mock_order_api_call(order_id)
+    donation = Donation.create(shop: @shop, order_id: order_id, donation_amount: 10)
+
+    assert_nil donation.email_template
+  end
+
+  test "dontation template is nil (default to charity template) for multiple products" do
+    order_id = 1234
+    mock_order_api_call(order_id)
+    donation = Donation.create(shop: @shop, order_id: order_id, donation_amount: 10)
+
+    Product.stubs(:where).returns([1, 2])
+
+    assert_nil donation.email_template
+  end
+
+  test "dontation template is nil (default to charity template) for 0 products (test email)" do
+    order_id = 1234
+    mock_order_api_call(order_id)
+    donation = Donation.create(shop: @shop, order_id: order_id, donation_amount: 10)
+
+    Product.stubs(:where).returns([])
+
+    assert_nil donation.email_template
+  end
 end

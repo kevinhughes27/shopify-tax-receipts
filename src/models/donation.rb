@@ -8,9 +8,12 @@ class Donation < ActiveRecord::Base
     products = Product.where(shop: shop, product_id: product_ids)
 
     # default template for multiple products
-    return nil if products.size > 1
-
-    products.first.email_template
+    # or for no products (test email)
+    if products.size == 1
+      products.first.email_template
+    else
+      nil
+    end
   end
 
   def resent!
