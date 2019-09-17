@@ -5,7 +5,7 @@ end
 def send_announcement(shop)
   puts "Sending announcement to shop: #{shop.name}"
 
-  api_session = ShopifyAPI::Session.new(shop.name, shop.token)
+  api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token, api_version: '2019-04')
   ShopifyAPI::Base.activate_session(api_session)
 
   shopify_shop = ShopifyAPI::Shop.current

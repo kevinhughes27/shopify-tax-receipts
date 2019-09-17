@@ -12,7 +12,7 @@ end
 def recreate_webhooks(shop)
   puts "shop: #{shop.name}"
 
-  api_session = ShopifyAPI::Session.new(shop.name, shop.token)
+  api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token, api_version: '2019-04')
   ShopifyAPI::Base.activate_session(api_session)
 
   ShopifyAPI::Shop.current
@@ -26,7 +26,7 @@ end
 # def remove_old_webhooks(shop)
 #   puts "Checking shop: #{shop.name}"
 #
-#   api_session = ShopifyAPI::Session.new(shop.name, shop.token)
+#   api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token)
 #   ShopifyAPI::Base.activate_session(api_session)
 #
 #   paid_webhooks = ShopifyAPI::Webhook.where(topic: 'orders/paid')
