@@ -25,7 +25,7 @@
         <%= partial 'components/search', locals: { search_param_name: 'donation_search', search_param: donation_search } %>
         <%= partial 'components/export_donations', locals: { shop: shop } %>
       </div>
-      <%= partial 'donations', locals: { donations: donations, order_ids: order_ids, donation_search: donation_search } %>
+      <%= partial 'donations', locals: { charity: charity, donations: donations, order_ids: order_ids, donation_search: donation_search } %>
     </div>
 
     <div class="tab-pane <%= 'active' if tab == 'settings' %>" id="settings">
