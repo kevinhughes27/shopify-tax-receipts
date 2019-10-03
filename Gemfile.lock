@@ -169,7 +169,7 @@ GEM
       activeresource (>= 4.1.0, < 6.0.0)
       graphql-client
       rack
-    sidekiq (6.0.0)
+    sidekiq (6.0.1)
       connection_pool (>= 2.2.2)
       rack (>= 2.0.0)
       rack-protection (>= 2.0.0)
