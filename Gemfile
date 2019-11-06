@@ -17,7 +17,7 @@ gem 'redis'
 gem 'wicked_pdf'
 gem 'pony'
 gem 'liquid'
-gem 'raygun4ruby'
+gem 'bugsnag', '~> 6.12'
 
 group :production do
   gem 'pg'

@@ -1,11 +1,10 @@
-require 'raygun4ruby'
-require 'raygun/sidekiq'
+require 'bugsnag'
 
-Raygun.setup do |config|
-  config.api_key = ENV['RAYGUN_APIKEY']
+Bugsnag.configure do |config|
+  config.api_key = ENV['BUGSNAG_API_KEY']
 end
 
 class SinatraApp < Sinatra::Base
   set :raise_errors, true
-  use Raygun::Middleware::RackExceptionInterceptor
+  use Bugsnag::Rack
 end
