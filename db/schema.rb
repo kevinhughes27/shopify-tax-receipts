@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_08_233720) do
+ActiveRecord::Schema.define(version: 2019_11_11_234127) do
 
   create_table "charities", force: :cascade do |t|
     t.string "name", limit: 255
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2019_08_08_233720) do
     t.string "order_number"
     t.string "status"
     t.string "order"
+    t.integer "donation_number"
     t.index ["shop"], name: "index_donations_on_shop"
   end
 
