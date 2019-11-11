@@ -14,6 +14,15 @@ class DonationTest < ActiveSupport::TestCase
     refute Donation.create(shop: @shop, order_id: 1234, donation_amount: 10, status: 'thresholded').persisted?
   end
 
+  test "donation sets donation number before create" do
+    donation = Donation.create!(shop: @shop, order_id: 1, donation_amount: 10)
+    assert_equal 1, donation.donation_number
+
+    donation.update_column(:donation_number, 20)
+    new_donation = Donation.create!(shop: @shop, order_id: 2, donation_amount: 10)
+    assert_equal 21, new_donation.donation_number
+  end
+
   test "donation without order saved loads from Shopify and saves the order" do
     order_id = 1234
     donation = Donation.create(shop: @shop, order_id: order_id, donation_amount: 10)
