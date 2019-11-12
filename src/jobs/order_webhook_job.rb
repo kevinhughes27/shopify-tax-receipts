@@ -86,7 +86,6 @@ class OrderWebhookJob < Job
       order: order.to_json,
       order_id: order['id'],
       order_number: order['name'],
-      donation_number: existing_donation.donation_number,
       donation_amount: sprintf( "%0.02f", amount)
     )
 
@@ -94,6 +93,7 @@ class OrderWebhookJob < Job
     new_donation.id = existing_donation.id
     new_donation.created_at = existing_donation.created_at
     new_donation.status = existing_donation.status
+    new_donation.donation_number = existing_donation.donation_number
     new_donation.original_donation = existing_donation.original_donation if existing_donation.status == 'update'
 
     old_receipt_pdf = render_pdf(shopify_shop, charity, existing_donation)
@@ -108,6 +108,7 @@ class OrderWebhookJob < Job
       new_donation.id = nil
       new_donation.created_at = nil
       new_donation.status = 'update'
+      new_donation.donation_number = nil
       new_donation.original_donation = existing_donation
 
       if existing_donation.thresholded && charity.receipt_threshold.present? && amount < charity.receipt_threshold

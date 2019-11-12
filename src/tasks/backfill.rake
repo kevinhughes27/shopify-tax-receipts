@@ -1,23 +1,15 @@
-task :backfill_products do
-  Shop.find_each { |shop| backfill_products(shop) }
+task :backfill_donation_number do
+  Shop.find_each { |shop| backfill_donation_number(shop) }
 end
 
-def backfill_products(shop)
+def backfill_donation_number(shop)
   puts "Backfilling shop: #{shop.name}"
 
-  products = Product.where(shop: shop.name, shopify_product: nil)
-
-  return unless products.present?
-
-  api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token, api_version: '2019-04')
-  ShopifyAPI::Base.activate_session(api_session)
-
-  products.each do |product|
-    shopify_product = ShopifyAPI::Product.find(product.product_id)
-    product.shopify_product = shopify_product.to_json
-    product.save!
+  num = 1
+  Donation.where(shop: shop.name).order(:id).find_each do |donation|
+    donation.update_column(:donation_number, num)
+    num += 1
   end
-
 rescue => e
   puts "Error backfilling for shop #{shop.name} error: #{e}"
 end

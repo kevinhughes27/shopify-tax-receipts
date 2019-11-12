@@ -1,7 +1,7 @@
 class Donation < ActiveRecord::Base
   validates_presence_of :shop, :order_id, :donation_amount
   validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where("status != 'void' or status is null") }
-  validates_uniqueness_of :donation_number, scope: :shop, conditions: -> { where("status != 'void' or status is null") }
+  validates_uniqueness_of :donation_number, scope: :shop
   validates :status, inclusion: { in: %w(thresholded resent update void) }, allow_nil: true
 
   before_create :set_donation_number
@@ -120,7 +120,6 @@ class Donation < ActiveRecord::Base
   end
 
   def set_donation_number
-    return if self.donation_number
     last_donation = Donation.where(shop: self.shop).order(id: :desc).limit(1).first
     last_number = last_donation.present? ? last_donation.donation_number : 0
     self.donation_number = last_number + 1
