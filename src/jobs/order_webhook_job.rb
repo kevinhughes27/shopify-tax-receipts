@@ -15,7 +15,7 @@ class OrderWebhookJob < Job
       order_refunded(shop_name, order, existing_donation)
 
     elsif status == 'partially_refunded' && existing_donation
-      order_partially_refunded(shop_name, order, existing_donation)
+      order_updated(shop_name, order, existing_donation)
 
     end
 
@@ -33,7 +33,9 @@ class OrderWebhookJob < Job
     return unless order['customer']
     return unless order['billing_address']
 
-    donations = donations_from_order(shop_name, order)
+    donation_products = Product.where(shop: shop_name)
+
+    donations = donations_from_order(order, donation_products)
     donation_amount = donations.sum
     return if donations.empty?
 
@@ -67,16 +69,24 @@ class OrderWebhookJob < Job
   def order_updated(shop_name, order, existing_donation)
     activate_shopify_api(shop_name)
     shopify_shop = ShopifyAPI::Shop.current
+
     charity = Charity.find_by(shop: shop_name)
-    donations = donations_from_order(shop_name, order)
+    donation_products = Product.where(shop: shop_name)
+
+    donations = donations_from_order(order, donation_products)
     donation_amount = donations.sum
+
+    refunded_donations = donations_from_refund(order, donation_products)
+    refunded_amount = refunded_donations.sum
+
+    amount = donation_amount - refunded_amount
 
     new_donation = Donation.new(
       shop: shop_name,
       order: order.to_json,
       order_id: order['id'],
       order_number: order['name'],
-      donation_amount: sprintf( "%0.02f", donation_amount)
+      donation_amount: sprintf( "%0.02f", amount)
     )
 
     # set attributes for comparison
@@ -93,13 +103,13 @@ class OrderWebhookJob < Job
     update_required ||= pdf_changed?(old_receipt_pdf, new_receipt_pdf)
 
     if update_required
-      # clear attributes for comparison
+      # clear attributes after comparison
       new_donation.id = nil
       new_donation.created_at = nil
       new_donation.status = 'update'
       new_donation.original_donation = existing_donation
 
-      if existing_donation.thresholded && charity.receipt_threshold.present? && donation_amount < charity.receipt_threshold
+      if existing_donation.thresholded && charity.receipt_threshold.present? && amount < charity.receipt_threshold
         new_donation.status = 'thresholded'
         new_donation.original_donation = nil
       elsif existing_donation.thresholded
@@ -134,45 +144,6 @@ class OrderWebhookJob < Job
     end
   end
 
-  # order_partially_refunded
-  def order_partially_refunded(shop_name, order, existing_donation)
-    donations = donations_from_order(shop_name, order)
-    donation_amount = donations.sum
-
-    refunded_donations = donations_from_refund(shop_name, order)
-    refunded_amount = refunded_donations.sum
-    return if refunded_donations.empty?
-
-    new_amount = donation_amount - refunded_amount
-
-    new_donation = Donation.new(
-      status: 'update',
-      shop: shop_name,
-      order: order.to_json,
-      order_id: order['id'],
-      order_number: order['name'],
-      donation_amount: sprintf( "%0.02f", new_amount)
-    )
-
-    if existing_donation.thresholded
-      new_donation.status = 'thresholded'
-    end
-
-    Donation.transaction do
-      existing_donation.void!
-      new_donation.save!
-    end
-
-    unless new_donation.thresholded
-      activate_shopify_api(shop_name)
-      shopify_shop = ShopifyAPI::Shop.current
-      charity = Charity.find_by(shop: shop_name)
-
-      new_receipt_pdf = render_pdf(shopify_shop, charity, new_donation)
-      deliver_updated_receipt(shopify_shop, charity, new_donation, new_receipt_pdf)
-    end
-  end
-
   private
 
   def load_most_recent_donation(shop_name, order_id)
@@ -182,9 +153,7 @@ class OrderWebhookJob < Job
       .first
     end
 
-  def donations_from_order(shop_name, order)
-    donation_products = Product.where(shop: shop_name)
-
+  def donations_from_order(order, donation_products)
     donations = []
 
     order["line_items"].each do |item|
@@ -200,10 +169,10 @@ class OrderWebhookJob < Job
     donations
   end
 
-  def donations_from_refund(shop_name, order)
-    donation_products = Product.where(shop: shop_name)
-
+  def donations_from_refund(order, donation_products)
     donations = []
+
+    return donations unless order["refunds"].present?
 
     order["refunds"].each do |refund|
       refund["refund_line_items"].each do |refund_item|
