@@ -36,6 +36,33 @@ class OrderRefundTest < ActiveSupport::TestCase
     end
   end
 
+  test "full refund doesn't email if already void" do
+    order_webhook = load_fixture 'order.json'
+    order = JSON.parse(order_webhook)
+
+    donation = Donation.create!(
+      shop: @shop,
+      order: order.to_json,
+      order_id: order['id'],
+      order_number: order['name'],
+      donation_amount: 597.00,
+      status: 'void'
+    )
+
+    order['financial_status'] = 'refunded'
+    order_webhook = order.to_json
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+    mock_shop_api_call
+    Pony.expects(:mail).never
+
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+      assert donation.reload.void
+    end
+  end
+
   test "refund of thresholded voids donation but does not email" do
     order_webhook = load_fixture 'order.json'
     order = JSON.parse(order_webhook)

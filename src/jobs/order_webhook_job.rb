@@ -11,7 +11,7 @@ class OrderWebhookJob < Job
     elsif status == 'paid' && existing_donation
       order_updated(shop_name, order, existing_donation)
 
-    elsif status == 'refunded' && existing_donation
+    elsif status == 'refunded' && existing_donation && !existing_donation.void
       order_refunded(shop_name, order, existing_donation)
 
     elsif status == 'partially_refunded' && existing_donation
