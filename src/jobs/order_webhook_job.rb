@@ -86,6 +86,7 @@ class OrderWebhookJob < Job
       order: order.to_json,
       order_id: order['id'],
       order_number: order['name'],
+      donation_number: existing_donation.donation_number,
       donation_amount: sprintf( "%0.02f", amount)
     )
 
