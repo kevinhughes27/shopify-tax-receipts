@@ -40,7 +40,7 @@ git push staging <branch_name>:master -f
 Sinatra console on production:
 
 ```
-heroku run bundle exec irb --app taxreceipts
+heroku run bundle console --app taxreceipts
 
 require_relative 'src/app.rb'
 ```
