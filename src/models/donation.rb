@@ -120,7 +120,13 @@ class Donation < ActiveRecord::Base
 
   def set_donation_number
     last_donation = Donation.where(shop: self.shop).order(id: :desc).limit(1).first
-    last_number = last_donation.present? ? last_donation.donation_number : 0
+
+    last_number = if last_donation.present? && last_donation.donation_number
+      last_donation.donation_number
+    else
+      0
+    end
+
     self.donation_number = last_number + 1
   end
 end
