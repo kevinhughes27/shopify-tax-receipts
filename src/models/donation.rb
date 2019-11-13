@@ -1,6 +1,7 @@
 class Donation < ActiveRecord::Base
   validates_presence_of :shop, :order_id, :donation_amount
   validates_uniqueness_of :order_id, scope: :shop, conditions: -> { where("status != 'void' or status is null") }
+  validates_uniqueness_of :donation_number, scope: :shop
   validates :status, inclusion: { in: %w(thresholded resent update void) }, allow_nil: true
 
   before_create :set_donation_number
