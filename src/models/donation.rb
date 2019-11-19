@@ -80,6 +80,7 @@ class Donation < ActiveRecord::Base
   def to_liquid
     {
       'id' => id,
+      'donation_number' => donation_number,
       'order_number' => order_number,
       'status' => status,
       'email' => email,
