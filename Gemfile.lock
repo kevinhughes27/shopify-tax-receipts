@@ -122,7 +122,7 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
-    pg (1.1.4)
+    pg (1.2.0)
     pony (1.13.1)
       mail (>= 2.0)
     pry (0.12.2)
