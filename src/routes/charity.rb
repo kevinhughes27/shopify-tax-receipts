@@ -37,6 +37,7 @@ class SinatraApp < Sinatra::Base
       'charity_id',
       'donation_id_prefix',
       'receipt_threshold',
+      'subtract_discounts',
       'email_from',
       'email_bcc',
       'email_subject',

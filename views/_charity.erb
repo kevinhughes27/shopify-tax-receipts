@@ -61,6 +61,15 @@
       <span class="help-block">Only send receipts for donations greater than a certain amount</span>
     </div>
 
+    <div class="checkbox">
+      <label for="subtract_discounts">
+        <input type="hidden" name="subtract_discounts" value="false">
+        <input type="checkbox" name="subtract_discounts" value="true" <%= "checked" if charity.present? && charity.subtract_discounts %>>
+        <strong>Subtract Discounts</strong>
+      </label>
+      <span class="help-block">If checked then the app will subtract discounts on the order from the donation</span>
+    </div>
+
     <div class="form-group">
       <input type="submit" class="btn btn-primary pull-right" value="save">
     </div>
