@@ -1,0 +1,166 @@
+{
+  "id": 1977641762904,
+  "email": "bob.norman@example.com",
+  "closed_at": null,
+  "created_at": "2019-12-17T08:43:41-05:00",
+  "updated_at": "2019-12-17T12:30:38-05:00",
+  "number": 4342,
+  "note": null,
+  "total_price": "79.28",
+  "subtotal_price": "70.00",
+  "total_weight": 164,
+  "total_tax": "0.00",
+  "taxes_included": false,
+  "currency": "CAD",
+  "financial_status": "paid",
+  "confirmed": true,
+  "total_discounts": "10.00",
+  "total_line_items_price": "80.00",
+  "cart_token": "",
+  "buyer_accepts_marketing": true,
+  "name": "#5332",
+  "referring_site": null,
+  "landing_site": "\/api\/2019-07\/graphql.json",
+  "cancelled_at": null,
+  "cancel_reason": null,
+  "total_price_usd": "60.22",
+  "checkout_token": "token",
+  "reference": null,
+  "user_id": null,
+  "location_id": null,
+  "source_identifier": null,
+  "source_url": null,
+  "processed_at": "2019-12-17T08:43:41-05:00",
+  "device_id": null,
+  "phone": null,
+  "order_number": 5332,
+  "discount_applications": [
+    {
+      "type": "automatic",
+      "value": "5.0",
+      "value_type": "fixed_amount",
+      "allocation_method": "each",
+      "target_selection": "entitled",
+      "target_type": "line_item",
+      "title": "Plush Bundle - Bulk Discount"
+    }
+  ],
+  "contact_email": "bob.norman@example.com",
+  "line_items": [
+    {
+      "variant_id": 32007568654424,
+      "title": "Grizzly Bear Adoption Kit - Plush Bundle",
+      "quantity": 2,
+      "sku": "",
+      "variant_title": "",
+      "vendor": "The Earth Rangers Shop",
+      "fulfillment_service": "manual",
+      "product_id": 4436552548440,
+      "requires_shipping": true,
+      "taxable": false,
+      "gift_card": false,
+      "name": "Grizzly Bear Adoption Kit - Plush Bundle",
+      "variant_inventory_management": "shopify",
+      "properties": [],
+      "product_exists": true,
+      "fulfillable_quantity": 0,
+      "grams": 82,
+      "price": "40.00",
+      "total_discount": "10.00",
+      "fulfillment_status": null,
+      "price_set": {
+        "shop_money": {
+          "amount": "40.00",
+          "currency_code": "CAD"
+        },
+        "presentment_money": {
+          "amount": "40.00",
+          "currency_code": "CAD"
+        }
+      },
+      "total_discount_set": {
+        "shop_money": {
+          "amount": "10.00",
+          "currency_code": "CAD"
+        },
+        "presentment_money": {
+          "amount": "10.00",
+          "currency_code": "CAD"
+        }
+      },
+      "discount_allocations": [
+        {
+          "amount": "10.00",
+          "discount_application_index": 0,
+          "amount_set": {
+            "shop_money": {
+              "amount": "10.00",
+              "currency_code": "CAD"
+            },
+            "presentment_money": {
+              "amount": "10.00",
+              "currency_code": "CAD"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "billing_address": {
+    "first_name": "Bob",
+    "address1": "Chestnut Street 92",
+    "phone": "",
+    "city": "Louisville",
+    "zip": "40202",
+    "province": "Kentucky",
+    "country": "United States",
+    "last_name": "Norman",
+    "address2": "",
+    "company": "",
+    "name": "Bob Norman",
+    "country_code": "US",
+    "province_code": "KY"
+  },
+  "shipping_address": {
+    "first_name": "Bob",
+    "address1": "Chestnut Street 92",
+    "phone": "",
+    "city": "Louisville",
+    "zip": "40202",
+    "province": "Kentucky",
+    "country": "United States",
+    "last_name": "Norman",
+    "address2": "",
+    "company": "",
+    "name": "Bob Norman",
+    "country_code": "US",
+    "province_code": "KY"
+  },
+  "customer": {
+    "email": "bob.normon@example.com",
+    "accepts_marketing": true,
+    "first_name": "Bob",
+    "last_name": "Norman",
+    "note": null,
+    "phone": null,
+    "tags": "",
+    "currency": "CAD",
+    "default_address": {
+      "first_name": "Bob",
+      "last_name": "Norman",
+      "company": "",
+      "address1": "Chestnut Street 92",
+      "address2": "",
+      "city": "Louisville",
+      "province": "Kentucky",
+      "country": "United States",
+      "zip": "40202",
+      "phone": "",
+      "name": "Bob Norman",
+      "province_code": "KY",
+      "country_code": "US",
+      "country_name": "United States",
+      "default": true
+    }
+  }
+}
