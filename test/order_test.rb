@@ -207,6 +207,28 @@ class OrderTest < ActiveSupport::TestCase
     refute donation.thresholded
   end
 
+  test "charity which subtracts discounts" do
+    charity = Charity.find_by(shop: @shop)
+    charity.update_attribute(:subtract_discounts, true)
+
+    Product.create(shop: @shop, product_id: 4436552548440)
+
+    order_webhook = load_fixture 'order_with_discount.json'
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+    mock_shop_api_call
+
+    Pony.expects(:mail).once
+
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
+
+    donation = Donation.last
+    assert_equal 70, donation.donation_amount
+  end
+
   private
 
   def session

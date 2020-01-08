@@ -33,14 +33,16 @@ class OrderWebhookJob < Job
     return unless order['customer']
     return unless order['billing_address']
 
-    donation_products = Product.where(shop: shop_name)
-
-    donations = donations_from_order(order, donation_products)
-    donation_amount = donations.sum
-    return if donations.empty?
-
     charity = Charity.find_by(shop: shop_name)
     return if charity.nil?
+
+    donation_products = Product.where(shop: shop_name)
+    return if donation_products.empty?
+
+    donations = donations_from_order(order, charity, donation_products)
+    return if donations.empty?
+
+    donation_amount = donations.sum
 
     donation = Donation.new(
       shop: shop_name,
@@ -73,10 +75,10 @@ class OrderWebhookJob < Job
     charity = Charity.find_by(shop: shop_name)
     donation_products = Product.where(shop: shop_name)
 
-    donations = donations_from_order(order, donation_products)
+    donations = donations_from_order(order, charity, donation_products)
     donation_amount = donations.sum
 
-    refunded_donations = donations_from_refund(order, donation_products)
+    refunded_donations = donations_from_refund(order, charity, donation_products)
     refunded_amount = refunded_donations.sum
 
     amount = donation_amount - refunded_amount
@@ -155,7 +157,7 @@ class OrderWebhookJob < Job
       .first
     end
 
-  def donations_from_order(order, donation_products)
+  def donations_from_order(order, charity, donation_products)
     donations = []
 
     order["line_items"].each do |item|
@@ -164,14 +166,23 @@ class OrderWebhookJob < Job
       end
 
       if donation_product
-        donations << item["price"].to_f * item["quantity"].to_i * (donation_product.percentage / 100.0)
+        price = item["price"].to_f
+        quantity = item["quantity"].to_i
+
+        total = price * quantity
+
+        if charity.subtract_discounts
+          total -= item["total_discount"].to_f
+        end
+
+        donations << total * (donation_product.percentage / 100.0)
       end
     end
 
     donations
   end
 
-  def donations_from_refund(order, donation_products)
+  def donations_from_refund(order, charity, donation_products)
     donations = []
 
     return donations unless order["refunds"].present?
@@ -185,7 +196,16 @@ class OrderWebhookJob < Job
         end
 
         if donation_product
-          donations << line_item["price"].to_f * refund_item["quantity"].to_i * (donation_product.percentage / 100.0)
+          price = line_item["price"].to_f
+          quantity = refund_item["quantity"].to_i
+
+          total = price * quantity
+
+          if charity.subtract_discounts
+            total -= line_item["total_discount"].to_f
+          end
+
+          donations << total * (donation_product.percentage / 100.0)
         end
       end
     end
