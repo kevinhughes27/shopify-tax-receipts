@@ -169,7 +169,7 @@ class OrderWebhookJob < Job
         price = item["price"].to_f
         quantity = item["quantity"].to_i
 
-        total = price * quantity
+        total = price * quantity * (donation_product.percentage / 100.0)
 
         if charity.subtract_discounts && item["discount_allocations"].present?
           item["discount_allocations"].each do |discount|
@@ -177,7 +177,7 @@ class OrderWebhookJob < Job
           end
         end
 
-        donations << total * (donation_product.percentage / 100.0)
+        donations << total
       end
     end
 
@@ -201,7 +201,7 @@ class OrderWebhookJob < Job
           price = line_item["price"].to_f
           quantity = refund_item["quantity"].to_i
 
-          total = price * quantity
+          total = price * quantity * (donation_product.percentage / 100.0)
 
           if charity.subtract_discounts && line_item["discount_allocations"].present?
             line_item["discount_allocations"].each do |discount|
@@ -209,7 +209,7 @@ class OrderWebhookJob < Job
             end
           end
 
-          donations << total * (donation_product.percentage / 100.0)
+          donations << total
         end
       end
     end
