@@ -48,6 +48,9 @@ class OrderTest < ActiveSupport::TestCase
       post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
       assert last_response.ok?
     end
+
+    donation = Donation.last
+    assert_equal 597, donation.donation_amount
   end
 
   test "order with no email" do
@@ -117,6 +120,9 @@ class OrderTest < ActiveSupport::TestCase
       post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
       assert last_response.ok?
     end
+
+    donation = Donation.last
+    assert_equal 477.60, donation.donation_amount
   end
 
   test "charity with default email template" do
