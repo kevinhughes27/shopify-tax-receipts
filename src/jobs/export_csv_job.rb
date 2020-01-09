@@ -1,6 +1,12 @@
 require 'csv'
 
 class ExportCsvJob < Job
+  class ExportError < StandardError
+    def initialize(order_id, error)
+      super("Order ID: #{order_id}, Error: #{error.inspect}")
+    end
+  end
+
   def perform(shop_name, email_to, start_date, end_date)
     activate_shopify_api(shop_name)
 
@@ -59,6 +65,8 @@ class ExportCsvJob < Job
           d.order.customer && d.order.customer.email,
           d.order.customer && d.order.customer.accepts_marketing,
         ]
+      rescue => e
+        raise ExportError.new(d.order_id, e)
       end
     end
 
