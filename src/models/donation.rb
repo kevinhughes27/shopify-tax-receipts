@@ -44,7 +44,6 @@ class Donation < ActiveRecord::Base
   end
 
   delegate :email, to: :order
-  delegate :billing_address, to: :order
 
   delegate :first_name,
            :last_name,
@@ -55,7 +54,21 @@ class Donation < ActiveRecord::Base
            :province,
            :country,
            :zip,
-           to: :billing_address
+           to: :donor_information
+
+  class MissingBillingInformation < StandardError
+  end
+
+  def donor_information
+    order.billing_address
+
+  rescue NoMethodError
+    message = "Donation is missing a billing_adress. Falling back to customer"
+    error = MissingBillingInformation.new(message)
+    Bugsnag.notify(error)
+
+    order.customer.default_address
+  end
 
   def original_donation=(donation)
     @original_donation = donation

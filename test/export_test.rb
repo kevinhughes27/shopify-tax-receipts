@@ -31,6 +31,7 @@ class ExportTest < ActiveSupport::TestCase
 
     mock_shop_api_call
     mock_order_api_call('1234')
+    # second order api call will raise a webmock exception
 
     start_date = Time.now - 3.days
     end_date = Time.now + 2.days
@@ -40,5 +41,30 @@ class ExportTest < ActiveSupport::TestCase
     end
 
     assert_match "Order ID: 5678, Error:", error.message
+  end
+
+  test "can export orders without billing_addresses by falling back to customer" do
+    order = JSON.parse(load_fixture 'order.json')
+    order.delete('billing_address')
+
+    Donation.create!(
+      shop: @shop,
+      order_id: 1234,
+      order: order.to_json,
+      donation_amount: 10,
+      created_at: Time.now
+    )
+
+    mock_shop_api_call
+
+    start_date = Time.now - 3.days
+    end_date = Time.now + 2.days
+
+    ExportCsvJob.new.perform(@shop, 'kevin@example.com', start_date, end_date)
+
+    mail = Mail::TestMailer.deliveries.last
+    csv = mail.attachments[0].read
+
+    assert_match "1234", csv
   end
 end
