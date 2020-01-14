@@ -63,11 +63,11 @@ class Donation < ActiveRecord::Base
     order.billing_address
 
   rescue NoMethodError
-    message = "Donation is missing a billing_adress. Falling back to shipping address"
+    message = "Donation is missing a billing_adress. Falling back to customer"
     error = MissingBillingInformation.new(message)
     Bugsnag.notify(error)
 
-    order.shipping_address
+    order.customer.default_address
   end
 
   def original_donation=(donation)
