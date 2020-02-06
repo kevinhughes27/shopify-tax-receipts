@@ -5,7 +5,7 @@ require 'irb'
 
 task :debug_shop, [:shop] do |t, args|
   shop = Shop.find_by(name: args[:shop])
-  api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token, api_version: '2019-04')
+  api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token, api_version: API_VERSION)
   ShopifyAPI::Base.activate_session(api_session)
 
   ARGV.clear # otherwise all script parameters get passed to IRB

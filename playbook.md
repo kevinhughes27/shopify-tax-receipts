@@ -59,7 +59,7 @@ Check webhooks for shop:
 name = 'kevintest3.myshopify.com'
 shop = Shop.find_by(name: name)
 
-api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token, api_version: '2019-04')
+api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token, api_version: API_VERSION)
 ShopifyAPI::Base.activate_session(api_session)
 
 ShopifyAPI::Webhook.all

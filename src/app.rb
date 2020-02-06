@@ -25,8 +25,12 @@ require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/gdpr'
 
+API_VERSION = "2019-04"
+
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
+
+  set :api_version, API_VERSION
   set :scope, 'read_products, read_orders, read_all_orders'
 
   register Kaminari::Helpers::SinatraHelpers
