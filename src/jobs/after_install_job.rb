@@ -1,5 +1,5 @@
 class AfterInstallJob < Job
-  def perform(shop_name)
+  def perform(shop_name, base_url)
     activate_shopify_api(shop_name)
     create_webhook(topic: 'orders/updated', address: "#{base_url}/order")
     create_webhook(topic: 'products/update', address: "#{base_url}/product_update")
@@ -16,16 +16,6 @@ class AfterInstallJob < Job
     webhook.save!
   rescue => e
     raise unless webhook_already_created?(webhook)
-  end
-
-  def base_url
-    if ENV['DEVELOPMENT']
-      'https://75ea1c1c.ngrok.io'
-    elsif ENV['STAGING']
-      'https://taxreceipts-staging.herokuapp.com'
-    else
-      'https://taxreceipts.herokuapp.com'
-    end
   end
 
   def webhook_already_created?(webhook)

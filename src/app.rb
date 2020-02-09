@@ -37,7 +37,8 @@ class SinatraApp < Sinatra::Base
 
   def after_shopify_auth
     shopify_session do |shop_name|
-      AfterInstallJob.perform_async(shop_name)
+      base_url = "https://#{request.env['HTTP_HOST']}"
+      AfterInstallJob.perform_async(shop_name, base_url)
     end
   end
 
