@@ -1,6 +1,3 @@
-require 'sidekiq'
-require_relative '../../src/jobs/after_install_job'
-
 task :recreate_webhooks do
   Shop.find_each { |shop| recreate_webhooks(shop) }
 end
@@ -12,7 +9,7 @@ end
 def recreate_webhooks(shop)
   puts "shop: #{shop.name}"
 
-  api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token, api_version: '2019-04')
+  api_session = ShopifyAPI::Session.new(domain: shop.name, token: shop.token, api_version: API_VERSION)
   ShopifyAPI::Base.activate_session(api_session)
 
   ShopifyAPI::Shop.current

@@ -128,7 +128,7 @@ class Donation < ActiveRecord::Base
 
   def with_shopify_api
     shop = Shop.find_by(name: self.shop)
-    ShopifyAPI::Session.temp(domain: shop.name, token: shop.token, api_version: '2019-04') do
+    ShopifyAPI::Session.temp(domain: shop.name, token: shop.token, api_version: API_VERSION) do
       yield
     end
   end
