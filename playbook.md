@@ -14,9 +14,8 @@ SIDEKIQ_USERNAME=
 SIDEKIQ_PASSWORD=
 DEVELOPMENT=1
 
-Install `forward` with `gem install forward`
-Make sure the tunnel is started `./ngrok http 5000`
-Then configure your Shopify API Client to use the ngrok url.
+Then start ngrok `./ngrok http 5000`
+Configure the Shopify API Client and the `base_url` in `AfterInstallJob` to use the ngrok url.
 
 Then run `foreman start -m all=1,release=0 ` or `PORT=5000 foreman run web` if you need byebug
 

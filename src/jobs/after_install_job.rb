@@ -20,7 +20,7 @@ class AfterInstallJob < Job
 
   def base_url
     if ENV['DEVELOPMENT']
-      'https://shopify-kevinhughes27.fwd.wf'
+      'https://75ea1c1c.ngrok.io'
     elsif ENV['STAGING']
       'https://taxreceipts-staging.herokuapp.com'
     else
