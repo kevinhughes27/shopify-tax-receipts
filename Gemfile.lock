@@ -131,7 +131,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (3.0.3)
-    rack (2.1.2)
+    rack (2.2.2)
     rack-flash3 (1.0.5)
       rack
     rack-protection (2.0.8.1)
@@ -160,9 +160,9 @@ GEM
       activeresource (>= 4.1.0, < 6.0.0)
       graphql-client
       rack
-    sidekiq (6.0.3)
+    sidekiq (6.0.5)
       connection_pool (>= 2.2.2)
-      rack (>= 2.0.0)
+      rack (~> 2.0)
       rack-protection (>= 2.0.0)
       redis (>= 4.1.0)
     sinatra (2.0.8.1)
