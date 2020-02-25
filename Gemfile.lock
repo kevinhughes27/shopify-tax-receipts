@@ -94,7 +94,7 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.1.0)
       ruby2_keywords (~> 0.0.1)
-    nokogiri (1.10.5)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     oauth2 (1.4.3)
       faraday (>= 0.8, < 2.0)
