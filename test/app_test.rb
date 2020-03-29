@@ -81,7 +81,7 @@ class AppTest < ActiveSupport::TestCase
     post '/resend', params, 'rack.session' => session
 
     assert last_response.redirect?
-    assert_equal 'Email resent!', last_request.env['x-rack.flash'][:notice]
+    assert_equal 'Email resent!', last_request.session[:flash][:notice]
     assert_equal 'resent', donation.reload.status
   end
 
@@ -98,7 +98,7 @@ class AppTest < ActiveSupport::TestCase
     post '/resend', params, 'rack.session' => session
 
     assert last_response.redirect?
-    assert_equal 'Email sent!', last_request.env['x-rack.flash'][:notice]
+    assert_equal 'Email sent!', last_request.session[:flash][:notice]
     assert_nil donation.reload.status
   end
 
@@ -112,7 +112,7 @@ class AppTest < ActiveSupport::TestCase
     post '/resend', params, 'rack.session' => session
 
     assert last_response.redirect?
-    assert_equal 'Donation is void', last_request.env['x-rack.flash'][:error]
+    assert_equal 'Donation is void', last_request.session[:flash][:error]
   end
 
   test "void" do
@@ -128,7 +128,7 @@ class AppTest < ActiveSupport::TestCase
     post '/void', params, 'rack.session' => session
 
     assert last_response.redirect?
-    assert_equal 'Donation voided', last_request.env['x-rack.flash'][:notice]
+    assert_equal 'Donation voided', last_request.session[:flash][:notice]
     assert donation.reload.void
   end
 
@@ -145,7 +145,7 @@ class AppTest < ActiveSupport::TestCase
     post '/void', params, 'rack.session' => session
 
     assert last_response.redirect?
-    assert_equal 'Donation is void', last_request.env['x-rack.flash'][:error]
+    assert_equal 'Donation is void', last_request.session[:flash][:error]
     assert donation.reload.void
   end
 
@@ -162,7 +162,7 @@ class AppTest < ActiveSupport::TestCase
     post '/void', params, 'rack.session' => session
 
     assert last_response.redirect?
-    assert_equal 'Donation voided', last_request.env['x-rack.flash'][:notice]
+    assert_equal 'Donation voided', last_request.session[:flash][:notice]
     assert donation.reload.void
   end
 
