@@ -4,7 +4,9 @@ ruby '2.6.3'
 gem 'rake'
 gem 'foreman'
 
-gem 'shopify-sinatra-app', '~> 0.10.0'
+gem 'sinatra', '~> 2.0.8.1'
+gem 'shopify-sinatra-app', '0.11.0'
+gem 'sinatra-flash'
 gem 'sinatra-contrib'
 gem 'activerecord', '5.2.3'
 

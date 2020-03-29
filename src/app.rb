@@ -1,4 +1,5 @@
 require 'sinatra/shopify-sinatra-app'
+require 'sinatra/flash'
 
 require_relative '../config/pony'
 require_relative '../config/sidekiq'
@@ -29,6 +30,7 @@ API_VERSION = "2019-04"
 
 class SinatraApp < Sinatra::Base
   register Sinatra::Shopify
+  register Sinatra::Flash
 
   set :api_version, API_VERSION
   set :scope, 'read_products, read_orders, read_all_orders'
