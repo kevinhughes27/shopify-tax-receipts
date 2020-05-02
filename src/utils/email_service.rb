@@ -53,7 +53,8 @@ def send_email(to, bcc, from, subject, body, pdf, filename)
     bcc: bcc,
     from: from,
     subject: subject,
-    attachments: {"#{filename}.pdf" => pdf}
+    attachments: {"#{filename}.pdf" => pdf},
+    charset: "UTF-8"
   }
 
   if body.include?("</html>")
