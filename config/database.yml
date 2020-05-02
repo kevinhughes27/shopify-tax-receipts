@@ -1,6 +1,7 @@
 production:
   adapter: postgresql
   url: <%= ENV['DATABASE_URL'] %>
+  pool: 5
 
 development:
   adapter: sqlite3
@@ -10,4 +11,4 @@ development:
 test:
   adapter: sqlite3
   database: db/test.sqlite3
-  pool: 8
+  pool: 5

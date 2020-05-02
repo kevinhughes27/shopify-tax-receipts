@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '2.6.3'
 
 gem 'rake'
+gem 'puma'
 gem 'foreman'
 
 gem 'sinatra', '~> 2.0.8.1'

@@ -29,6 +29,8 @@ require_relative 'routes/gdpr'
 API_VERSION = "2019-04"
 
 class SinatraApp < Sinatra::Base
+  use Sinatra::CommonLogger
+
   register Sinatra::Shopify
   register Sinatra::Flash
 
