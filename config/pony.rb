@@ -18,8 +18,8 @@ class SinatraApp < Sinatra::Base
         :address => 'smtp.sendgrid.net',
         :port => '587',
         :domain => 'heroku.com',
-        :user_name => ENV['SENDGRID_USERNAME'],
-        :password => ENV['SENDGRID_PASSWORD'],
+        :user_name => 'api_key',
+        :password => ENV['SENDGRID_API_KEY'],
         :authentication => :plain,
         :enable_starttls_auto => true
       }
