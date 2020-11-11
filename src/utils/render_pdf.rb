@@ -24,7 +24,7 @@ end
 require 'wicked_pdf'
 
 def render_pdf(shop, charity, donation)
-  template = Tilt::LiquidTemplate.new { |t| charity.pdf_template }
+  template = Tilt::LiquidTemplate.new(default_encoding: 'utf-8') { |t| charity.pdf_template }
 
   pdf_content = template.render(
     shop: shop.attributes,
@@ -35,7 +35,7 @@ def render_pdf(shop, charity, donation)
   )
 
   WickedPdf.new.pdf_from_string(
-    Tilt::ERBTemplate.new('views/receipt/pdf.erb').render(
+    Tilt::ERBTemplate.new('views/receipt/pdf.erb', default_encoding: 'utf-8').render(
       Object.new,
       pdf_content: pdf_content,
       void: donation.void

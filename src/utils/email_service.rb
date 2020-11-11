@@ -38,7 +38,7 @@ def deliver_void_receipt(shop, charity, donation, pdf, to = nil)
 end
 
 def email_body(email_template, charity, donation)
-  template = Tilt::LiquidTemplate.new { |t| email_template }
+  template = Tilt::LiquidTemplate.new(default_encoding: 'utf-8') { |t| email_template }
 
   template.render(
     charity: charity,
