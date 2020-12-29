@@ -51,7 +51,6 @@ def send_email(to, bcc, from, subject, body, pdf, filename)
   options = {
     to: to,
     bcc: bcc,
-    from: "no-reply@shopify-taxreceipts.com",
     sender: from,
     subject: subject,
     attachments: {"#{filename}.pdf" => pdf}
