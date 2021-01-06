@@ -71,7 +71,7 @@ class ExportCsvJob < Job
     end
 
     Pony.mail to: email_to,
-              from: charity.email_from || shop.email,
+              from: "no-reply@shopify-taxreceipts.com",
               subject: "Donations from #{start_date} to #{end_date}",
               attachments: {"donations.csv" => csv},
               body: "Exported donations attached."
