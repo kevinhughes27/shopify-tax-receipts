@@ -3,21 +3,21 @@ Playbook
 
 ### Running Locally
 
-(Note: see `shopify-sinatra-app`)
+Prereqs:
+* A shopify application and credentials
+* A development domain with https (I have a personal domain but ngork also works). This domain needs to be configured in Shopify and in the AfterInstallJob.
+* A `.env` file that includes:
 
-First you need a .env file that includes:
+   ```
+   SHOPIFY_API_KEY=
+   SHOPIFY_SHARED_SECRET=
+   SECRET=
+   SIDEKIQ_USERNAME=
+   SIDEKIQ_PASSWORD=
+   DEVELOPMENT=1
+   ```
 
-SHOPIFY_API_KEY=
-SHOPIFY_SHARED_SECRET=
-SECRET=
-SIDEKIQ_USERNAME=
-SIDEKIQ_PASSWORD=
-DEVELOPMENT=1
-
-Then start ngrok `./ngrok http 5000`
-Configure the Shopify API Client and the `base_url` in `AfterInstallJob` to use the ngrok url.
-
-Then run `foreman start -m all=1,release=0 ` or `PORT=5000 foreman run web` if you need byebug
+Then run `OVERMIND_PROCESSES=web,worker PORT=5000 overmind start`
 
 ### Testing
 
