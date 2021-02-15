@@ -1,7 +1,21 @@
 <script>
-ShopifyApp.ready(function(){
-  ShopifyApp.Bar.setTitle('Webhooks')
-});
+  var AppBridge = window['app-bridge'];
+
+  var actions = AppBridge.actions;
+  var Button = actions.Button;
+  var Redirect = actions.Redirect;
+
+  var breadcrumb = Button.create(app, { label: 'Home' });
+
+  breadcrumb.subscribe(Button.Action.CLICK, () => {
+    app.dispatch(Redirect.toApp({ path: '/' }));
+  });
+
+  var titleBar = TitleBar.create(app, {
+    icon: 'https://taxreceipts.herokuapp.com/icon.png',
+    title: 'Webhooks',
+    breadcrumbs: breadcrumb
+  });
 </script>
 
 <h3>Webhooks</h3>

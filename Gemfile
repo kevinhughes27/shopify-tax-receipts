@@ -3,10 +3,9 @@ ruby '2.6.6'
 
 gem 'rake'
 gem 'puma'
-gem 'foreman'
 
-gem 'sinatra', '~> 2.0.8.1'
-gem 'shopify-sinatra-app', '0.11.0'
+gem 'sinatra'
+gem 'shopify-sinatra-app', '~> 0.12.0'
 gem 'sinatra-flash'
 gem 'sinatra-contrib'
 gem 'activerecord', '5.2.3'
