@@ -87,8 +87,9 @@ class SinatraApp < Sinatra::Base
       end
 
       # pagination
-      @donations = @donations.order('created_at DESC').page(params[:donations_page])
-      @products = @products.page(params[:products_page])
+      per_page = 20
+      @donations = @donations.order('created_at DESC').page(params[:donations_page]).per(per_page)
+      @products = @products.page(params[:products_page]).per(per_page)
 
       erb :home
     end
