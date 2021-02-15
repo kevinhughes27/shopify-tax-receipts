@@ -2,8 +2,6 @@ require './src/app'
 require 'sidekiq'
 require 'sidekiq/web'
 
-$stdout.sync = true
-
 map '/' do
   run SinatraApp
 end
