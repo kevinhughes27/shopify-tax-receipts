@@ -47,7 +47,9 @@ class SinatraApp < Sinatra::Base
 
   # Home page
   get '/' do
+    puts '1'
     shopify_session do |shop_name|
+      puts '2'
       @shop = ShopifyAPI::Shop.current
       @charity = Charity.find_by(shop: shop_name)
       @products = Product.where(shop: shop_name)
@@ -86,11 +88,13 @@ class SinatraApp < Sinatra::Base
         @tab = 'products'
       end
 
+      puts '3'
       # pagination
       per_page = 20
       @donations = @donations.order('created_at DESC').page(params[:donations_page]).per(per_page)
       @products = @products.page(params[:products_page]).per(per_page)
 
+      puts '4'
       erb :home
     end
   end
