@@ -73,6 +73,10 @@
       <% end %>
     </tbody>
   </table>
+
+  <div style="padding-left: 5px;">
+    <%= paginate donations, param_name: :donations_page, params: {tab: 'donations', donation_search: donation_search} %>
+  </div>
 <% elsif donations.present? && charity.blank? %>
   <p class="blank-list">Please update your settings before viewing orders</p>
 <% elsif @order_ids.present? %>
