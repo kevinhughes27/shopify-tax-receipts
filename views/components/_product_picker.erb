@@ -1,19 +1,26 @@
 <script>
-  window.productPicker = function() {
-    ShopifyApp.Modal.productPicker({selectMultiple: true},
-      function(success, result) {
-        if(!success){ return; }
-        product_ids = result.products.map(function(p) { return "ids%5B%5D=" + p.id }).join("&")
-        url = "/products?" + product_ids
-        ShopifyApp.Bar.loadingOn()
-        window.location = url
-      }
-    );
-  }
+  var AppBridge = window['app-bridge'];
+
+  var actions = AppBridge.actions;
+  var ResourcePicker = actions.ResourcePicker;
+
+  var productPicker = ResourcePicker.create(app, {
+    resourceType: ResourcePicker.ResourceType.Product,
+    selectMultiple: true,
+  });
+
+  productPicker.subscribe(ResourcePicker.Action.SELECT, (selectPayload) => {
+    selection = selectPayload.selection;
+    product_ids = selection.map(function(s) {
+      return "ids%5B%5D=" + s.id.replace("gid://shopify/Product/", "")
+    }).join("&")
+    url = "/products?" + product_ids
+    window.location = url
+  });
 </script>
 
 <p>
-  <a href="#" class="btn btn-default" onclick="productPicker()">
+  <a href="#" class="btn btn-default" onclick="productPicker.dispatch(ResourcePicker.Action.OPEN)">
     <i class="fa fa-plus-circle"></i> Add a product
   </a>
 </p>

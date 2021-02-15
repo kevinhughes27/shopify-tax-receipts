@@ -1,17 +1,30 @@
 <script type="text/javascript">
+  var AppBridge = window['app-bridge'];
 
-  ShopifyApp.ready(function(){
-    ShopifyApp.Bar.initialize({
-      icon: 'https://taxreceipts.herokuapp.com/icon.png',
+  var actions = AppBridge.actions;
+  var TitleBar = actions.TitleBar;
+  var Toast = actions.Toast;
+
+  var titleBar = TitleBar.create(app, {
+    icon: 'https://taxreceipts.herokuapp.com/icon.png',
+  });
+
+  <% if flash[:notice] %>
+    var notice = Toast.create(app, {
+      message: "<%= flash[:notice] %>",
+      duration: 5000
     });
 
-    <% if flash[:notice] %>
-      ShopifyApp.flashNotice("<%= flash[:notice] %>");
-    <% end %>
+    notice.dispatch(Toast.Action.SHOW);
+  <% end %>
 
-    <% if flash[:error] %>
-      ShopifyApp.flashError("<%= flash[:error] %>");
-    <% end %>
+  <% if flash[:error] %>
+    var notice = Toast.create(app, {
+      message: "<%= flash[:error] %>",
+      duration: 5000,
+      isError: true,
+    });
 
-  });
+    notice.dispatch(Toast.Action.SHOW);
+  <% end %>
 </script>

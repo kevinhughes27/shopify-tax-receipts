@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <script src="https://cdn.shopify.com/s/assets/external/app.js"></script>
+  <head>
+  <script src="https://unpkg.com/@shopify/app-bridge"></script>
   <script type="text/javascript">
-    ShopifyApp.init({
+    var AppBridge = window['app-bridge'];
+    var createApp = AppBridge.default;
+
+    var app = createApp({
       apiKey: "<%= SinatraApp.settings.api_key %>",
       shopOrigin: "<%= shop_origin %>",
-      debug: true
     });
   </script>
 
