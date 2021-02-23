@@ -191,7 +191,7 @@ GEM
     ttfunk (1.5.1)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
-    wicked_pdf (1.4.0)
+    wicked_pdf (2.1.0)
       activesupport
     wkhtmltopdf-binary (0.12.4)
     wkhtmltopdf-heroku (2.12.5.0)
