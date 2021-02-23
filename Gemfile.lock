@@ -45,7 +45,7 @@ GEM
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
     backports (3.15.0)
-    bugsnag (6.13.0)
+    bugsnag (6.19.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     byebug (11.1.1)
@@ -201,7 +201,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (= 5.2.3)
-  bugsnag (~> 6.13)
+  bugsnag (~> 6.19)
   byebug
   database_cleaner
   fakeweb
