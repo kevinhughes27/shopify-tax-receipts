@@ -26,7 +26,7 @@ require_relative 'routes/charity'
 require_relative 'routes/products'
 require_relative 'routes/gdpr'
 
-API_VERSION = "2019-04"
+API_VERSION = "2020-07"
 
 class SinatraApp < Sinatra::Base
   use Sinatra::CommonLogger
