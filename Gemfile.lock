@@ -153,7 +153,7 @@ GEM
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
     rake (13.0.3)
-    redis (4.2.5)
+    redis (4.3.1)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.4)
     shopify-sinatra-app (0.12.0)
