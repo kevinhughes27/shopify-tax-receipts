@@ -9,18 +9,6 @@ GIT
       padrino-helpers
       sinatra
 
-PATH
-  remote: ../shopify-sinatra-app
-  specs:
-    shopify-sinatra-app (1.0.0)
-      activesupport
-      attr_encrypted (~> 3.1.0)
-      omniauth (>= 2.0.4)
-      omniauth-shopify-oauth2 (>= 2.3.2)
-      shopify_api (>= 7.0.1, < 9.3.0)
-      sinatra (~> 2.0.2)
-      sinatra-activerecord (~> 2.0.9)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -177,7 +165,15 @@ GEM
     redis (4.3.1)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.4)
-    shopify_api (9.2.0)
+    shopify-sinatra-app (1.0.0)
+      activesupport
+      attr_encrypted (~> 3.1.0)
+      omniauth (>= 2.0.4)
+      omniauth-shopify-oauth2 (>= 2.3.2)
+      shopify_api (>= 7.0.1, < 9.4.0)
+      sinatra (>= 2.0.2, < 2.2.0)
+      sinatra-activerecord (~> 2.0.9)
+    shopify_api (9.3.0)
       activeresource (>= 4.1.0, < 6.0.0)
       graphql-client
       rack
@@ -236,7 +232,7 @@ DEPENDENCIES
   rack-test
   rake
   redis
-  shopify-sinatra-app!
+  shopify-sinatra-app (~> 1.0.0)
   sidekiq
   sinatra
   sinatra-contrib
