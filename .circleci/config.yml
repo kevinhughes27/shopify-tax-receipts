@@ -1,0 +1,21 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.6.6
+    executor: ruby/default
+    steps:
+      - checkout
+      - run:
+          name: install bundler
+          command: gem install bundler:2.2.8
+      - ruby/bundle-install
+      - run:
+          name: DB Setup
+          command: bundle exec rake db:schema:load
+      - run:
+          name: Tests
+          command: bundle exec rake test
