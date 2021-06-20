@@ -11,9 +11,6 @@ updates:
   - dependency-name: activerecord
     versions:
     - "> 5.2.3"
-  - dependency-name: omniauth
-    versions:
-    - 2.0.1
   - dependency-name: pry
     versions:
     - 0.13.1

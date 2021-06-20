@@ -38,6 +38,7 @@
       </div>
 
       <form method="POST" action="/charity" role="form">
+        <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
         <input type="hidden" name="_method" value="put" />
 
         <div class="modal-body">
@@ -150,6 +151,7 @@
       </div>
 
       <form method="POST" action="/charity" role="form">
+        <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
         <input type="hidden" name="_method" value="put" />
 
         <div class="modal-body">

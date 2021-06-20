@@ -8,8 +8,9 @@
       </div>
 
       <form method="POST" action="/export" role="form">
-        <div class="modal-body">
+        <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
 
+        <div class="modal-body">
           <div class="form-group">
             <label for="email_to">Email</label>
             <input type="text" class="form-control" name="email_to" value="<%= shop.email %>" style="width: 97%"/>
