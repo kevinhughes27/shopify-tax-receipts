@@ -10,8 +10,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Which bundler
-          command: bundler -v
+          name: install bundler
+          command: gem install bundler:2.2.8
       - ruby/bundle-install
       - run:
           name: DB Setup
