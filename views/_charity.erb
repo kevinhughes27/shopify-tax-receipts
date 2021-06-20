@@ -1,5 +1,7 @@
 <div class="well" style="padding-bottom: 50px;">
   <form method="POST" action="/charity" role="form" style="max-width: 320px;">
+    <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
+
     <% if charity.present? %>
       <input type="hidden" name="_method" value="put" />
     <% end %>

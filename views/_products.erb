@@ -39,6 +39,7 @@
           </td>
 
           <form method="POST" action="/products">
+            <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
             <input type="hidden" name="_method" value="put" />
             <input type="hidden" name="id" value="<%= product.id %>" />
 
@@ -62,6 +63,7 @@
 
           <td style="width:1px;">
             <form method="POST" action="/products">
+              <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
               <input type="hidden" name="_method" value="delete" />
               <input type="hidden" name="id" value="<%= product.id %>" />
               <input type="submit" class="btn btn-danger align-right" value="delete">

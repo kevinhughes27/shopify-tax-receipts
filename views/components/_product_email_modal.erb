@@ -38,6 +38,7 @@
       </div>
 
       <form method="POST" action="/products/<%= product.id %>" role="form">
+        <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
         <input type="hidden" name="_method" value="put" />
 
         <div class="modal-body">
@@ -154,6 +155,7 @@
       </div>
 
       <form method="POST" action="/products" role="form">
+        <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
         <input type="hidden" name="_method" value="put" />
         <input type="hidden" name="id" value="<%= product.id %>" />
 

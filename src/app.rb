@@ -22,10 +22,6 @@ require_relative 'jobs/uninstall_job'
 require_relative 'utils/email_service'
 require_relative 'utils/render_pdf'
 
-require_relative 'routes/charity'
-require_relative 'routes/products'
-require_relative 'routes/gdpr'
-
 API_VERSION = "2021-04"
 
 class SinatraApp < Sinatra::Base
@@ -33,6 +29,10 @@ class SinatraApp < Sinatra::Base
 
   register Sinatra::Shopify
   register Sinatra::Flash
+
+  require_relative 'routes/charity'
+  require_relative 'routes/products'
+  require_relative 'routes/gdpr'
 
   set :api_version, API_VERSION
   set :scope, 'read_products, read_orders, read_all_orders'
@@ -104,17 +104,13 @@ class SinatraApp < Sinatra::Base
   end
 
   # receive uninstall webhook
-  post '/uninstall' do
-    shopify_webhook do |shop_name, params|
-      UninstallJob.perform_async(shop_name)
-    end
+  shopify_webhook('/uninstall') do |shop_name, params|
+    UninstallJob.perform_async(shop_name)
   end
 
   # orders/updated webhook receiver
-  post '/order' do
-    shopify_webhook do |shop_name, order|
-      OrderWebhookJob.perform_async(shop_name, order)
-    end
+  shopify_webhook('/order') do |shop_name, order|
+    OrderWebhookJob.perform_async(shop_name, order)
   end
 
   # view a donation receipt pdf

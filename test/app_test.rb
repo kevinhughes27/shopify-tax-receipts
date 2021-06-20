@@ -11,8 +11,8 @@ class AppTest < ActiveSupport::TestCase
     @noop_shop = "banana.myshopify.com"
   end
 
-  test "install" do
-    get '/install'
+  test "login" do
+    get '/login'
     assert last_response.ok?
   end
 
@@ -77,7 +77,7 @@ class AppTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).once
 
-    params = {id: donation.id}
+    params = {id: donation.id, authenticity_token: token}
     post '/resend', params, 'rack.session' => session
 
     assert last_response.redirect?
@@ -94,7 +94,7 @@ class AppTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).once
 
-    params = {id: donation.id}
+    params = {id: donation.id, authenticity_token: token}
     post '/resend', params, 'rack.session' => session
 
     assert last_response.redirect?
@@ -108,7 +108,7 @@ class AppTest < ActiveSupport::TestCase
 
     mock_shop_api_call
 
-    params = {id: donation.id}
+    params = {id: donation.id, authenticity_token: token}
     post '/resend', params, 'rack.session' => session
 
     assert last_response.redirect?
@@ -124,7 +124,7 @@ class AppTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).once
 
-    params = {id: donation.id}
+    params = {id: donation.id, authenticity_token: token}
     post '/void', params, 'rack.session' => session
 
     assert last_response.redirect?
@@ -141,7 +141,7 @@ class AppTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).never
 
-    params = {id: donation.id}
+    params = {id: donation.id, authenticity_token: token}
     post '/void', params, 'rack.session' => session
 
     assert last_response.redirect?
@@ -158,7 +158,7 @@ class AppTest < ActiveSupport::TestCase
 
     Pony.expects(:mail).never
 
-    params = {id: donation.id}
+    params = {id: donation.id, authenticity_token: token}
     post '/void', params, 'rack.session' => session
 
     assert last_response.redirect?
@@ -210,7 +210,8 @@ class AppTest < ActiveSupport::TestCase
 
     mock_shop_api_call
 
-    post '/preview_pdf', {template: 'hello {{ charity.name }}', status: 'default'}, 'rack.session' => session
+    params ={template: 'hello {{ charity.name }}', status: 'default', authenticity_token: token}
+    post '/preview_pdf', params, 'rack.session' => session
     assert last_response.ok?
 
     text = PDF::Inspector::Text.analyze(last_response.body)
@@ -222,7 +223,8 @@ class AppTest < ActiveSupport::TestCase
 
     mock_shop_api_call
 
-    post '/preview_pdf', {template: 'hello {{ charity.name }}', status: 'void'}, 'rack.session' => session
+    params = {template: 'hello {{ charity.name }}', status: 'void', authenticity_token: token}
+    post '/preview_pdf', params, 'rack.session' => session
     assert last_response.ok?
 
     text = PDF::Inspector::Text.analyze(last_response.body)
@@ -237,7 +239,7 @@ class AppTest < ActiveSupport::TestCase
     mock_order_api_call('1234')
     mock_order_api_call('5678')
 
-    params = {email_to: 'kevin@example.com', start_date: Time.now - 3.days, end_date: Time.now + 2.days}
+    params = {email_to: 'kevin@example.com', start_date: Time.now - 3.days, end_date: Time.now + 2.days, authenticity_token: token}
     post '/export', params, 'rack.session' => session
 
     assert last_response.redirect?
@@ -252,6 +254,13 @@ class AppTest < ActiveSupport::TestCase
   private
 
   def session
-    { shopify: {shop: @shop, token: 'token'} }
+    {
+      shopify: { shop: @shop, token: 'token' },
+      csrf: token
+    }
+  end
+
+  def token
+    @token ||= Rack::Protection::AuthenticityToken.random_token
   end
 end

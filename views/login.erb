@@ -24,13 +24,26 @@
   <div style="margin-top: 30px"></div>
 
   <div class="container">
-    <form role="form" class="form-large" action="/login" method="post">
+    <form id="login" role="form" class="form-large" action="/auth/shopify" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
       <div class="input-group form-wide">
-        <input class="form-control" type="url" name="shop" placeholder="Shop URL">
+        <input class="form-control" name="shop" value="<%= params['shop'] %>" placeholder="your-shop-url.myshopify.com">
         <span class="input-group-btn">
-          <input class="btn" type="submit" value="Install App" />
+          <input class="btn" type="submit" value="Login" />
         </span>
       </div>
     </form>
   </div>
+
+  <% if params['shop'].present? %>
+    <div style="position: fixed; top: 0; left: 0; height: 100%; width: 100%; z-index: 1000; background: white;">
+      <div style="padding-left: 10px; padding-top: 10px">
+        Logging in...
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("login").submit();
+    </script>
+  <% end %>
 </body>

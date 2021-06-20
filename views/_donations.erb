@@ -49,6 +49,7 @@
 
           <td style="width:1px;">
             <form method="POST" action="/resend">
+              <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
               <input type="hidden" name="id" value="<%= donation.id %>" />
               <input
                 type="submit"
@@ -60,6 +61,7 @@
 
           <td style="width:1px;">
             <form method="POST" action="/void">
+              <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
               <input type="hidden" name="id" value="<%= donation.id %>" />
               <input
                 type="submit"
