@@ -45,12 +45,12 @@ GEM
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
     backports (3.15.0)
-    bugsnag (6.20.0)
+    bugsnag (6.21.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
     coderay (1.1.3)
-    concurrent-ruby (1.1.8)
+    concurrent-ruby (1.1.9)
     connection_pool (2.2.2)
     crass (1.0.5)
     database_cleaner (2.0.1)
@@ -215,7 +215,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (= 5.2.3)
-  bugsnag (~> 6.20)
+  bugsnag (~> 6.21)
   byebug
   database_cleaner
   fakeweb
