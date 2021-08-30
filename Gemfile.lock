@@ -204,7 +204,7 @@ GEM
       thread_safe (~> 0.1)
     wicked_pdf (1.4.0)
       activesupport
-    wkhtmltopdf-binary (0.12.4)
+    wkhtmltopdf-binary (0.12.6.5)
     wkhtmltopdf-heroku (2.12.5.0)
 
 PLATFORMS
