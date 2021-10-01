@@ -24,6 +24,18 @@ require_relative 'utils/render_pdf'
 
 API_VERSION = "2021-04"
 
+module Sinatra
+  module Shopify
+    module Methods
+      def after_shopify_auth
+        shopify_session do |shop_name|
+          AfterInstallJob.perform_async(shop_name)
+        end
+      end
+    end
+  end
+end
+
 class SinatraApp < Sinatra::Base
   use Sinatra::CommonLogger
 
@@ -38,12 +50,6 @@ class SinatraApp < Sinatra::Base
   set :scope, 'read_products, read_orders, read_all_orders'
 
   register Kaminari::Helpers::SinatraHelpers
-
-  def after_shopify_auth
-    shopify_session do |shop_name|
-      AfterInstallJob.perform_async(shop_name)
-    end
-  end
 
   # Home page
   get '/' do
