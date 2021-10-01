@@ -17,5 +17,7 @@ map '/sidekiq' do
       Rack::Utils.secure_compare(::Digest::SHA256.hexdigest(password), ::Digest::SHA256.hexdigest(ENV["SIDEKIQ_PASSWORD"]))
   end
 
+  use Rack::Session::Cookie, secret: ENV["SECRET"], same_site: true, max_age: 86400
+
   run Sidekiq::Web
 end
