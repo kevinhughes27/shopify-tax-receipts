@@ -1,5 +1,6 @@
 class AfterInstallJob < Job
   def perform(shop_name)
+    logger.info "#{shop_name}"
     activate_shopify_api(shop_name)
     create_webhook(topic: 'orders/updated', address: "#{base_url}/order")
     create_webhook(topic: 'products/update', address: "#{base_url}/product_update")

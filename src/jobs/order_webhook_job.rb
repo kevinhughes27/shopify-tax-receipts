@@ -1,5 +1,7 @@
 class OrderWebhookJob < Job
   def perform(shop_name, order)
+    logger.info "#{shop_name}, order_id: #{order['id']}"
+
     existing_donation = load_most_recent_donation(shop_name, order['id'])
     return if existing_donation && existing_donation.void
 
