@@ -22,7 +22,7 @@ require_relative 'jobs/uninstall_job'
 require_relative 'utils/email_service'
 require_relative 'utils/render_pdf'
 
-API_VERSION = "2021-04"
+API_VERSION = "2021-07"
 
 module Sinatra
   module Shopify
