@@ -100,7 +100,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.0.1)
     mini_portile2 (2.8.0)
-    minitest (5.14.3)
+    minitest (5.15.0)
     mocha (1.13.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
@@ -202,7 +202,7 @@ GEM
     ttfunk (1.5.1)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
-    wicked_pdf (1.4.0)
+    wicked_pdf (2.1.0)
       activesupport
     wkhtmltopdf-binary (0.12.4)
     wkhtmltopdf-heroku (2.12.5.0)
