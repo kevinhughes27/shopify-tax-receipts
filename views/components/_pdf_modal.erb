@@ -26,7 +26,7 @@
 
       <div class="modal-footer">
         <div class="pull-left">
-          <form method="POST" action="/preview_pdf" target="_blank" role="form">
+          <form method="POST" action="/preview_pdf" role="form">
             <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
             <input type="hidden" name="template" value="<%= charity.pdf_template %>" bind="pdfTemplate" />
             <input type="hidden" name="status" value="default" bind="previewOptions" />
