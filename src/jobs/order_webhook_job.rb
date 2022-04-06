@@ -46,6 +46,10 @@ class OrderWebhookJob < Job
 
     donation_amount = donations.sum
 
+    if charity.add_tip
+      donation_amount = add_tip(order, donation_amount)
+    end
+
     donation = Donation.new(
       shop: shop_name,
       order: order.to_json,
@@ -79,6 +83,10 @@ class OrderWebhookJob < Job
 
     donations = donations_from_order(order, charity, donation_products)
     donation_amount = donations.sum
+
+    if charity.add_tip
+      donation_amount = add_tip(order, donation_amount)
+    end
 
     refunded_donations = donations_from_refund(order, charity, donation_products)
     refunded_amount = refunded_donations.sum
@@ -234,5 +242,15 @@ class OrderWebhookJob < Job
 
     changed = old_compare_string != new_compare_string
     changed
+  end
+
+  def add_tip(order, donation_amount)
+    order["line_items"].each do |item|
+      if item["name"] == "Tip"
+        donation_amount += item["price"].to_f
+      end
+    end
+    
+    donation_amount
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_05_191330) do
+ActiveRecord::Schema.define(version: 2022_04_01_184643) do
 
   create_table "charities", force: :cascade do |t|
     t.string "name", limit: 255
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2020_01_05_191330) do
     t.string "update_email_subject"
     t.string "donation_id_prefix"
     t.boolean "subtract_discounts", default: false, null: false
+    t.boolean "add_tip", default: false, null: false
     t.index ["shop"], name: "index_charities_on_shop"
   end
 
