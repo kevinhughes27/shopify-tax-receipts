@@ -12,6 +12,8 @@
       <tr>
         <th>Order</th>
         <th>Date</th>
+        <th>First Name</th>
+        <th>Last Name</th>
         <th>Amount</th>
         <th>Status</th>
         <th></th>
@@ -30,6 +32,9 @@
           </td>
 
           <td><%= donation.created_at %></td>
+
+          <td><%= donation.first_name %></td>
+          <td><%= donation.last_name %></td>
 
           <td>
             <% if disabled %>
