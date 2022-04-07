@@ -46,8 +46,8 @@ class OrderWebhookJob < Job
 
     donation_amount = donations.sum
 
-    if charity.add_tip
-      donation_amount = add_tip(order, donation_amount)
+    if charity.include_tip
+      donation_amount = include_tip(order, donation_amount)
     end
 
     donation = Donation.new(
@@ -84,8 +84,8 @@ class OrderWebhookJob < Job
     donations = donations_from_order(order, charity, donation_products)
     donation_amount = donations.sum
 
-    if charity.add_tip
-      donation_amount = add_tip(order, donation_amount)
+    if charity.include_tip
+      donation_amount = include_tip(order, donation_amount)
     end
 
     refunded_donations = donations_from_refund(order, charity, donation_products)
@@ -244,7 +244,7 @@ class OrderWebhookJob < Job
     changed
   end
 
-  def add_tip(order, donation_amount)
+  def include_tip(order, donation_amount)
     order["line_items"].each do |item|
       if item["name"] == "Tip"
         donation_amount += item["price"].to_f

@@ -73,10 +73,10 @@
     </div>
 
     <div class="checkbox">
-      <label for="add_tip">
-        <input type="hidden" name="add_tip" value="false">
-        <input type="checkbox" name="add_tip" value="true" <%= "checked" if charity.present? && charity.add_tip %>>
-        <strong>Add tips to total </strong>
+      <label for="include_tip">
+        <input type="hidden" name="include_tip" value="false">
+        <input type="checkbox" name="include_tip" value="true" <%= "checked" if charity.present? && charity.include_tip %>>
+        <strong>Include Tips</strong>
       </label>
       <span class="help-block">If checked then the tips added to the transaction will be counted in the final donation amount</span>
     </div>
