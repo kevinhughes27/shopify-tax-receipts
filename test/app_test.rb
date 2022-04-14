@@ -17,7 +17,8 @@ class AppTest < ActiveSupport::TestCase
   end
 
   test "home" do
-    Donation.create!(shop: @shop, order_id: '1234', donation_amount: 10)
+    order_json = load_fixture 'order.json'
+    Donation.create!(shop: @shop, order_id: '1234', order: order_json, donation_amount: 10)
 
     mock_shop_api_call
 
