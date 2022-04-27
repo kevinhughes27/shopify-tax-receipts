@@ -38,6 +38,7 @@ class SinatraApp < Sinatra::Base
       'donation_id_prefix',
       'receipt_threshold',
       'subtract_discounts',
+      'include_tip',
       'email_from',
       'email_bcc',
       'email_subject',

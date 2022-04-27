@@ -274,6 +274,28 @@ class OrderTest < ActiveSupport::TestCase
     assert_equal 60, donation.donation_amount
   end
 
+  test "charity which include tips and normal order" do
+    charity = Charity.find_by(shop: @shop)
+    charity.update_attribute(:include_tip, true)
+
+    Product.create(shop: @shop, product_id: 7157413183681, percentage: 50.0)
+
+    order_webhook = load_fixture 'order_with_tip.json'
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+    mock_shop_api_call
+
+    Pony.expects(:mail).once
+
+    assert_difference 'Donation.count', +1 do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
+
+    donation = Donation.last
+    assert_equal 19.5, donation.donation_amount
+  end
+
   private
 
   def session

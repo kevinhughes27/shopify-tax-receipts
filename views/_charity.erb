@@ -72,6 +72,15 @@
       <span class="help-block">If checked then the app will subtract discounts on the order from the donation</span>
     </div>
 
+    <div class="checkbox">
+      <label for="include_tip">
+        <input type="hidden" name="include_tip" value="false">
+        <input type="checkbox" name="include_tip" value="true" <%= "checked" if charity.present? && charity.include_tip %>>
+        <strong>Include Tips</strong>
+      </label>
+      <span class="help-block">If checked then the tips added to the transaction will be counted in the final donation amount</span>
+    </div>
+
     <div class="form-group">
       <input type="submit" class="btn btn-primary pull-right" value="save">
     </div>

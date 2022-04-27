@@ -1,0 +1,411 @@
+{
+  "id": 4359400227009,
+  "admin_graphql_api_id": "gid:\/\/shopify\/Order\/4359400227009",
+  "app_id": 580111,
+  "browser_ip": "24.201.89.48",
+  "buyer_accepts_marketing": false,
+  "cancel_reason": null,
+  "cancelled_at": null,
+  "cart_token": null,
+  "checkout_id": 26749874503873,
+  "checkout_token": "965fea1549c7b6ddc3f303982509e0f9",
+  "client_details": {
+    "accept_language": "en-US,en;q=0.9,fr-CA;q=0.8,fr-FR;q=0.7,fr;q=0.6,es-419;q=0.5,es;q=0.4",
+    "browser_height": 941,
+    "browser_ip": "24.201.89.48",
+    "browser_width": 1903,
+    "session_hash": null,
+    "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/100.0.4896.79 Safari\/537.36"
+  },
+  "closed_at": null,
+  "confirmed": true,
+  "contact_email": "johndoe@test.com",
+  "created_at": "2022-04-06T21:28:18-04:00",
+  "currency": "CAD",
+  "current_subtotal_price": "30.00",
+  "current_subtotal_price_set": {
+    "shop_money": {
+      "amount": "30.00",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "30.00",
+      "currency_code": "CAD"
+    }
+  },
+  "current_total_discounts": "0.00",
+  "current_total_discounts_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "0.00",
+      "currency_code": "CAD"
+    }
+  },
+  "current_total_duties_set": null,
+  "current_total_price": "49.40",
+  "current_total_price_set": {
+    "shop_money": {
+      "amount": "49.40",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "49.40",
+      "currency_code": "CAD"
+    }
+  },
+  "current_total_tax": "0.00",
+  "current_total_tax_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "0.00",
+      "currency_code": "CAD"
+    }
+  },
+  "customer_locale": "en",
+  "device_id": null,
+  "discount_codes": [],
+  "email": "johndoe@test.com",
+  "estimated_taxes": false,
+  "financial_status": "paid",
+  "fulfillment_status": null,
+  "gateway": "bogus",
+  "landing_site": "\/wallets\/checkouts.json",
+  "landing_site_ref": null,
+  "location_id": null,
+  "name": "#1044",
+  "note": null,
+  "note_attributes": [],
+  "number": 44,
+  "order_number": 1044,
+  "order_status_url": null,
+  "original_total_duties_set": null,
+  "payment_gateway_names": [
+    "bogus"
+  ],
+  "phone": null,
+  "presentment_currency": "CAD",
+  "processed_at": "2022-04-06T21:28:17-04:00",
+  "processing_method": "direct",
+  "reference": null,
+  "referring_site": null,
+  "source_identifier": null,
+  "source_name": "web",
+  "source_url": null,
+  "subtotal_price": "30.00",
+  "subtotal_price_set": {
+    "shop_money": {
+      "amount": "30.00",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "30.00",
+      "currency_code": "CAD"
+    }
+  },
+  "tags": "",
+  "tax_lines": [],
+  "taxes_included": false,
+  "test": true,
+  "token": "0a776ad060a8c77bdf10cc5b9ffddff1",
+  "total_discounts": "0.00",
+  "total_discounts_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "0.00",
+      "currency_code": "CAD"
+    }
+  },
+  "total_line_items_price": "30.00",
+  "total_line_items_price_set": {
+    "shop_money": {
+      "amount": "30.00",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "30.00",
+      "currency_code": "CAD"
+    }
+  },
+  "total_outstanding": "0.00",
+  "total_price": "49.40",
+  "total_price_set": {
+    "shop_money": {
+      "amount": "49.40",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "49.40",
+      "currency_code": "CAD"
+    }
+  },
+  "total_price_usd": "39.57",
+  "total_shipping_price_set": {
+    "shop_money": {
+      "amount": "14.90",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "14.90",
+      "currency_code": "CAD"
+    }
+  },
+  "total_tax": "0.00",
+  "total_tax_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "CAD"
+    },
+    "presentment_money": {
+      "amount": "0.00",
+      "currency_code": "CAD"
+    }
+  },
+  "total_tip_received": "4.50",
+  "total_weight": 400,
+  "updated_at": "2022-04-06T21:28:19-04:00",
+  "user_id": null,
+  "billing_address": {
+    "first_name": "John",
+    "address1": "1235 Rue Bishop",
+    "phone": null,
+    "city": "Montréal",
+    "zip": "H3G 0A6",
+    "province": "Quebec",
+    "country": "Canada",
+    "last_name": "Doe",
+    "address2": "",
+    "company": null,
+    "latitude": 45.4962435,
+    "longitude": -73.5754053,
+    "name": "John Doe",
+    "country_code": "CA",
+    "province_code": "QC"
+  },
+  "customer": {
+    "id": 5927039631553,
+    "email": "johndoe@test.com",
+    "accepts_marketing": false,
+    "created_at": "2022-04-06T20:48:29-04:00",
+    "updated_at": "2022-04-06T21:28:19-04:00",
+    "first_name": "John",
+    "last_name": "Doe",
+    "orders_count": 0,
+    "state": "disabled",
+    "total_spent": "0.00",
+    "last_order_id": null,
+    "note": null,
+    "verified_email": true,
+    "multipass_identifier": null,
+    "tax_exempt": false,
+    "phone": null,
+    "tags": "",
+    "last_order_name": null,
+    "currency": "CAD",
+    "accepts_marketing_updated_at": "2022-04-06T20:48:29-04:00",
+    "marketing_opt_in_level": null,
+    "admin_graphql_api_id": "gid:\/\/shopify\/Customer\/5927039631553",
+    "default_address": {
+      "id": 7121909481665,
+      "customer_id": 5927039631553,
+      "first_name": "John",
+      "last_name": "Doe",
+      "company": null,
+      "address1": "1235 Rue Bishop",
+      "address2": "",
+      "city": "Montréal",
+      "province": "Quebec",
+      "country": "Canada",
+      "zip": "H3G 0A6",
+      "phone": null,
+      "name": "John Doe",
+      "province_code": "QC",
+      "country_code": "CA",
+      "country_name": "Canada",
+      "default": true
+    }
+  },
+  "discount_applications": [],
+  "fulfillments": [],
+  "line_items": [
+    {
+      "id": 10963008585921,
+      "admin_graphql_api_id": "gid:\/\/shopify\/LineItem\/10963008585921",
+      "fulfillable_quantity": 0,
+      "fulfillment_service": "manual",
+      "fulfillment_status": null,
+      "gift_card": false,
+      "grams": 0,
+      "name": "Tip",
+      "price": "4.50",
+      "price_set": {
+        "shop_money": {
+          "amount": "4.50",
+          "currency_code": "CAD"
+        },
+        "presentment_money": {
+          "amount": "4.50",
+          "currency_code": "CAD"
+        }
+      },
+      "product_exists": false,
+      "product_id": null,
+      "properties": [],
+      "quantity": 1,
+      "requires_shipping": false,
+      "sku": null,
+      "taxable": false,
+      "tip": {
+        "payment_method": "bogus",
+        "payment_gateway": "bogus"
+      },
+      "tip_payment_gateway": "bogus",
+      "tip_payment_method": "bogus",
+      "title": "Tip",
+      "total_discount": "0.00",
+      "total_discount_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "CAD"
+        },
+        "presentment_money": {
+          "amount": "0.00",
+          "currency_code": "CAD"
+        }
+      },
+      "variant_id": null,
+      "variant_inventory_management": null,
+      "variant_title": null,
+      "vendor": null,
+      "tax_lines": [],
+      "duties": [],
+      "discount_allocations": []
+    },
+    {
+      "id": 10963008618689,
+      "admin_graphql_api_id": "gid:\/\/shopify\/LineItem\/10963008618689",
+      "fulfillable_quantity": 2,
+      "fulfillment_service": "manual",
+      "fulfillment_status": null,
+      "gift_card": false,
+      "grams": 200,
+      "name": "Mug",
+      "origin_location": {
+        "id": 3339490492609,
+        "country_code": "CA",
+        "province_code": "QC",
+        "name": "PFE-H2022",
+        "address1": "1100 Rue Notre Dame O",
+        "address2": "",
+        "city": "Montreal",
+        "zip": "H3C 1K3"
+      },
+      "price": "15.00",
+      "price_set": {
+        "shop_money": {
+          "amount": "15.00",
+          "currency_code": "CAD"
+        },
+        "presentment_money": {
+          "amount": "15.00",
+          "currency_code": "CAD"
+        }
+      },
+      "product_exists": true,
+      "product_id": 7157413183681,
+      "properties": [],
+      "quantity": 2,
+      "requires_shipping": true,
+      "sku": "",
+      "taxable": false,
+      "title": "Mug",
+      "total_discount": "0.00",
+      "total_discount_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "CAD"
+        },
+        "presentment_money": {
+          "amount": "0.00",
+          "currency_code": "CAD"
+        }
+      },
+      "variant_id": 41383274741953,
+      "variant_inventory_management": "shopify",
+      "variant_title": "",
+      "vendor": "PFE-H2022",
+      "tax_lines": [],
+      "duties": [],
+      "discount_allocations": []
+    }
+  ],
+  "payment_details": {
+    "credit_card_bin": "1",
+    "avs_result_code": null,
+    "cvv_result_code": null,
+    "credit_card_number": "•••• •••• •••• 1",
+    "credit_card_company": "Bogus"
+  },
+  "refunds": [],
+  "shipping_address": {
+    "first_name": "John",
+    "address1": "1235 Rue Bishop",
+    "phone": null,
+    "city": "Montréal",
+    "zip": "H3G 0A6",
+    "province": "Quebec",
+    "country": "Canada",
+    "last_name": "Doe",
+    "address2": "",
+    "company": null,
+    "latitude": 45.4962435,
+    "longitude": -73.5754053,
+    "name": "John Doe",
+    "country_code": "CA",
+    "province_code": "QC"
+  },
+  "shipping_lines": [
+    {
+      "id": 3669901476033,
+      "carrier_identifier": null,
+      "code": "Standard",
+      "delivery_category": null,
+      "discounted_price": "14.90",
+      "discounted_price_set": {
+        "shop_money": {
+          "amount": "14.90",
+          "currency_code": "CAD"
+        },
+        "presentment_money": {
+          "amount": "14.90",
+          "currency_code": "CAD"
+        }
+      },
+      "phone": null,
+      "price": "14.90",
+      "price_set": {
+        "shop_money": {
+          "amount": "14.90",
+          "currency_code": "CAD"
+        },
+        "presentment_money": {
+          "amount": "14.90",
+          "currency_code": "CAD"
+        }
+      },
+      "requested_fulfillment_service_id": null,
+      "source": "shopify",
+      "title": "Standard",
+      "tax_lines": [],
+      "discount_allocations": []
+    }
+  ]
+}
