@@ -63,5 +63,7 @@ def send_email(to, bcc, from, subject, body, pdf, filename)
     options[:body] = body
   end
 
+  logger.info "sending email to: #{to}"
+
   Pony.mail(options)
 end

@@ -250,7 +250,7 @@ class OrderWebhookJob < Job
         donation_amount += item["price"].to_f
       end
     end
-    
+
     donation_amount
   end
 end
