@@ -190,7 +190,7 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.10)
     ttfunk (1.5.1)
-    tzinfo (1.2.9)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     wicked_pdf (1.4.0)
       activesupport
