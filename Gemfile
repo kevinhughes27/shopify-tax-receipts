@@ -19,7 +19,7 @@ gem 'redis'
 gem 'wicked_pdf'
 gem 'pony'
 gem 'liquid'
-gem 'bugsnag', '~> 6.22'
+gem 'bugsnag', '~> 6.24'
 
 group :production do
   gem 'pg'
