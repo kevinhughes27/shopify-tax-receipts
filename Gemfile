@@ -16,14 +16,14 @@ gem 'kaminari-activerecord'
 gem 'sidekiq'
 gem 'redis'
 
-gem 'wicked_pdf'
+gem 'wicked_pdf', '~> 2.6.3'
 gem 'pony'
 gem 'liquid'
 gem 'bugsnag', '~> 6.22'
 
 group :production do
   gem 'pg'
-  gem 'wkhtmltopdf-heroku'
+  gem 'wkhtmltopdf-heroku', '2.12.6.0'
 end
 
 group :development do

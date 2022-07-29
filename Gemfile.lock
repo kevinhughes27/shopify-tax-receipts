@@ -192,10 +192,10 @@ GEM
     ttfunk (1.5.1)
     tzinfo (1.2.10)
       thread_safe (~> 0.1)
-    wicked_pdf (1.4.0)
+    wicked_pdf (2.6.3)
       activesupport
     wkhtmltopdf-binary (0.12.4)
-    wkhtmltopdf-heroku (2.12.5.0)
+    wkhtmltopdf-heroku (2.12.6.0)
 
 PLATFORMS
   ruby
@@ -225,9 +225,9 @@ DEPENDENCIES
   sinatra-contrib (~> 2.2.0)
   sinatra-flash
   sqlite3
-  wicked_pdf
+  wicked_pdf (~> 2.6.3)
   wkhtmltopdf-binary
-  wkhtmltopdf-heroku
+  wkhtmltopdf-heroku (= 2.12.6.0)
 
 RUBY VERSION
    ruby 2.6.6p146
