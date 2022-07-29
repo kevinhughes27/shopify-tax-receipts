@@ -1,26 +1,4 @@
 require 'tilt/liquid'
-
-# mock rails classes for wicked_pdf
-module Rails
-  def self.env
-    'production'
-  end
-
-  module VERSION
-    MAJOR = 0
-  end
-end
-
-class WickedPdf
-  class Mime
-    class Type
-      def self.lookup_by_extension(var)
-        true
-      end
-    end
-  end
-end
-
 require 'wicked_pdf'
 
 def render_pdf(shop, charity, donation)
