@@ -194,7 +194,7 @@ GEM
       thread_safe (~> 0.1)
     wicked_pdf (2.6.3)
       activesupport
-    wkhtmltopdf-binary (0.12.4)
+    wkhtmltopdf-binary (0.12.6.5)
     wkhtmltopdf-heroku (2.12.6.0)
 
 PLATFORMS
@@ -226,7 +226,7 @@ DEPENDENCIES
   sinatra-flash
   sqlite3
   wicked_pdf (~> 2.6.3)
-  wkhtmltopdf-binary
+  wkhtmltopdf-binary (= 0.12.6.5)
   wkhtmltopdf-heroku (= 2.12.6.0)
 
 RUBY VERSION
