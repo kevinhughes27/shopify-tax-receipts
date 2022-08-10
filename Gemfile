@@ -16,19 +16,19 @@ gem 'kaminari-activerecord'
 gem 'sidekiq'
 gem 'redis'
 
-gem 'wicked_pdf'
+gem 'wicked_pdf', '~> 2.6.3'
 gem 'pony'
 gem 'liquid'
 gem 'bugsnag', '~> 6.24'
 
 group :production do
   gem 'pg'
-  gem 'wkhtmltopdf-heroku'
+  gem 'wkhtmltopdf-heroku', '2.12.6.0'
 end
 
 group :development do
   gem 'sqlite3'
-  gem 'wkhtmltopdf-binary'
+  gem 'wkhtmltopdf-binary', '0.12.6.5'
   gem 'pdf-inspector'
   gem 'letter_opener'
   gem 'rack-test'
