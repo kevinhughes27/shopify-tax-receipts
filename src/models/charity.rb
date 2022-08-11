@@ -1,10 +1,8 @@
 class Charity < ActiveRecord::Base
-  EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-
   validates :shop, uniqueness: true
   validates_presence_of :name, :charity_id
   validates :receipt_threshold, numericality: { greater_than: 0 }, allow_nil: true
-  validates_format_of :email_bcc, with: EMAIL_REGEX, allow_blank: true
+  validate :validate_email_bcc
 
   def self.attr_or_default(attr, default)
     define_method(attr) do
@@ -35,5 +33,19 @@ class Charity < ActiveRecord::Base
       'charity_id' => charity_id,
       'donation_id_prefix' => donation_id_prefix
     }
+  end
+
+  private
+
+  def validate_email_bcc
+    return unless self.email_bcc
+
+    emails = self.email_bcc.split(",").map(&:strip)
+
+    emails.each do |email|
+      self.errors.add(:emails, "invalid email") unless email =~ URI::MailTo::EMAIL_REGEXP
+    end
+
+    self.email_bcc = emails.join(",")
   end
 end
