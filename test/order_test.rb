@@ -252,6 +252,25 @@ class OrderTest < ActiveSupport::TestCase
     assert_equal 70, donation.donation_amount
   end
 
+  test "charity which subtracts discounts and order with discount larger than amount" do
+    charity = Charity.find_by(shop: @shop)
+    charity.update_attribute(:subtract_discounts, true)
+
+    Product.create(shop: @shop, product_id: 4436552548440)
+
+    order_webhook = JSON.parse(load_fixture('order_with_discount.json'))
+    order_webhook["line_items"][0]["discount_allocations"][0]["amount"] = "80.0"
+    order_webhook = order_webhook.to_json
+
+    SinatraApp.any_instance.expects(:verify_shopify_webhook).returns(true)
+    mock_shop_api_call
+
+    assert_no_difference 'Donation.count' do
+      post '/order', order_webhook, 'HTTP_X_SHOPIFY_SHOP_DOMAIN' => @shop
+      assert last_response.ok?
+    end
+  end
+
   test "charity which subtracts discounts and applies percentage and order has discount" do
     charity = Charity.find_by(shop: @shop)
     charity.update_attribute(:subtract_discounts, true)

@@ -50,6 +50,8 @@ class OrderWebhookJob < Job
       donation_amount = include_tip(order, donation_amount)
     end
 
+    return if donation_amount <= 0
+
     donation = Donation.new(
       shop: shop_name,
       order: order.to_json,
