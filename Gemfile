@@ -4,7 +4,7 @@ ruby '2.6.6'
 gem 'rake'
 gem 'puma'
 
-gem 'sinatra', '~> 2.2.0'
+gem 'sinatra', '~> 2.2.3'
 gem 'shopify-sinatra-app', '~> 1.1.0'
 gem 'sinatra-flash'
 gem 'sinatra-contrib', '~> 2.2.0'
