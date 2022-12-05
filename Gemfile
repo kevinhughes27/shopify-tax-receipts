@@ -4,10 +4,10 @@ ruby '2.6.6'
 gem 'rake'
 gem 'puma'
 
-gem 'sinatra', '~> 2.2.3'
+gem 'sinatra', '~> 3.0.4'
 gem 'shopify-sinatra-app'
 gem 'sinatra-flash'
-gem 'sinatra-contrib', '~> 2.2.0'
+gem 'sinatra-contrib', '~> 3.0.4'
 gem 'activerecord', '5.2.3'
 
 gem 'kaminari-sinatra', git: 'https://github.com/kevinhughes27/kaminari-sinatra', ref: '2e7eb2771f921eaf75aab9dd21bf465876be3404'
