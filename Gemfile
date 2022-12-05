@@ -28,7 +28,7 @@ end
 
 group :development do
   gem 'sqlite3'
-  gem 'wkhtmltopdf-binary', '0.12.6.5'
+  gem 'wkhtmltopdf-binary', '0.12.6.6'
   gem 'pdf-inspector'
   gem 'letter_opener'
   gem 'rack-test'
