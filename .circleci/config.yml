@@ -1,17 +1,17 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@0.1.2
+  ruby: circleci/ruby@2.0.0
 
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.6.6
+      - image: cimg/ruby:2.7.2
     executor: ruby/default
     steps:
       - checkout
       - run:
           name: install bundler
-          command: gem install bundler:2.2.8
+          command: gem install bundler:2.4.2
       - ruby/bundle-install
       - run:
           name: DB Setup
