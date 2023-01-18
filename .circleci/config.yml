@@ -12,7 +12,7 @@ jobs:
       - ruby/install-deps
       - run:
           name: install deps for wkhtmltopdf
-          command: sudo apt-get install -y libjpeg8-dev
+          command: sudo apt-get update && sudo apt-get install -y libjpeg8-dev
       - run:
           name: DB Setup
           command: bundle exec rake db:schema:load
