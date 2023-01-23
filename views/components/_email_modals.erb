@@ -20,10 +20,19 @@
 
     $.ajax({url: url})
     .done(function() {
-      ShopifyApp.flashNotice("Test email sent");
+      var notice = Toast.create(app, {
+        message: "Test email sent",
+        duration: 5000
+      });
+      notice.dispatch(Toast.Action.SHOW);
     })
     .error(function() {
-      ShopifyApp.flashNotice("Error!");
+      var notice = Toast.create(app, {
+        message: "Error!",
+        duration: 5000,
+        isError: true,
+      });
+      notice.dispatch(Toast.Action.SHOW);
     });
   }
 </script>
