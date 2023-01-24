@@ -14,9 +14,9 @@
 
   window.sendTestEmail<%= modal_id %> = function() {
     var params = $('#editEmailModal<%= modal_id %>').find('form').serialize();
-    params = params.replace('_method=put&', '?');
+    params = params.replace('&_method=put', '');
 
-    var url = '/test_email?' + params;
+    var url = '/test_email' + '?' + params;
 
     $.ajax({url: url})
     .done(function() {
