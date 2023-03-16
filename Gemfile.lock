@@ -154,7 +154,7 @@ GEM
     rake (13.0.6)
     redis (5.0.5)
       redis-client (>= 0.9.0)
-    redis-client (0.11.2)
+    redis-client (0.14.0)
       connection_pool
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
@@ -170,10 +170,11 @@ GEM
       activeresource (>= 4.1.0)
       graphql-client
       rack
-    sidekiq (6.5.5)
-      connection_pool (>= 2.2.2)
-      rack (~> 2.0)
-      redis (>= 4.5.0)
+    sidekiq (7.0.7)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.11.0)
     sinatra (2.2.3)
       mustermann (~> 2.0)
       rack (~> 2.2)
