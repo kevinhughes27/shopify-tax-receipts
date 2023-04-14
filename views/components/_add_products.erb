@@ -1,0 +1,39 @@
+<div class="modal fade" id="addProductsModal">
+  <div class="modal-dialog" style="width: 800px;">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Products</h4>
+      </div>
+
+      <div class="modal-body">
+        <p>
+          To select which products should recieve tax receipts on purchase go to your
+          <a href=<%="https://#{@shop.myshopify_domain}/admin/products"%> target="_blank">products</a>
+          page and use the bulk dropdown
+        </p>
+
+        <img
+          style="width: 100%;"
+          src='<%="#{base_url}/add_products.gif"%>'
+          alt="Add Products using the bulk app link">
+
+        <p>
+          A product can also be added from the product's page by using the app link in the top right corner
+        </p>
+
+        <img
+          style="width: 100%;"
+          src='<%="#{base_url}/add_product.png"%>'
+          alt="Add Product using the app link">
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>
+  <a href="#" class="btn btn-default" onclick="$('#addProductsModal').modal('toggle'); return false;">
+    <i class="fa fa-plus-circle"></i> Add a product
+  </a>
+</p>

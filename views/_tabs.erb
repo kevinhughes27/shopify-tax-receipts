@@ -15,7 +15,7 @@
     <div class="tab-pane <%= 'active' if tab == 'products' %>" id="products">
       <div class="list_actions">
         <%= partial 'components/search', locals: { search_param_name: 'product_search', search_param: product_search } %>
-        <%= partial 'components/product_picker' %>
+        <%= partial 'components/add_products' %>
       </div>
       <%= partial 'products', locals: { shop: shop, charity: charity, products: products, product_search: product_search } %>
     </div>
@@ -37,6 +37,11 @@
 <script>
   $('#tabs a').click(function (e) {
     e.preventDefault();
+    var url = new URL(window.location);
+    var tab = e.target.attributes.href.value.replace('#', '');
+    url.searchParams.set('tab', tab);
+    history.pushState('', '', url)
+
     $(this).tab('show');
   })
 </script>

@@ -1,5 +1,5 @@
 require 'sinatra/shopify-sinatra-app'
-require 'sinatra/flash'
+require 'sinatra/pretty-flash'
 
 require_relative '../config/pony'
 require_relative '../config/sidekiq'
@@ -40,7 +40,7 @@ class SinatraApp < Sinatra::Base
   use Sinatra::CommonLogger
 
   register Sinatra::Shopify
-  register Sinatra::Flash
+  register Sinatra::PrettyFlash
 
   require_relative 'routes/charity'
   require_relative 'routes/products'

@@ -13,7 +13,7 @@ class SinatraApp < Sinatra::Base
         flash[:error] = 'Error Saving Charity Information'
       end
 
-      redirect '/'
+      redirect '/?tab=settings'
     end
   end
 
@@ -27,7 +27,7 @@ class SinatraApp < Sinatra::Base
         flash[:error] = 'Error Saving'
       end
 
-      redirect '/'
+      redirect '/?tab=settings'
     end
   end
 
