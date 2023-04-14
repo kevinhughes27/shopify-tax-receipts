@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.7.2'
+ruby '2.7.7'
 
 gem 'rake'
 gem 'puma'
@@ -8,7 +8,7 @@ gem 'sinatra', '~> 2.2.3'
 gem 'shopify-sinatra-app', '~> 1.1.1'
 gem 'sinatra-flash'
 gem 'sinatra-contrib', '~> 2.2.0'
-gem 'activerecord', '5.2.3'
+gem 'activerecord'
 
 gem 'kaminari-sinatra', git: 'https://github.com/kevinhughes27/kaminari-sinatra', ref: '2e7eb2771f921eaf75aab9dd21bf465876be3404'
 gem 'kaminari-activerecord'

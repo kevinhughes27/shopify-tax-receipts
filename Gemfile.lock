@@ -210,7 +210,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (= 5.2.3)
+  activerecord
   bugsnag (~> 6.25)
   byebug
   database_cleaner
@@ -239,7 +239,7 @@ DEPENDENCIES
   wkhtmltopdf-heroku (= 2.12.6.0)
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 2.7.7p221
 
 BUNDLED WITH
-   2.4.2
+   2.4.12
