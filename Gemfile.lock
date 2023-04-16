@@ -9,25 +9,6 @@ GIT
       padrino-helpers
       sinatra
 
-PATH
-  remote: ../shopify-sinatra-app
-  specs:
-    shopify-sinatra-app (1.2.0)
-      activesupport
-      attr_encrypted
-      omniauth (>= 2.0.4)
-      omniauth-shopify-oauth2 (>= 2.3.2)
-      shopify_api (= 9.5.1)
-      sinatra
-      sinatra-activerecord
-
-PATH
-  remote: ../sinatra-pretty-flash
-  specs:
-    sinatra-pretty-flash (0.0.3)
-      sinatra
-      sinatra-flash
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -177,6 +158,14 @@ GEM
       connection_pool
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
+    shopify-sinatra-app (1.2.0)
+      activesupport
+      attr_encrypted
+      omniauth (>= 2.0.4)
+      omniauth-shopify-oauth2 (>= 2.3.2)
+      shopify_api (= 9.5.1)
+      sinatra
+      sinatra-activerecord
     shopify_api (9.5.1)
       activeresource (>= 4.1.0)
       graphql-client
@@ -201,6 +190,9 @@ GEM
       tilt (~> 2.0)
     sinatra-flash (0.3.0)
       sinatra (>= 1.0.0)
+    sinatra-pretty-flash (0.0.3)
+      sinatra
+      sinatra-flash
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
@@ -239,11 +231,11 @@ DEPENDENCIES
   rack-test
   rake
   redis
-  shopify-sinatra-app!
+  shopify-sinatra-app (= 1.2.0)
   sidekiq
   sinatra
   sinatra-contrib
-  sinatra-pretty-flash!
+  sinatra-pretty-flash (= 0.0.3)
   sqlite3
   wicked_pdf (~> 2.6.3)
   wkhtmltopdf-binary (= 0.12.6.5)

@@ -5,8 +5,8 @@ gem 'rake'
 gem 'puma'
 
 gem 'sinatra'
-gem 'shopify-sinatra-app', path: '../shopify-sinatra-app'
-gem 'sinatra-pretty-flash', path: '../sinatra-pretty-flash'
+gem 'shopify-sinatra-app', '1.2.0'
+gem 'sinatra-pretty-flash', '0.0.3'
 gem 'sinatra-contrib'
 gem 'activerecord'
 
