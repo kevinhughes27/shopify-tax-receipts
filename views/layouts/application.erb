@@ -11,26 +11,16 @@
 </head>
 
 <body>
-  <div id="wrap">
-    <div class="container">
-      <%= yield %>
+  <div class="container">
+    <%= yield %>
 
-      <% if flash[:notice] %>
-        <p class="flash notice"><%= flash[:notice] %></p>
-      <% end %>
+    <% if flash[:notice] %>
+      <p class="flash notice"><%= flash[:notice] %></p>
+    <% end %>
 
-      <% if flash[:error] %>
-        <p class="flash error"><%= flash[:error] %></p>
-      <% end %>
-
-      <div id="push"></div>
-    </div>
-  </div>
-
-  <div id="footer">
-    <div class="container">
-      <%= yield_content :footer %>
-    </div>
+    <% if flash[:error] %>
+      <p class="flash error"><%= flash[:error] %></p>
+    <% end %>
   </div>
 
   <%== pretty_flash_js %>
