@@ -1,42 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
-  <script>
-    var AppBridge = window['app-bridge'];
-
-    var host = '<%= shop_host %>';
-    var apiKey = '<%= SinatraApp.settings.api_key %>';
-
-    var app = AppBridge.createApp({
-      apiKey: apiKey,
-      host: host
-    });
-  </script>
-
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
   <link rel="stylesheet" href='<%= "#{base_url}/styles5.css" %>'>
+  <%== pretty_flash_css %>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <%= erb :"/layouts/_top_bar", layout: false %>
+  <div class="container">
+    <%= yield %>
 
-  <div id="wrap">
-    <div class="container">
-      <%= yield %>
-      <div id="push"></div>
-    </div>
+    <% if flash[:notice] %>
+      <p class="flash notice"><%= flash[:notice] %></p>
+    <% end %>
+
+    <% if flash[:error] %>
+      <p class="flash error"><%= flash[:error] %></p>
+    <% end %>
   </div>
 
-  <div id="footer">
-    <div class="container">
-      <%= yield_content :footer %>
-    </div>
-  </div>
+  <%== pretty_flash_js %>
 
   <script>
     // two way data binding
