@@ -5,7 +5,7 @@ gem 'rake'
 gem 'puma'
 
 gem 'sinatra'
-gem 'shopify-sinatra-app', '1.2.0'
+gem 'shopify-sinatra-app', '1.2.1'
 gem 'sinatra-pretty-flash', '0.0.3'
 gem 'sinatra-contrib'
 gem 'activerecord'
