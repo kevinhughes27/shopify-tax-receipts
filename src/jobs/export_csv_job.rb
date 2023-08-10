@@ -35,7 +35,7 @@ class ExportCsvJob < Job
         'Country',
         'Zip',
         'Customer ID',
-        'Phone',
+        # 'Phone',
         'Email',
         'Accepts Marketing'
       ]
@@ -61,7 +61,7 @@ class ExportCsvJob < Job
           d.country,
           d.zip,
           d.order.customer && d.order.customer.id,
-          d.order.customer && d.order.customer.phone,
+          # d.order.customer && d.order.customer.phone,
           d.order.customer && d.order.customer.email,
           d.order.customer && d.order.customer.accepts_marketing,
         ]
