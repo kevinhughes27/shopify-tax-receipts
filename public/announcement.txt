@@ -1,11 +1,20 @@
-Dear Tax Receipts User,
+Dear User,
 
-There have been a few new features added I wanted to let everyone know about.
+I am writing today to notify you that I will be shutting down "Kevin's Tax Receipt App". I plan to keep it running until the end of January 2024 but I would urge you to migrate to a new solution as soon as possible in case it stops working sooner for reasons beyond my control.
 
-1. We now support HTML in email templates. If you add HTML please be sure to test your emails in a real email client to make sure they display how you want.
+For the past several weeks I have been working with a number of developers to provide easy migration options:
 
-2. The products table now has a button for configuring a custom email template per product. This allows you to run more customized donation campaigns!
+1. ShopCraft is building a new Shopify app called Koha. I've been working with them to ensure it is an easy upgrade path and I am excited about the other improvements they have planned. This will be the most drop-in replacement available for my app. It isn't quite ready yet but in the meantime you can read about the app here: https://shopcraft.dev/pages/koha-charity-donations-tax-receipts-for-shopify-stores
 
-As always I am here if you need anything.
+2. Mecanic (https://apps.shopify.com/mechanic) has added a task called "Send tax receipts for donations" which functions very similarly to my app. The task will send a customizable donation email with an attached PDF for orders that include products with certain labels. So instead of configuring the products in the app you need to label them in Shopify. The templates are both HTML and Liquid same as my app. Some more advanced logic like percentage donations are not in the default task but could be added using Mecanic to edit the task.
+
+3. I have also spoken with React Flow (https://apps.shopify.com/react-flow) which is another Shopify automation tool and they are planning to add PDF support to their email action soon.
+
+Lastly you should export the donation records for your record keeping if you need this data. After the app is shutdown you will not be able to export your donations.
+
+
+It was almost 10 years ago that I wrote the first lines of code for this app at my first Shopify employee hackathon. Over the years I've enjoyed enabling and supporting many charities through running this free and open source application. A lot has changed since then and I'm not able to spend the necessary time to continue maintaining the app.
+
+I hope the options I've laid out leave you a clear path forwards. I am not able to directly assist with migrations but I will try and reply to any questions by email. Responses may be delayed if there is a lot of demand.
 
 - Kevin
