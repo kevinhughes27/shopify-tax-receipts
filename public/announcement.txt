@@ -10,11 +10,11 @@ For the past several weeks I have been working with a number of developers to pr
 
 3. I have also spoken with React Flow (https://apps.shopify.com/react-flow) which is another Shopify automation tool and they are planning to add PDF support to their email action soon.
 
-Lastly you should export the donation records for your record keeping if you need this data. After my app is shutdown you will not be able to export your donations.
+Lastly you should export the donation records for your record keeping if you need this data. After my app is shutdown you will NOT be able to export your donations.
 
 
 It was almost 10 years ago that I wrote the first lines of code for Tax Receipts at my first Shopify employee hackathon. Over the years I've enjoyed enabling and supporting many charities through running this free and open source application. A lot has changed since then and I'm not able to spend the necessary time to continue maintaining the app.
 
-I hope the options I've laid out leave you a clear path forwards. I am not able to directly assist with migrations but I will try and reply to any questions by email. Responses may be delayed if there is a lot of demand.
+I hope the options I've laid out leave you a clear path forwards. I am not able to directly assist with migrations but I will try and reply to any questions by email (send a new email to kevinhughes27@gmail.com). Responses may be delayed if there is a lot of demand.
 
 - Kevin

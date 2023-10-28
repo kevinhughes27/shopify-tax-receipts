@@ -11,8 +11,8 @@ def send_announcement(shop)
   shopify_shop = ShopifyAPI::Shop.current
 
   Pony.mail to: shopify_shop.email,
-            from: 'kevinhughes27@gmail.com',
-            subject: 'Shopify Tax Receipts Update',
+            from: 'kevin@shopify-taxreceipts.com',
+            subject: "Kevin's Tax Receipts App is shutting down",
             body: announcement
 rescue => e
   puts "Error emailing shop: #{shop.name} error: #{e}"
