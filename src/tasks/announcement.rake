@@ -19,5 +19,5 @@ rescue => e
 end
 
 def announcement
-  @announcement ||= File.read('public/announcement.txt')
+  @announcement ||= File.read('public/announcement_two.txt')
 end

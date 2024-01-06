@@ -1,0 +1,15 @@
+Dear User,
+
+I am writing today to remind you that I will be shutting down "Kevin's Tax Receipt App" at the end of January.
+
+You will need to migrate to a new solution and export your donation records for record keeping if you need this data. After my app is shut down you will NOT be able to export your donations.
+
+I've been working with the following developers to provide an easy migration:
+
+1. Koha by ShopCraft is now ready! They are offering a special 90 day free trial for you available until the end of the month. That's a 25% discount for the first year. You can install the app using this direct link: https://apps.shopify.com/koha-donations-tax-receipts. They've also written a thorough migration guide at https://shopifyapps.notion.site/Migration-Guide-a8fa414c76d44db587ed4c8d51eed1c1.
+
+2. Mecanic (https://apps.shopify.com/mechanic) has added a task called "Send tax receipts for donations" which functions very similarly to my app. The task will send a customizable donation email with an attached PDF for orders that include products with certain labels. More advanced logic like percentage donations are not in the default task but could be added using Mecanic to edit the task.
+
+Thanks again for using my app for all these years. If you need an assistance I can be reached at kevinhughes27@gmail.com
+
+- Kevin
