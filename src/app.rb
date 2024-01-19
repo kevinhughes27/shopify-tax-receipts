@@ -116,7 +116,7 @@ class SinatraApp < Sinatra::Base
 
   # orders/updated webhook receiver
   shopify_webhook('/order') do |shop_name, order|
-    OrderWebhookJob.perform_async(shop_name, order)
+    # OrderWebhookJob.perform_async(shop_name, order)
   end
 
   # view a donation receipt pdf
